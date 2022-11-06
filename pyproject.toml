@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "gyver"
+version = "0.1.0"
+description = "Toolbox for web development"
+authors = ["Gustavo Correa <self.gustavocorrea@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+orjson = "^3.8.1"
+pydantic = {version = "^1.10.2", extras = ["email"]}
+typing-extensions = "^4.4.0"
+
+[tool.poetry.group.lint.dependencies]
+black = "^22.10.0"
+isort = "^5.10.1"
+flake8 = "^5.0.4"
+autoflake = "^1.7.7"
+
+
+[tool.poetry.group.test.dependencies]
+pytest = "^7.2.0"
+pytest-cov = "^4.0.0"
+coverage = "^6.5.0"
+pytest-asyncio = "^0.20.1"
+hypothesis = "^6.56.4"
+
+[tool.ruff]
+line-length = 79
+
+[tool.black]
+line_length = 79
+
+[tool.isort]
+profile = 'black'
+line_length = 79
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
