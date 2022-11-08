@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from core import utils
+from gyver import utils
 
 
 class Model(BaseModel):

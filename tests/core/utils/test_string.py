@@ -1,4 +1,4 @@
-from core.utils import string
+from gyver.utils import string
 
 
 def test_to_camel_should_return_expected_string():

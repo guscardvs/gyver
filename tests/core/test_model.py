@@ -1,7 +1,7 @@
 import pytest
 
-from core.model import Model
-from core.utils import lazyfield
+from gyver.model import Model
+from gyver.utils import lazyfield
 
 
 def test_model_configs_are_expected():

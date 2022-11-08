@@ -4,8 +4,8 @@ from os import environ
 from pathlib import Path
 from typing import Any, Callable, Iterator, MutableMapping, TypeVar, Union
 
-from core.exc import InvalidCast, MissingName
-from core.utils.exc import panic
+from gyver.exc import InvalidCast, MissingName
+from gyver.utils.exc import panic
 
 T = TypeVar("T")
 

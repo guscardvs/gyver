@@ -2,12 +2,12 @@ from contextlib import suppress
 from typing import Any, Iterable, TypeVar, get_args, get_origin
 
 from pydantic.fields import ModelField
-from core.config.utils import boolean_cast
+from gyver.config.utils import boolean_cast
 
-from core.exc import MissingName
-from core.model import Model
-from core.utils.exc import panic
-from core.utils.string import make_lex_separator
+from gyver.exc import MissingName
+from gyver.model import Model
+from gyver.utils.exc import panic
+from gyver.utils.string import make_lex_separator
 
 from .config import MISSING, Config
 

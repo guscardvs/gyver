@@ -4,7 +4,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from core import utils
+from gyver import utils
 
 T = TypeVar("T")
 

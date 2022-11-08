@@ -5,8 +5,8 @@ import pytest
 from hypothesis import given
 from hypothesis.strategies import text
 
-from core import config
-from core.exc import InvalidCast, MissingName
+from gyver import config
+from gyver.exc import InvalidCast, MissingName
 
 
 @given(text(), text())
