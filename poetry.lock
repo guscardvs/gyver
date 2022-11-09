@@ -2,8 +2,8 @@
 name = "aiomysql"
 version = "0.1.1"
 description = "MySQL driver for asyncio."
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.7"
 
 [package.dependencies]
@@ -17,8 +17,8 @@ sa = ["sqlalchemy (>=1.0,<1.4)"]
 name = "aiosqlite"
 version = "0.17.0"
 description = "asyncio bridge to the standard sqlite3 module"
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.6"
 
 [package.dependencies]
@@ -28,8 +28,8 @@ typing_extensions = ">=3.7.2"
 name = "asyncpg"
 version = "0.27.0"
 description = "An asyncio PostgreSQL driver"
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.7.0"
 
 [package.extras]
@@ -300,8 +300,8 @@ testing = ["pytest", "pytest-benchmark"]
 name = "psycopg2"
 version = "2.9.5"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.6"
 
 [[package]]
@@ -340,8 +340,8 @@ python-versions = ">=3.6"
 name = "pymysql"
 version = "1.0.2"
 description = "Pure Python MySQL Driver"
-category = "dev"
-optional = false
+category = "main"
+optional = true
 python-versions = ">=3.6"
 
 [package.extras]
@@ -432,10 +432,23 @@ category = "main"
 optional = false
 python-versions = ">=3.7"
 
+[[package]]
+name = "tzdata"
+version = "2022.6"
+description = "Provider of IANA time zone data"
+category = "main"
+optional = false
+python-versions = ">=2"
+
+[extras]
+db-mysql = ["aiomysql", "pymysql"]
+db-pg = ["asyncpg", "psycopg2"]
+db-sqlite = ["aiosqlite"]
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "9287d4524332ab307b5eae8a0ef97322aba286271442c2115665e8119d850cd5"
+content-hash = "29afcde06e3d085182dbb94934f35a702dd96dcc25543184af9fc24126651857"
 
 [metadata.files]
 aiomysql = [
@@ -685,6 +698,8 @@ pluggy = [
 psycopg2 = [
     {file = "psycopg2-2.9.5-cp310-cp310-win32.whl", hash = "sha256:d3ef67e630b0de0779c42912fe2cbae3805ebaba30cda27fea2a3de650a9414f"},
     {file = "psycopg2-2.9.5-cp310-cp310-win_amd64.whl", hash = "sha256:4cb9936316d88bfab614666eb9e32995e794ed0f8f6b3b718666c22819c1d7ee"},
+    {file = "psycopg2-2.9.5-cp311-cp311-win32.whl", hash = "sha256:093e3894d2d3c592ab0945d9eba9d139c139664dcf83a1c440b8a7aa9bb21955"},
+    {file = "psycopg2-2.9.5-cp311-cp311-win_amd64.whl", hash = "sha256:920bf418000dd17669d2904472efeab2b20546efd0548139618f8fa305d1d7ad"},
     {file = "psycopg2-2.9.5-cp36-cp36m-win32.whl", hash = "sha256:b9ac1b0d8ecc49e05e4e182694f418d27f3aedcfca854ebd6c05bb1cffa10d6d"},
     {file = "psycopg2-2.9.5-cp36-cp36m-win_amd64.whl", hash = "sha256:fc04dd5189b90d825509caa510f20d1d504761e78b8dfb95a0ede180f71d50e5"},
     {file = "psycopg2-2.9.5-cp37-cp37m-win32.whl", hash = "sha256:922cc5f0b98a5f2b1ff481f5551b95cd04580fd6f0c72d9b22e6c0145a4840e0"},
@@ -772,4 +787,8 @@ tomli = [
 typing-extensions = [
     {file = "typing_extensions-4.4.0-py3-none-any.whl", hash = "sha256:16fa4864408f655d35ec496218b85f79b3437c829e93320c7c9215ccfd92489e"},
     {file = "typing_extensions-4.4.0.tar.gz", hash = "sha256:1511434bb92bf8dd198c12b1cc812e800d4181cfcb867674e0f8279cc93087aa"},
+]
+tzdata = [
+    {file = "tzdata-2022.6-py2.py3-none-any.whl", hash = "sha256:04a680bdc5b15750c39c12a448885a51134a27ec9af83667663f0b3a1bf3f342"},
+    {file = "tzdata-2022.6.tar.gz", hash = "sha256:91f11db4503385928c15598c98573e3af07e7229181bee5375bd30f1695ddcae"},
 ]

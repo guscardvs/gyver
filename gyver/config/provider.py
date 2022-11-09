@@ -2,8 +2,8 @@ from contextlib import suppress
 from typing import Any, Iterable, TypeVar, get_args, get_origin
 
 from pydantic.fields import ModelField
-from gyver.config.utils import boolean_cast
 
+from gyver.config.utils import boolean_cast
 from gyver.exc import MissingName
 from gyver.model import Model
 from gyver.utils.exc import panic
