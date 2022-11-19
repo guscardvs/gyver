@@ -1,5 +1,8 @@
-from dataclasses import FrozenInstanceError, dataclass
-from typing import Callable, Generic, TypeVar
+from dataclasses import FrozenInstanceError
+from dataclasses import dataclass
+from typing import Callable
+from typing import Generic
+from typing import TypeVar
 from unittest.mock import Mock
 
 import pytest

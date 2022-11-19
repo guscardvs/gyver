@@ -1,6 +1,7 @@
 import re
 import shlex
-from typing import Callable, TypeVar
+from typing import Callable
+from typing import TypeVar
 
 _to_camel_regexp = re.compile("_([a-zA-Z])")
 _to_snake_regexp = re.compile("([a-z])([A-Z])")

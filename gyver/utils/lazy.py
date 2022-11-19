@@ -1,7 +1,5 @@
 import typing
 
-from typing_extensions import Self
-
 T = typing.TypeVar("T")
 SelfT = typing.TypeVar("SelfT")
 
@@ -18,7 +16,7 @@ class lazyfield(typing.Generic[SelfT, T]):
         self,
         instance: typing.Optional[SelfT],
         owner: typing.Optional[type[SelfT]] = None,
-    ) -> typing.Union[Self, T]:
+    ) -> T:
         if not instance:
             assert owner is not None
             raise AttributeError(

@@ -1,5 +1,9 @@
 from contextlib import suppress
-from typing import Any, Iterable, TypeVar, get_args, get_origin
+from typing import Any
+from typing import Iterable
+from typing import TypeVar
+from typing import get_args
+from typing import get_origin
 
 from pydantic.fields import ModelField
 
@@ -9,7 +13,8 @@ from gyver.model import Model
 from gyver.utils.exc import panic
 from gyver.utils.string import make_lex_separator
 
-from .config import MISSING, Config
+from .config import MISSING
+from .config import Config
 
 
 class ProviderConfig(Model):

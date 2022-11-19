@@ -2,9 +2,15 @@
 import os
 from os import environ
 from pathlib import Path
-from typing import Any, Callable, Iterator, MutableMapping, TypeVar, Union
+from typing import Any
+from typing import Callable
+from typing import Iterator
+from typing import MutableMapping
+from typing import TypeVar
+from typing import Union
 
-from gyver.exc import InvalidCast, MissingName
+from gyver.exc import InvalidCast
+from gyver.exc import MissingName
 from gyver.utils.exc import panic
 
 T = TypeVar("T")

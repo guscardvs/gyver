@@ -6,7 +6,8 @@ from hypothesis import given
 from hypothesis.strategies import text
 
 from gyver import config
-from gyver.exc import InvalidCast, MissingName
+from gyver.exc import InvalidCast
+from gyver.exc import MissingName
 
 
 @given(text(), text())
