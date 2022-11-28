@@ -77,14 +77,14 @@ def _make_names(
 ) -> tuple[str, str]:
     name = field.name
     alias = field.alias
-    if not provider.__prefix__ or not {name, alias}.intersection(
+    if not provider.__prefix__ or {name, alias}.intersection(
         provider.__without_prefix__
     ):
         return (name, alias)
     prefix = provider.__prefix__.removesuffix("_")
     name = name.removeprefix("_")
     alias = alias.removeprefix("_")
-    return f"{prefix}_{name}", f"{prefix}_{alias}"
+    return f"{prefix}_{name}".upper(), f"{prefix}_{alias}".upper()
 
 
 def _get_cast(field: ModelField):
