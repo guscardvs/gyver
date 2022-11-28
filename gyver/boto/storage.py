@@ -1,13 +1,14 @@
-from contextlib import suppress
 import logging
-from typing import BinaryIO, Optional, Protocol, cast
+from typing import BinaryIO
+from typing import Optional
+from typing import Protocol
 
 from botocore.exceptions import ClientError
 
 from gyver import utils
-from gyver.exc import GyverError
 from gyver.config import ProviderConfig
 from gyver.config import from_config
+from gyver.exc import GyverError
 
 from ._client import make_client
 
