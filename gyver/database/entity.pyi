@@ -20,5 +20,5 @@ class Entity(AbstractEntity):
     def pk(self) -> sa.Column[sa.Integer]: ...
 
 def make_table(
-    name: str, *args: sa.schema.SchemaItem, kwargs: typing.Any
+    name: str, *args: sa.schema.SchemaItem, **kwargs: typing.Any
 ) -> sa.Table: ...
