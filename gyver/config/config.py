@@ -8,6 +8,7 @@ from typing import Iterator
 from typing import MutableMapping
 from typing import TypeVar
 from typing import Union
+from typing import overload
 
 from gyver.exc import InvalidCast
 from gyver.exc import MissingName
@@ -45,7 +46,7 @@ class EnvMapping(MutableMapping[str, str]):
         return len(self._mapping)
 
 
-_mapping = EnvMapping()
+default_mapping = EnvMapping()
 
 
 class MISSING:
@@ -60,7 +61,7 @@ class Config:
     def __init__(
         self,
         env_file: Union[str, Path, None] = None,
-        mapping: EnvMapping = _mapping,
+        mapping: EnvMapping = default_mapping,
     ) -> None:
         self._mapping = mapping
         self._file_values = {}
@@ -103,10 +104,28 @@ class Config:
             )
         return self._cast(name, val, cast)
 
+    @overload
     def __call__(
         self,
         name: str,
         cast: Union[Callable[[Any], T], type[T]] = _default_cast,
-        default: Union[T, MISSING] = MISSING,
+        default: type[MISSING] = MISSING,
+    ) -> T:
+        ...
+
+    @overload
+    def __call__(
+        self,
+        name: str,
+        cast: Union[Callable[[Any], T], type[T]] = _default_cast,
+        default: T = ...,
+    ) -> T:
+        ...
+
+    def __call__(
+        self,
+        name: str,
+        cast: Union[Callable[[Any], T], type[T]] = _default_cast,
+        default: Union[T, type[MISSING]] = MISSING,
     ) -> T:
         return self.get(name, cast, default)

@@ -1,7 +1,6 @@
 import typing
 
 import sqlalchemy as sa
-from sqlalchemy.orm import declared_attr
 
 class AbstractEntity:
 

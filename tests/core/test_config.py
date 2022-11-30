@@ -1,4 +1,5 @@
 import tempfile
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -179,3 +180,36 @@ def test_boolean_cast_works_correctly():
         CustomConfig,
         __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "1"})),
     ).is_valid
+
+
+def test_envconfig_identifies_correct_layer_of_dotfile():
+    mapping = config.EnvMapping({"CONFIG_ENV": "local"})
+    curdir = Path(__file__).parent
+    env_config = config.EnvConfig(
+        config.DotFile(curdir / "test.env", config.Env.TEST), mapping=mapping
+    )
+    second_envconfig = config.EnvConfig(
+        config.DotFile(curdir / "local.env", config.Env.LOCAL), mapping=mapping
+    )
+    third_envconfig = config.EnvConfig(
+        config.DotFile(
+            curdir / "test.env", config.Env.TEST, apply_to_lower=True
+        ),
+        config.DotFile(curdir / "local.env", config.Env.LOCAL),
+        mapping=mapping,
+    )
+    assert env_config.dotfile is None
+    assert (
+        second_envconfig.dotfile
+        and second_envconfig.dotfile.env is config.Env.LOCAL
+    )
+    assert (
+        third_envconfig.dotfile
+        and third_envconfig.dotfile.env is config.Env.TEST
+    )
+
+def test_envconfig_ignores_dotfiles_without_valid_files():
+    mapping = config.EnvMapping({"CONFIG_ENV": "local"})
+    env_config = config.EnvConfig(config.DotFile('invalid', config.Env.LOCAL), mapping=mapping)
+
+    assert env_config.dotfile is None
