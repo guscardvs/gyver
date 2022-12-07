@@ -1,9 +1,13 @@
 from . import comp
+from ._helpers import retrieve_attr
 from .builder import delete
 from .builder import select
 from .builder import update
 from .exc import FieldNotFound
 from .exc import FilterError
+from .interface import ApplyClause
+from .interface import BindClause
+from .interface import Mapper
 from .order_by import OrderBy
 from .order_by import OrderDirection
 from .paginate import IdPaginate
@@ -38,4 +42,8 @@ __all__ = [
     "select",
     "update",
     "delete",
+    "BindClause",
+    "ApplyClause",
+    "retrieve_attr",
+    "Mapper",
 ]

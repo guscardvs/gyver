@@ -208,8 +208,11 @@ def test_envconfig_identifies_correct_layer_of_dotfile():
         and third_envconfig.dotfile.env is config.Env.TEST
     )
 
+
 def test_envconfig_ignores_dotfiles_without_valid_files():
     mapping = config.EnvMapping({"CONFIG_ENV": "local"})
-    env_config = config.EnvConfig(config.DotFile('invalid', config.Env.LOCAL), mapping=mapping)
+    env_config = config.EnvConfig(
+        config.DotFile("invalid", config.Env.LOCAL), mapping=mapping
+    )
 
     assert env_config.dotfile is None

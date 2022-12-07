@@ -18,8 +18,8 @@ class Where(typing.Generic[T]):
     expected: typing.Optional[T] = None
     comp: interface.Comparator[T] = cp.equals
 
-    def bind(self, entity: Mapper) -> interface.Comparison:
-        attr = _helpers.retrieve_attr(entity, self.field)
+    def bind(self, mapper: Mapper) -> interface.Comparison:
+        attr = _helpers.retrieve_attr(mapper, self.field)
         return (
             sa.true()
             if self.expected is None
@@ -32,8 +32,8 @@ class _JoinBind:
     items: typing.Sequence[BindClause]
     operator: typing.Callable[..., interface.Comparison]
 
-    def bind(self, entity: Mapper) -> interface.Comparison:
-        return self.operator(*(item.bind(entity) for item in self.items))
+    def bind(self, mapper: Mapper) -> interface.Comparison:
+        return self.operator(*(item.bind(mapper) for item in self.items))
 
 
 def and_(*bind: BindClause) -> _JoinBind:
