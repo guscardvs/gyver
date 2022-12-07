@@ -1,9 +1,10 @@
 import typing
 
-from typing_extensions import ParamSpec, Concatenate
 import sqlalchemy as sa
 from context_handler.ext.sqlalchemy import AsyncSaContext
 from sqlalchemy.engine import Result
+from typing_extensions import Concatenate
+from typing_extensions import ParamSpec
 
 from gyver.exc import GyverError
 from gyver.model import Model

@@ -1,26 +1,30 @@
 import typing
-from dataclasses import dataclass
 
 import sqlalchemy as sa
+
 from gyver.database.types import ClauseType
 
 from . import _helpers
 from . import comp as cp
 from . import interface
-from .interface import BindClause
-from .interface import Mapper
 
 T = typing.TypeVar("T")
 
 
-@dataclass
-class Where(typing.Generic[T]):
-    type_ = ClauseType.BIND
-    field: str
-    expected: typing.Optional[T] = None
-    comp: interface.Comparator[T] = cp.equals
+class Where(interface.BindClause, typing.Generic[T]):
+    def __init__(
+        self,
+        field: str,
+        expected: typing.Optional[T] = None,
+        comp: interface.Comparator[T] = cp.equals,
+    ) -> None:
+        self.field = field
+        self.expected = expected
+        self.comp = comp
 
-    def bind(self, mapper: Mapper) -> interface.Comparison:
+    type_ = ClauseType.BIND
+
+    def bind(self, mapper: interface.Mapper) -> interface.Comparison:
         attr = _helpers.retrieve_attr(mapper, self.field)
         return (
             sa.true()
@@ -29,19 +33,27 @@ class Where(typing.Generic[T]):
         )
 
 
-@dataclass(frozen=True)
-class _JoinBind:
-    type_ = ClauseType.BIND
-    items: typing.Sequence[BindClause]
-    operator: typing.Callable[..., interface.Comparison]
+class _JoinBind(interface.BindClause):
+    def __init__(
+        self,
+        items: typing.Sequence[interface.BindClause],
+        operator: typing.Callable[..., interface.Comparison],
+    ) -> None:
+        self.items = items
+        self.operator = operator
 
-    def bind(self, mapper: Mapper) -> interface.Comparison:
+    type_ = ClauseType.BIND
+
+    def bind(self, mapper: interface.Mapper) -> interface.Comparison:
         return self.operator(*(item.bind(mapper) for item in self.items))
 
 
-def and_(*bind: BindClause) -> _JoinBind:
+def and_(*bind: interface.BindClause) -> _JoinBind:
     return _JoinBind(bind, sa.and_)
 
 
-def or_(*bind: BindClause) -> _JoinBind:
+def or_(*bind: interface.BindClause) -> _JoinBind:
     return _JoinBind(bind, sa.or_)
+
+
+and_(Where("anyfield", 1))

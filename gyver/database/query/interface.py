@@ -31,6 +31,8 @@ class Clause(typing.Protocol):
 
 
 class BindClause(Clause, typing.Protocol):
+    type_: typing.Literal[ClauseType.BIND]
+
     def bind(self, mapper: Mapper) -> Comparison:
         ...
 
