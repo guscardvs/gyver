@@ -2,6 +2,7 @@ import typing
 from dataclasses import dataclass
 
 import sqlalchemy as sa
+from gyver.database.types import ClauseType
 
 from . import _helpers
 from . import comp as cp
@@ -14,6 +15,7 @@ T = typing.TypeVar("T")
 
 @dataclass
 class Where(typing.Generic[T]):
+    type_ = ClauseType.BIND
     field: str
     expected: typing.Optional[T] = None
     comp: interface.Comparator[T] = cp.equals
@@ -29,6 +31,7 @@ class Where(typing.Generic[T]):
 
 @dataclass(frozen=True)
 class _JoinBind:
+    type_ = ClauseType.BIND
     items: typing.Sequence[BindClause]
     operator: typing.Callable[..., interface.Comparison]
 
