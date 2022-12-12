@@ -10,3 +10,8 @@ class InvalidCast(GyverError):
 class MissingName(GyverError, KeyError):
     """Exception raised for config when
     name is not found in given environ"""
+
+
+class InvalidField(GyverError, KeyError):
+    """Exception raised when field lookup
+    found nothing on mapping"""

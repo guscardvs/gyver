@@ -4,7 +4,7 @@ from abc import abstractmethod
 
 from sqlalchemy.sql import Select
 
-from gyver.database.types import ClauseType
+from gyver.database.typedef import ClauseType
 from gyver.utils.helpers import cache
 
 from . import comp as cp

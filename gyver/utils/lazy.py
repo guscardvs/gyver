@@ -1,4 +1,5 @@
 import typing
+from typing_extensions import Self
 
 T = typing.TypeVar("T")
 SelfT = typing.TypeVar("SelfT")
@@ -12,16 +13,23 @@ class lazyfield(typing.Generic[SelfT, T]):
         self.public_name = name
         self.private_name = f"_lazyfield_{name}"
 
+    @typing.overload
+    def __get__(self, instance: SelfT, owner: type[SelfT]) -> T:
+        ...
+
+    @typing.overload
+    def __get__(
+        self, instance: typing.Literal[None], owner: type[SelfT]
+    ) -> Self:
+        ...
+
     def __get__(
         self,
         instance: typing.Optional[SelfT],
         owner: typing.Optional[type[SelfT]] = None,
-    ) -> T:
+    ) -> typing.Union[T, Self]:
         if not instance:
-            assert owner is not None
-            raise AttributeError(
-                f"{owner.__name__!r} has no" f"attribute {self.public_name!r}"
-            )
+            return self
         assert instance is not None
         try:
             val = typing.cast(
@@ -46,7 +54,7 @@ class lazyfield(typing.Generic[SelfT, T]):
             return val
 
     def __set__(self, instance: SelfT, value: T):
-        setattr(instance, self.private_name, value)
+        object.__setattr__(instance, self.private_name, value)
 
     def __delete__(self, instance: SelfT):
-        delattr(instance, self.private_name)
+        object.__delattr__(instance, self.private_name)

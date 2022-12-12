@@ -1,4 +1,4 @@
-from gyver.database.types import Driver
+from gyver.database.typedef import Driver
 from gyver.utils import frozen
 
 

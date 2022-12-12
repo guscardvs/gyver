@@ -1,4 +1,4 @@
-from gyver.database.types import Driver
+from gyver.database.typedef import Driver
 
 from .interface import Dialect
 from .mysql import MysqlDialect

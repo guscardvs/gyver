@@ -5,6 +5,7 @@ class Driver(str, Enum):
     MYSQL = "mysql"
     POSTGRES = "postgres"
     SQLITE = "sqlite"
+    CUSTOM = "custom"
 
 
 class OrderDirection(str, Enum):

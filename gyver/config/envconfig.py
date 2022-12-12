@@ -8,7 +8,7 @@ from gyver import utils
 from .config import Config
 from .config import EnvMapping
 from .config import default_mapping
-from .types import Env
+from .typedef import Env
 
 
 @dataclass(frozen=True)

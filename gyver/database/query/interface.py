@@ -10,7 +10,7 @@ from sqlalchemy.sql.elements import BooleanClauseList
 from sqlalchemy.sql.elements import ColumnElement
 
 from gyver.database.entity import AbstractEntity
-from gyver.database.types import ClauseType
+from gyver.database.typedef import ClauseType
 
 ExecutableType = typing.Union[Select, Update, Delete]
 ExecutableT = typing.TypeVar("ExecutableT", bound=ExecutableType)

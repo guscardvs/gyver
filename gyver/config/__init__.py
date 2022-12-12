@@ -5,7 +5,7 @@ from .envconfig import DotFile
 from .envconfig import EnvConfig
 from .provider import ProviderConfig
 from .provider import from_config
-from .types import Env
+from .typedef import Env
 from .utils import boolean_cast
 
 __all__ = [

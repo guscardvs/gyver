@@ -1,13 +1,12 @@
-from typing import ClassVar
 from typing import Protocol
 
-from gyver.database.types import Driver
+from gyver.database.typedef import Driver
 
 
 class Dialect(Protocol):
-    default_port: ClassVar[int]
-    driver: ClassVar[Driver]
-    dialect_name: ClassVar[str]
-    async_driver: ClassVar[str]
-    sync_driver: ClassVar[str]
-    only_host: ClassVar[bool]
+    default_port: int
+    driver: Driver
+    dialect_name: str
+    async_driver: str
+    sync_driver: str
+    only_host: bool

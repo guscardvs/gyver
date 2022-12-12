@@ -8,7 +8,7 @@ from .entity import make_table
 from .metadata import metadata as default_metadata
 from .provider import AsyncDatabaseProvider
 from .provider import SyncDatabaseProvider
-from .types import Driver
+from .typedef import Driver
 from .utils import make_uri
 
 __all__ = [

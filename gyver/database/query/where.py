@@ -2,7 +2,7 @@ import typing
 
 import sqlalchemy as sa
 
-from gyver.database.types import ClauseType
+from gyver.database.typedef import ClauseType
 
 from . import _helpers
 from . import comp as cp
