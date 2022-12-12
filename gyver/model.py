@@ -17,7 +17,6 @@ class Model(BaseModel):
     def __setattr__(self, name: str, value: Any):
         if isinstance(getattr(type(self), name, None), utils.lazyfield):
             object.__setattr__(self, name, value)
-            print(getattr(type(self), name, None))
             return
         return super().__setattr__(name, value)
 
