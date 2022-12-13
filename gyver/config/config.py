@@ -73,7 +73,7 @@ class Config:
             for line in buf:
                 if line.startswith("#"):
                     continue
-                name, value = line.split("=")
+                name, value = line.split("=", 1)
                 self._file_values[name.strip()] = value.strip()
 
     def _cast(self, name: str, val: Any, cast: Callable) -> Any:
