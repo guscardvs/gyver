@@ -11,7 +11,7 @@ from gyver.config.utils import boolean_cast
 from gyver.exc import MissingName
 from gyver.model import Model
 from gyver.utils.exc import panic
-from gyver.utils.string import make_lex_separator
+from gyver.utils.strings import make_lex_separator
 
 from .config import MISSING
 from .config import Config

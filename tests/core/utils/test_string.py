@@ -1,4 +1,4 @@
-from gyver.utils import string
+from gyver.utils import strings
 
 
 def test_to_camel_should_return_expected_string():
@@ -9,7 +9,7 @@ def test_to_camel_should_return_expected_string():
         ("type_", "type"),
     )
     for val, expected in vals:
-        assert string.to_camel(val) == expected
+        assert strings.to_camel(val) == expected
 
 
 def test_to_snake_should_return_expected_string():
@@ -21,7 +21,7 @@ def test_to_snake_should_return_expected_string():
         ("string_a", "string_a"),
     )
     for val, expected in vals:
-        assert string.to_snake(val) == expected
+        assert strings.to_snake(val) == expected
 
 
 def test_upper_camel_should_return_expected_string():
@@ -32,4 +32,4 @@ def test_upper_camel_should_return_expected_string():
         ("type_", "Type"),
     )
     for val, expected in vals:
-        assert string.upper_camel(val) == expected
+        assert strings.upper_camel(val) == expected

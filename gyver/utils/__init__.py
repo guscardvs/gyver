@@ -6,9 +6,10 @@ from .finder import instance_validator
 from .helpers import cache
 from .helpers import frozen
 from .lazy import lazyfield
-from .string import to_camel
-from .string import to_snake
-from .string import upper_camel
+from .strings import to_camel
+from .strings import to_snake
+from .strings import upper_camel
+from .singleton import make_singleton
 
 __all__ = [
     "lazyfield",
@@ -22,4 +23,5 @@ __all__ = [
     "Finder",
     "class_validator",
     "instance_validator",
+    "make_singleton",
 ]
