@@ -15,3 +15,8 @@ class MissingName(GyverError, KeyError):
 class InvalidField(GyverError, KeyError):
     """Exception raised when field lookup
     found nothing on mapping"""
+
+
+class CacheMiss(GyverError, KeyError):
+    """Exception raised when cache lookup
+    returns None or raises error"""

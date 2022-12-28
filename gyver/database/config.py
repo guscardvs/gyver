@@ -1,7 +1,8 @@
 from types import FunctionType
-from typing import Any, Union
+from typing import Any
 from typing import Optional
 from typing import Sequence
+from typing import Union
 
 from gyver import utils
 from gyver.config import ProviderConfig

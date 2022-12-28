@@ -44,7 +44,7 @@ class StorageProvider:
             "aws_access_key_id": self._config.access_key_id,
             "aws_secret_access_key": self._config.secret_access_key,
         }
-        if endpoint_url := self._config.endpoint_url:
+        if (endpoint_url := self._config.endpoint_url) is not None:
             kwargs["endpoint_url"] = endpoint_url
         return make_client("s3", **kwargs)
 

@@ -1,6 +1,7 @@
 from gyver.database.typedef import Driver
 
 from .interface import Dialect
+from .mysql import MariaDbDialect
 from .mysql import MysqlDialect
 from .postgres import PostgresDialect
 from .sqlite import SqliteDriver
@@ -11,6 +12,7 @@ def resolve_driver(driver: Driver) -> Dialect:
         Driver.MYSQL: MysqlDialect(),
         Driver.POSTGRES: PostgresDialect(),
         Driver.SQLITE: SqliteDriver(),
+        Driver.MARIADB: MariaDbDialect(),
     }
     return _table[driver]
 

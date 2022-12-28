@@ -1,6 +1,7 @@
+import pytest
+
 from gyver import database
 from gyver.database.drivers.mysql import MysqlDialect
-import pytest
 from gyver.exc import InvalidField
 
 

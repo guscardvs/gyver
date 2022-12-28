@@ -5,6 +5,7 @@ class Driver(str, Enum):
     MYSQL = "mysql"
     POSTGRES = "postgres"
     SQLITE = "sqlite"
+    MARIADB = "mariadb"
     CUSTOM = "custom"
 
 

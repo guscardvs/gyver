@@ -1,4 +1,5 @@
 import typing
+
 from typing_extensions import Self
 
 T = typing.TypeVar("T")

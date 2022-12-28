@@ -10,3 +10,15 @@ class MysqlDialect:
     async_driver = "aiomysql"
     sync_driver = "pymysql"
     only_host = False
+
+
+class AsyncMyDialect(MysqlDialect):
+    async_driver = "asyncmy"
+
+
+class MariaDbDialect(MysqlDialect):
+    dialect_name = "mariadb"
+
+
+class AsyncMyMariaDialect(AsyncMyDialect, MariaDbDialect):
+    pass

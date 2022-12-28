@@ -6,10 +6,10 @@ from .finder import instance_validator
 from .helpers import cache
 from .helpers import frozen
 from .lazy import lazyfield
+from .singleton import make_singleton
 from .strings import to_camel
 from .strings import to_snake
 from .strings import upper_camel
-from .singleton import make_singleton
 
 __all__ = [
     "lazyfield",
