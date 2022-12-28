@@ -6,3 +6,4 @@ version_files = [
     "pyproject.toml:version",
     "gyver/__init__.py:__version__"
 ]
+annotated = true
