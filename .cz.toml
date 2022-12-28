@@ -1,9 +1,9 @@
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.8.0"
+version = "0.9.0"
 tag_format = "$version"
 version_files = [
     "pyproject.toml:version",
     "gyver/__init__.py:__version__"
 ]
-annotated = true
+annotated_tag = true
