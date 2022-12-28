@@ -5,23 +5,20 @@ from typing import Protocol
 
 from botocore.exceptions import ClientError
 
-from gyver import utils
+from gyver.boto.base import AWSCredentials
+from gyver.boto.base import AWSCredentialsConfig
+from gyver.boto.base import make_client
 from gyver.config import ProviderConfig
 from gyver.config import from_config
 from gyver.exc import GyverError
-
-from ._client import make_client
+from gyver.utils import lazyfield
 
 
 class StorageConfig(ProviderConfig):
-    _prefix_ = "storage"
+    __prefix__ = "storage"
 
-    access_key_id: str
-    secret_access_key: str
     bucket_name: str
-    region_name: str
     presigned_expiration: int = 3600
-    endpoint_url: Optional[str] = None
 
 
 class FileNotFound(GyverError, FileNotFoundError):
@@ -34,19 +31,21 @@ class ReadableBuffer(Protocol):
 
 
 class StorageProvider:
-    def __init__(self, config: Optional[StorageConfig] = None) -> None:
+    def __init__(
+        self,
+        config: Optional[StorageConfig] = None,
+        aws_credentials: Optional[AWSCredentialsConfig] = None,
+    ) -> None:
         self._config = config or from_config(StorageConfig)
+        self._aws_credentials = aws_credentials
 
-    @utils.lazyfield
+    @lazyfield
     def client(self):
-        kwargs = {
-            "region_name": self._config.region_name,
-            "aws_access_key_id": self._config.access_key_id,
-            "aws_secret_access_key": self._config.secret_access_key,
-        }
-        if (endpoint_url := self._config.endpoint_url) is not None:
-            kwargs["endpoint_url"] = endpoint_url
-        return make_client("s3", **kwargs)
+        return make_client("s3", self._aws_credentials)
+
+    @property
+    def credentials(self):
+        return self._aws_credentials or AWSCredentials().credentials
 
     @property
     def config(self):

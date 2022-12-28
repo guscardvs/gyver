@@ -20,3 +20,8 @@ class InvalidField(GyverError, KeyError):
 class CacheMiss(GyverError, KeyError):
     """Exception raised when cache lookup
     returns None or raises error"""
+
+
+class QueueNotFound(InvalidField):
+    """Exception raised when queue name provider
+    does not exist on given credentials"""

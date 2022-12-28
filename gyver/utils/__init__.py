@@ -1,5 +1,6 @@
 from . import json
 from . import timezone
+from .exc import panic
 from .finder import Finder
 from .finder import class_validator
 from .finder import instance_validator
@@ -24,4 +25,5 @@ __all__ = [
     "class_validator",
     "instance_validator",
     "make_singleton",
+    "panic",
 ]

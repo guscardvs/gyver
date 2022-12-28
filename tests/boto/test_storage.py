@@ -1,21 +1,26 @@
+from contextlib import contextmanager
+from contextlib import suppress
 from io import BytesIO
 from shutil import copyfileobj
-from moto.s3 import mock_s3
-from contextlib import contextmanager, suppress
-from gyver.boto import storage
+
 from botocore.exceptions import ClientError
+from moto.s3 import mock_s3
+
+from gyver import boto
 
 
 @contextmanager
 def storage_provider():
-    config = storage.StorageConfig(
+    aws_credentials = boto.AWSCredentialsConfig(
         access_key_id="test",
         secret_access_key="",
-        bucket_name="test",
         region_name="us-east-1",
     )
+    config = boto.StorageConfig(
+        bucket_name="test",
+    )
     with mock_s3():
-        provider = storage.StorageProvider(config)
+        provider = boto.StorageProvider(config, aws_credentials)
         client = provider.client
         with suppress(ClientError):
             client.head_bucket(Bucket=provider.config.bucket_name)

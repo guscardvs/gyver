@@ -20,8 +20,8 @@ tzdata = { markers = "sys_platform != \"linux\"", version = "^2022.6" }
 context-handler = "^5.1.0"
 sqlalchemy = { version = "^1.4.43", optional = true }
 cryptography = "^38.0.4"
-asyncmy = {version = "^0.2.5", optional = true}
-redis = {version = "^4.4.0", optional = true}
+asyncmy = { version = "^0.2.5", optional = true }
+redis = { version = "^4.4.0", optional = true }
 
 [tool.poetry.group.lint.dependencies]
 black = "^22.10.0"
@@ -36,7 +36,7 @@ coverage = "^6.5.0"
 pytest-asyncio = "^0.20.1"
 hypothesis = "^6.56.4"
 fakeredis = "^2.4.0"
-moto = {extras = ["all", "ec2", "s3"], version = "^4.0.12"}
+moto = { extras = ["sqs", "s3"], version = "^4.0.12" }
 
 [tool.poetry.group.types.dependencies]
 sqlalchemy2-stubs = "^0.0.2a29"
@@ -51,7 +51,7 @@ quart = "^0.18.3"
 [tool.poetry.group.aws.dependencies]
 boto3 = "^1.26.13"
 moto = "^4.0.9"
-boto3-stubs = {extras = ["s3"], version = "^1.26.13"}
+boto3-stubs = { extras = ["s3", "sqs"], version = "^1.26.13" }
 
 [tool.poetry.extras]
 db-mysql = ['aiomysql', 'pymysql']
