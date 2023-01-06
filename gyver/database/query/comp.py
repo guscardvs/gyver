@@ -77,6 +77,14 @@ def isnull(field: FieldType, target: bool) -> Comparison:
     return field.is_(None) if target else field.is_not(None)
 
 
+def includes(field: FieldType, target: typing.Sequence) -> Comparison:
+    return field.in_(list(target))
+
+
+def excludes(field: FieldType, target: typing.Sequence) -> Comparison:
+    return field.not_in(list(target))
+
+
 def json_contains(field: FieldType, target: typing.Any) -> Comparison:
     return sa.func.json_contains(field, f'"{target}"')
 
