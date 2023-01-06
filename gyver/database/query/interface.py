@@ -8,6 +8,7 @@ from sqlalchemy.sql import Select
 from sqlalchemy.sql import Update
 from sqlalchemy.sql.elements import BooleanClauseList
 from sqlalchemy.sql.elements import ColumnElement
+from sqlalchemy.sql.functions import Function
 
 from gyver.database.entity import AbstractEntity
 from gyver.database.typedef import ClauseType
@@ -15,7 +16,9 @@ from gyver.database.typedef import ClauseType
 ExecutableType = typing.Union[Select, Update, Delete]
 ExecutableT = typing.TypeVar("ExecutableT", bound=ExecutableType)
 Sortable = typing.Union[int, float, date, time]
-Comparison = typing.Union[ColumnElement[sa.Boolean], BooleanClauseList]
+Comparison = typing.Union[
+    ColumnElement[sa.Boolean], BooleanClauseList, Function
+]
 FieldType = typing.Union[ColumnElement, sa.Column]
 T = typing.TypeVar("T", contravariant=True)
 Mapper = typing.Union[sa.Table, type[AbstractEntity]]
