@@ -72,14 +72,14 @@ def insensitive_like(
     return comparator
 
 
-def isnull(field: FieldType, val: bool) -> Comparison:
-    return field.is_(None) if val else field.is_not(None)
+def isnull(field: FieldType, target: bool) -> Comparison:
+    return field.is_(None) if target else field.is_not(None)
 
 
-def json_contains(field: FieldType, val: typing.Any) -> Comparison:
-    return sa.func.json_contains(field, f'"{val}"')
+def json_contains(field: FieldType, target: typing.Any) -> Comparison:
+    return sa.func.json_contains(field, f'"{target}"')
 
 
-def json_empty(field: FieldType, val: typing.Any) -> Comparison:
+def json_empty(field: FieldType, target: typing.Any) -> Comparison:
     func_length = sa.func.json_length(field)
-    return func_length == 0 if val else func_length != 0
+    return func_length == 0 if target else func_length != 0
