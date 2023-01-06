@@ -54,6 +54,3 @@ def and_(*bind: interface.BindClause) -> _JoinBind:
 
 def or_(*bind: interface.BindClause) -> _JoinBind:
     return _JoinBind(bind, sa.or_)
-
-
-and_(Where("anyfield", 1))
