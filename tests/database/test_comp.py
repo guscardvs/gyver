@@ -4,7 +4,7 @@ import sqlalchemy as sa
 
 from gyver.database import query
 
-from .mocks import Person
+from .mocks import Person, PersonAddress, RelatedPerson, build_query
 
 
 def test_comparison_matches_expected():  # sourcery skip: none-compare

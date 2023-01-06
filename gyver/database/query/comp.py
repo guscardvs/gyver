@@ -1,6 +1,7 @@
 import typing
 
 import sqlalchemy as sa
+from sqlalchemy.orm import RelationshipProperty
 
 from .interface import Comparator
 from .interface import Comparison
@@ -83,3 +84,11 @@ def json_contains(field: FieldType, target: typing.Any) -> Comparison:
 def json_empty(field: FieldType, target: typing.Any) -> Comparison:
     func_length = sa.func.json_length(field)
     return func_length == 0 if target else func_length != 0
+
+
+def relation_exists_m2m(field: FieldType, target: bool) -> Comparison:
+    return field.any() if target else ~field.any()
+
+
+def relation_exists_o2m(field: FieldType, target: bool) -> Comparison:
+    return field.has() if target else ~field.has()

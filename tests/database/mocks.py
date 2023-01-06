@@ -3,7 +3,7 @@ import sqlalchemy as sa
 from gyver.database import Entity
 from gyver.database.entity import make_table
 from gyver.database.query.interface import ExecutableType
-from gyver.database.utils import make_relation
+from gyver.database.utils import make_relation, create_relation_table
 
 
 class Person(Entity):
@@ -23,10 +23,17 @@ class PersonAddress(Entity):
     another = make_relation(Another)
 
 
+related_person_person_address = create_relation_table(
+    "relatedperson_personaddress", "personaddress", "relatedperson"
+)
+
+
 class RelatedPerson(Entity):
     address_id = sa.Column(sa.Integer, sa.ForeignKey("personaddress.id"))
 
-    address = make_relation(PersonAddress)
+    address = make_relation(
+        PersonAddress, secondary=related_person_person_address
+    )
 
 
 mock_table = make_table(
