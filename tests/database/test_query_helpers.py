@@ -1,9 +1,12 @@
-from gyver.database.query._helpers import retrieve_attr
 import pytest
 
+from gyver.database.query._helpers import retrieve_attr
 from gyver.database.query.exc import FieldNotFound
 
-from .mocks import Another, RelatedPerson, PersonAddress, mock_table
+from .mocks import Another
+from .mocks import PersonAddress
+from .mocks import RelatedPerson
+from .mocks import mock_table
 
 
 def test_retrieve_attr_returns_valid_attr():

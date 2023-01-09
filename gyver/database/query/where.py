@@ -25,6 +25,8 @@ class Where(interface.BindClause, typing.Generic[T]):
     type_ = ClauseType.BIND
 
     def bind(self, mapper: interface.Mapper) -> interface.Comparison:
+        if self.comp is cp.always_true:
+            return AlwaysTrue().bind(mapper)
         attr = _helpers.retrieve_attr(mapper, self.field)
         return (
             sa.true()
@@ -54,3 +56,13 @@ def and_(*bind: interface.BindClause) -> _JoinBind:
 
 def or_(*bind: interface.BindClause) -> _JoinBind:
     return _JoinBind(bind, sa.or_)
+
+
+_placeholder_column = sa.Column("placeholder")
+
+
+class AlwaysTrue(interface.BindClause):
+    type_ = ClauseType.BIND
+
+    def bind(self, mapper: interface.Mapper) -> interface.Comparison:
+        return cp.always_true(_placeholder_column, mapper)

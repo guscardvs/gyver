@@ -2,8 +2,9 @@ import sqlalchemy as sa
 
 from gyver.database import Entity
 from gyver.database.entity import make_table
-from gyver.database.query.interface import ExecutableType
-from gyver.database.utils import make_relation, create_relation_table
+from gyver.database.query.interface import Comparison
+from gyver.database.utils import create_relation_table
+from gyver.database.utils import make_relation
 
 
 class Person(Entity):
@@ -41,5 +42,5 @@ mock_table = make_table(
 )
 
 
-def build_query(query: ExecutableType):
+def build_query(query: Comparison):
     return str(query.compile(compile_kwargs={"literal_binds": True}))

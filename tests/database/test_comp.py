@@ -1,64 +1,108 @@
 from datetime import datetime
+from typing import no_type_check
 
 import sqlalchemy as sa
 
 from gyver.database import query
 
-from .mocks import Person, PersonAddress, RelatedPerson, build_query
+from .mocks import Another, Person, PersonAddress, RelatedPerson
+from .mocks import build_query
 
 
 def test_comparison_matches_expected():  # sourcery skip: none-compare
 
     assert query.comp.always_true(Person.name, object()) == sa.true()
-    assert str(query.comp.equals(Person.name, "test")) == str(
+    assert build_query(query.comp.equals(Person.name, "test")) == build_query(
         Person.name == "test"
     )
-    assert str(query.comp.not_equals(Person.name, "test")) == str(
-        Person.name != "test"
+    print(build_query(query.comp.equals(Person.name, "test")))
+    assert build_query(
+        query.comp.not_equals(Person.name, "test")
+    ) == build_query(Person.name != "test")
+    assert build_query(query.comp.greater(Person.age, 46)) == build_query(
+        Person.age > 46
     )
-    assert str(query.comp.greater(Person.age, 46)) == str(Person.age > 46)
-    assert str(query.comp.greater_equals(Person.age, 46)) == str(
-        Person.age >= 46
+    assert build_query(
+        query.comp.greater_equals(Person.age, 46)
+    ) == build_query(Person.age >= 46)
+    assert build_query(query.comp.lesser(Person.age, 46)) == build_query(
+        Person.age < 46
     )
-    assert str(query.comp.lesser(Person.age, 46)) == str(Person.age < 46)
-    assert str(query.comp.lesser_equals(Person.age, 46)) == str(
-        Person.age <= 46
-    )
-    assert str(query.comp.between(Person.age, (45, 52))) == str(
-        Person.age.between(45, 52)
-    )
-    assert str(query.comp.range(Person.age, (45, 52))) == str(
+    assert build_query(
+        query.comp.lesser_equals(Person.age, 46)
+    ) == build_query(Person.age <= 46)
+    assert build_query(
+        query.comp.between(Person.age, (45, 52))
+    ) == build_query(Person.age.between(45, 52))
+    assert build_query(query.comp.range(Person.age, (45, 52))) == build_query(
         sa.and_(Person.age >= 45, Person.age < 52)
     )
-    assert str(query.comp.like(Person.name, "test")) == str(
+    assert build_query(query.comp.like(Person.name, "test")) == build_query(
         Person.name.like("%test%")
     )
-    assert str(query.comp.rlike(Person.name, "test")) == str(
+    assert build_query(query.comp.rlike(Person.name, "test")) == build_query(
         Person.name.like("test%")
     )
-    assert str(query.comp.llike(Person.name, "test")) == str(
+    assert build_query(query.comp.llike(Person.name, "test")) == build_query(
         Person.name.like("%test")
     )
-    assert str(query.comp.insensitive_like()(Person.name, "test")) == str(
-        Person.name.ilike("%test%")
-    )
-    assert str(
+    assert build_query(
+        query.comp.insensitive_like()(Person.name, "test")
+    ) == build_query(Person.name.ilike("%test%"))
+    assert build_query(
         query.comp.insensitive_like("llike")(Person.name, "test")
-    ) == str(Person.name.ilike("test%"))
-    assert str(
+    ) == build_query(Person.name.ilike("test%"))
+    assert build_query(
         query.comp.insensitive_like("rlike")(Person.name, "test")
-    ) == str(Person.name.ilike("%test"))
-    assert str(query.comp.isnull(Person.name, True)) == str(
+    ) == build_query(Person.name.ilike("%test"))
+    assert build_query(query.comp.isnull(Person.name, True)) == build_query(
         Person.name.is_(None)
     )
-    assert str(query.comp.isnull(Person.name, False)) == str(
+    assert build_query(query.comp.isnull(Person.name, False)) == build_query(
         Person.name.is_not(None)
     )
     now = datetime.now()
-    assert str(
+    assert build_query(
         query.as_date(query.comp.equals)(Person.last_login, now.date())
-    ) == str(sa.func.date(Person.last_login) == now.date())
-    assert str(
+    ) == build_query(sa.func.date(Person.last_login) == now.date())
+    assert build_query(
         query.as_time(query.comp.greater)(Person.last_login, now.time())
-        == str(sa.func.time(Person.last_login) > now.time())
+        == build_query(sa.func.time(Person.last_login) > now.time())
     )
+
+
+@no_type_check
+def test_related_queries_return_expected_values():
+    assert (
+        build_query(query.comp.relation_exists(RelatedPerson.address, True))
+        == build_query(
+            query.comp.relation_exists_m2m(RelatedPerson.address, True)
+        )
+        == build_query(RelatedPerson.address.any())
+    )
+    assert (
+        build_query(query.comp.relation_exists(PersonAddress.another, True))
+        == build_query(
+            query.comp.relation_exists_o2m(PersonAddress.another, True)
+        )
+        == build_query(PersonAddress.another.has())
+    )
+    assert (
+        build_query(query.comp.relation_exists(RelatedPerson.address, False))
+        == build_query(
+            query.comp.relation_exists_m2m(RelatedPerson.address, False)
+        )
+        == build_query(~RelatedPerson.address.any())
+    )
+    assert (
+        build_query(query.comp.relation_exists(PersonAddress.another, False))
+        == build_query(
+            query.comp.relation_exists_o2m(PersonAddress.another, False)
+        )
+        == build_query(~PersonAddress.another.has())
+    )
+
+    comp = query.Where("another.name", "any")
+    assert build_query(
+        query.comp.make_relation_check(comp)(PersonAddress.another, False)
+    ) == build_query(~PersonAddress.another.has(Another.name == "any"))

@@ -6,8 +6,8 @@ from urllib.parse import quote
 import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 
-from gyver.utils import cache
 from gyver.database import default_metadata
+from gyver.utils import cache
 
 from . import drivers
 from .config import DatabaseConfig

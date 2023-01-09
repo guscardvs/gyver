@@ -1,12 +1,14 @@
 import typing
 
 import sqlalchemy as sa
-from sqlalchemy.orm import RelationshipProperty
+
+from gyver.database.query.null import NullBind
 
 from .interface import Comparator
 from .interface import Comparison
 from .interface import FieldType
 from .interface import Sortable
+from .interface import BindClause
 
 
 def always_true(field: FieldType, target: typing.Any) -> Comparison:
@@ -94,9 +96,17 @@ def json_empty(field: FieldType, target: typing.Any) -> Comparison:
     return func_length == 0 if target else func_length != 0
 
 
-def relation_exists_m2m(field: FieldType, target: bool) -> Comparison:
-    return field.any() if target else ~field.any()
+def make_relation_check(clause: BindClause) -> Comparator:
+    def _relation_exists(field: FieldType, target: bool) -> Comparison:
+        comp = clause.bind(field.class_)
+        func = field.has if field.property.secondary is None else field.any
+        result = func() if str(comp) == str(sa.true()) else func(comp)
+        return result if target else ~result
+
+    return _relation_exists
 
 
-def relation_exists_o2m(field: FieldType, target: bool) -> Comparison:
-    return field.has() if target else ~field.has()
+# Compat
+relation_exists = (
+    relation_exists_m2m
+) = relation_exists_o2m = make_relation_check(NullBind())
