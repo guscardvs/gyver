@@ -101,6 +101,15 @@ def test_related_queries_return_expected_values():
         )
         == build_query(~PersonAddress.another.has())
     )
+    assert (
+        build_query(
+            query.comp.relation_exists(PersonAddress.related_person, False)
+        )
+        == build_query(
+            query.comp.relation_exists_m2m(PersonAddress.related_person, False)
+        )
+        == build_query(~PersonAddress.related_person.any())
+    )
 
     comp = query.Where("another.name", "any")
     assert build_query(

@@ -22,6 +22,11 @@ class PersonAddress(Entity):
     another_id = sa.Column(sa.Integer, sa.ForeignKey("another.id"))
 
     another = make_relation(Another)
+    related_person = make_relation(
+        lambda: RelatedPerson,
+        relation_name="RelatedPerson",
+        back_populates="address",
+    )
 
 
 related_person_person_address = create_relation_table(

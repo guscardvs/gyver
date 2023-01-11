@@ -99,7 +99,13 @@ def json_empty(field: FieldType, target: typing.Any) -> Comparison:
 def make_relation_check(clause: BindClause) -> Comparator:
     def _relation_exists(field: FieldType, target: bool) -> Comparison:
         comp = clause.bind(field.class_)
-        func = field.has if field.property.secondary is None else field.any
+        func = (
+            field.has
+            if field.property.direction.name.lower()
+            not in ("onetomany", "manytomany")
+            else field.any
+        )
+        print(field)
         result = func() if str(comp) == str(sa.true()) else func(comp)
         return result if target else ~result
 
