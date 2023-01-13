@@ -20,6 +20,9 @@ class DatabaseConfig(ProviderConfig):
     user: str = ""
     password: str = ""
     name: str = ""
+    pool_size: int = 20
+    pool_recycle: int = 3600
+    max_overflow: int = 0
 
     @utils.lazyfield
     def real_port(self) -> int:
