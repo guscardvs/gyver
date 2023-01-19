@@ -74,6 +74,6 @@ class RawQuery(interface.BindClause):
     def __init__(self, cmp: interface.Comparison) -> None:
         self._cmp = cmp
 
-    def bind(self, mapper: interface.Mapper):
+    def bind(self, mapper: interface.Mapper) -> interface.Comparison:
         del mapper
         return self._cmp
