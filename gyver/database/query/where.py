@@ -66,3 +66,14 @@ class AlwaysTrue(interface.BindClause):
 
     def bind(self, mapper: interface.Mapper) -> interface.Comparison:
         return cp.always_true(_placeholder_column, mapper)
+
+
+class RawQuery(interface.BindClause):
+    type_ = ClauseType.BIND
+
+    def __init__(self, cmp: interface.Comparison) -> None:
+        self._cmp = cmp
+
+    def bind(self, mapper: interface.Mapper):
+        del mapper
+        return self._cmp
