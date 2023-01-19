@@ -11,6 +11,25 @@ from . import interface
 T = typing.TypeVar("T")
 
 
+class _BindCache:
+    def __init__(self) -> None:
+        self._cached: dict[typing.Hashable, interface.Comparison] = {}
+
+    def get(
+        self, key: typing.Hashable
+    ) -> typing.Optional[interface.Comparison]:
+        return self._cached.get(key)
+
+    def set(
+        self, key: typing.Hashable, value: interface.Comparison
+    ) -> interface.Comparison:
+        self._cached[key] = value
+        return value
+
+
+_cache = _BindCache()
+
+
 class Where(interface.BindClause, typing.Generic[T]):
     def __init__(
         self,
@@ -27,7 +46,20 @@ class Where(interface.BindClause, typing.Generic[T]):
     def bind(self, mapper: interface.Mapper) -> interface.Comparison:
         if self.comp is cp.always_true:
             return AlwaysTrue().bind(mapper)
+        if not isinstance(mapper, typing.Hashable):
+            return self._get_comparison(
+                _helpers.retrieve_attr(mapper, self.field)
+            )
+        if value := _cache.get((mapper, self.expected, self.comp)):
+            return value
         attr = _helpers.retrieve_attr(mapper, self.field)
+
+        return _cache.set(
+            (mapper, self.expected, self.comp),
+            self._get_comparison(attr),
+        )
+
+    def _get_comparison(self, attr):
         return (
             sa.true()
             if self.expected is None
