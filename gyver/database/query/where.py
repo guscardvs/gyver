@@ -50,7 +50,9 @@ class Where(interface.BindClause, typing.Generic[T]):
             return self._get_comparison(
                 _helpers.retrieve_attr(mapper, self.field)
             )
-        if value := _cache.get((mapper, self.expected, self.comp)):
+        if (
+            value := _cache.get((mapper, self.expected, self.comp))
+        ) is not None:
             return value
         attr = _helpers.retrieve_attr(mapper, self.field)
 
