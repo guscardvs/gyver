@@ -1,18 +1,17 @@
 from gyver.database.typedef import Driver
 
 from .interface import Dialect
-from .mysql import MariaDbDialect
-from .mysql import MysqlDialect
+from .mysql import AsyncMyDialect, AsyncMyMariaDialect
 from .postgres import PostgresDialect
 from .sqlite import SqliteDriver
 
 
 def resolve_driver(driver: Driver) -> Dialect:
     _table: dict[Driver, Dialect] = {
-        Driver.MYSQL: MysqlDialect(),
+        Driver.MYSQL: AsyncMyDialect(),
         Driver.POSTGRES: PostgresDialect(),
         Driver.SQLITE: SqliteDriver(),
-        Driver.MARIADB: MariaDbDialect(),
+        Driver.MARIADB: AsyncMyMariaDialect(),
     }
     return _table[driver]
 
