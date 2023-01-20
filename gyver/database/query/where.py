@@ -10,10 +10,13 @@ from . import interface
 
 T = typing.TypeVar("T")
 
+CACHE_MAXLEN = 250
+
 
 class _BindCache:
     def __init__(self) -> None:
         self._cached: dict[typing.Hashable, interface.Comparison] = {}
+        self.maxlen = CACHE_MAXLEN
 
     def get(
         self, key: typing.Hashable
@@ -23,6 +26,8 @@ class _BindCache:
     def set(
         self, key: typing.Hashable, value: interface.Comparison
     ) -> interface.Comparison:
+        if len(self._cached) >= CACHE_MAXLEN:
+            self._cached.pop(tuple(self._cached)[0])
         self._cached[key] = value
         return value
 
