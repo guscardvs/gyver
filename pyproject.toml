@@ -58,7 +58,7 @@ boto3-stubs = { extras = ["s3", "sqs"], version = "^1.26.13" }
 mkdocs = "^1.4.2"
 
 [tool.poetry.extras]
-db-mysql = ['aiomysql', 'pymysql']
+db-mysql = ['asyncmy', 'pymysql']
 db-mariadb = ['asyncmy', 'pymysql']
 db-pg = ['asyncpg', 'psycopg2']
 db-sqlite = ['aiosqlite']

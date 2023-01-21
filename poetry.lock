@@ -2746,7 +2746,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [extras]
 cache = ["redis"]
 db-mariadb = ["asyncmy", "pymysql"]
-db-mysql = ["aiomysql", "pymysql"]
+db-mysql = ["asyncmy", "pymysql"]
 db-pg = ["asyncpg", "psycopg2"]
 db-sqlite = ["aiosqlite"]
 sqlalchemy = ["sqlalchemy"]
@@ -2754,4 +2754,4 @@ sqlalchemy = ["sqlalchemy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "b34929011ce8d6287cd9f90b4680ba53bd8df9408c6bbf3207f93a2aeab24488"
+content-hash = "1f775e99a2b6af660967426f6a945d15015e46cc7d7b8b77267c2a685a88df20"
