@@ -7,7 +7,23 @@ SelfT = typing.TypeVar("SelfT")
 
 
 class lazyfield(typing.Generic[SelfT, T]):
+    """
+    A descriptor class that can be used as a decorator for a method on a class.
+    When the decorated method is accessed on an instance, it will check if the
+    instance has an attribute with the same name as the method but with an
+    underscore prefix. If the attribute does not exist, it will call the decorated
+    method on the instance and set the result as the attribute's value.
+    Subsequent accesses will return the cached value, avoiding unnecessary
+    recalculation or computation.
+    """
+
     def __init__(self, func: typing.Callable[[SelfT], T]) -> None:
+        """
+        func : callable
+            The function that will be decorated. This function should take
+            a single argument, which is the instance of the class it is a
+            method of.
+        """
         self._func = func
 
     def __set_name__(self, owner: type[SelfT], name: str):

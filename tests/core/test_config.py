@@ -9,6 +9,7 @@ from hypothesis.strategies import text
 from gyver import config
 from gyver.exc import InvalidCast
 from gyver.exc import MissingName
+from gyver.utils import json
 
 
 @given(text(), text())
@@ -121,17 +122,18 @@ def test_provider_parses_correctly_on_from_config():
     assert person_config.meta == {"spouse": "Jane Doe"}
 
 
-def test_provider_raises_error_if_receives_dict_as_param():
+def test_provider_uses_json_loads_if_receives_dict_as_param():
     mapping = config.EnvMapping(
         {
             "NAME": "John Doe",
             "emails": "person@example.com,  john.doe@hi.com,doejohn@test.com",
             "COUNTS": "6,2, 7, 1",
+            "meta": json.dumps({"hello": "world"}),
         }
     )
     cfg = config.Config(mapping=mapping)
-    with pytest.raises(NotImplementedError):
-        config.from_config(PersonConfig, __config__=cfg)
+    person_config = config.from_config(PersonConfig, __config__=cfg)
+    assert person_config.meta == {"hello": "world"}
 
 
 def test_boolean_cast_works_correctly():

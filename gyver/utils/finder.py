@@ -21,7 +21,8 @@ class InvalidPath(GyverError, ValueError):
 
 @dataclass(frozen=True)
 class Finder:
-
+    """Finder can be used to search for and import specific entities
+    (defined by a user-provided validator function) from a codebase."""
     validator: Validator
     root: pathlib.Path
     look_on: typing.Optional[pathlib.Path] = None

@@ -5,6 +5,7 @@ from .envconfig import DotFile
 from .envconfig import EnvConfig
 from .provider import ProviderConfig
 from .provider import from_config
+from .provider import ConfigLoader
 from .typedef import Env
 from .utils import boolean_cast
 
@@ -14,6 +15,7 @@ __all__ = [
     "EnvMapping",
     "MISSING",
     "ProviderConfig",
+    "ConfigLoader",
     "from_config",
     "EnvConfig",
     "Env",

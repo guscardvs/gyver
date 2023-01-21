@@ -66,11 +66,11 @@ cache = ['redis']
 sqlalchemy = ['sqlalchemy']
 
 [tool.black]
-line_length = 79
+line_length = 88
 
 [tool.isort]
 profile = 'black'
-line_length = 79
+line_length = 88
 force_single_line = true
 
 [build-system]
