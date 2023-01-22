@@ -2502,6 +2502,24 @@ typing-extensions = {version = ">=3.10.0", markers = "python_version < \"3.10\""
 full = ["httpx (>=0.22.0)", "itsdangerous", "jinja2", "python-multipart", "pyyaml"]
 
 [[package]]
+name = "termynal"
+version = "0.2.1"
+description = ""
+category = "dev"
+optional = false
+python-versions = ">=3.8.1,<4.0.0"
+files = [
+    {file = "termynal-0.2.1-py3-none-any.whl", hash = "sha256:407cbf1cc757ebf322c6536b835fbc41f9d436b0812bc98b4b60441d411d2e4a"},
+    {file = "termynal-0.2.1.tar.gz", hash = "sha256:f456fac81687b57fc7241cf352d0679856e4344048109744018afe19e5bad58e"},
+]
+
+[package.dependencies]
+markdown = "*"
+
+[package.extras]
+mkdocs = ["mkdocs (>=1.4,<2.0)"]
+
+[[package]]
 name = "toml"
 version = "0.10.2"
 description = "Python Library for Tom's Obvious, Minimal Language"
@@ -2917,4 +2935,4 @@ sqlalchemy = ["sqlalchemy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "f22f4fad888aa64bdf05a0dc2654b5b5142b4a69bfec8ba26df054d3fd964b8b"
+content-hash = "2437d89163da401be531bc0acdf8e9fcc0efd10b9b170be2e7e746600a1591b5"

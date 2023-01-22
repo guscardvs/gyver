@@ -26,6 +26,6 @@ class Model(BaseModel):
         return super().__setattr__(name, value)
 
 
-class MutableModel(BaseModel):
+class MutableModel(Model):
     class Config:
         frozen = False
