@@ -125,8 +125,8 @@ class ConfigLoader:
         name = name.removeprefix("_")
         alias = alias.removeprefix("_")
         default_results = (
-            f"{prefix}_{name}".upper(),
             f"{prefix}_{alias}".upper(),
+            f"{prefix}_{name}".upper(),
         )
         return (*default_results, *(item.lower() for item in default_results))
 
