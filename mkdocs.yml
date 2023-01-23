@@ -2,9 +2,14 @@ site_name: Gyver
 nav:
   - Gyver: index.md
   - Usage:
-    - Model: usage/model.md
-    - Utils: usage/utils.md
-    - Config: usage/config.md
+      - Model: usage/model.md
+      - Utils: usage/utils.md
+      - Config: usage/config.md
+      - "Database":
+          - usage/database/index.md
+          - Providers: usage/database/providers.md
+          - SQLAlchemy Defaults: usage/database/sqlalchemy.md
+          - SQLAlchemy Queries Helper: usage/database/query.md
 theme:
   features:
     - navigation.instant
