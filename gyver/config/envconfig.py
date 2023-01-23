@@ -44,6 +44,15 @@ class EnvConfig(Config):
 
     @utils.lazyfield
     def dotfile(self):
+        """
+        The dotfile function returns the dotfile object that is applicable to
+        the current environment.  It traverses the list of dotfiles in reverse order,
+        so that higher priority dotfiles are checked first.  If no matching dotfile is
+        found, it returns None.
+
+        :return: The first dotfile that is not higher than the current environment
+        """
+
         for dot in sorted(self._dotfiles, reverse=True):
             if not dot.is_higher(self.env):
                 break
