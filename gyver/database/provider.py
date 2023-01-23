@@ -27,7 +27,7 @@ class SyncDatabaseProvider(SaAdapter):
         )
 
         super().__init__(
-            engine=sa.create_engine(make_uri(self.config), **db_kwargs)
+            engine=sa.create_engine(make_uri(self.config, sync=True), **db_kwargs)
         )
 
     @property
