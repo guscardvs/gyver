@@ -70,7 +70,7 @@ provider = SyncDatabaseProvider(db_config)
 # the context-handler library
 with provider.context().begin() as connection:
     # Do a hello world
-    connection.execute(sa.select(sa.text('Hello World')))
+    connection.execute(sa.select(sa.text('"Hello World"')))
 
 ```
 
