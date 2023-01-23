@@ -8,16 +8,35 @@ _to_snake_regexp = re.compile("([a-z])([A-Z])")
 
 
 def to_snake(camel_string: str) -> str:
+    """
+    The to_snake function converts camelCase strings to snake_case.
+
+    :param camel_string: str: Pass the camelcase string to be converted
+    :return: A string in snake_case
+    """
     return _to_snake_regexp.sub(r"\1_\2", camel_string).lower()
 
 
 def to_camel(snake_string: str) -> str:
+    """
+    The to_camel function converts a snake_string to camelCase.
+
+    :param snake_string: str: Pass the string that is to be converted
+    :return: A string that is converted from snake_case to camelcase
+    """
     return _to_camel_regexp.sub(
         lambda match: match[1].upper(), snake_string
     ).removesuffix("_")
 
 
 def upper_camel(snake_string: str):
+    """
+    The upper_camel function converts a snake_case string to an upperCamelCase string.
+
+    :param snake_string: str: Pass in the string that we want to convert
+    :return: A string that is the snake_string converted to camel
+    case and with the first letter capitalized
+    """
     val = to_camel(snake_string)
     return val and val[0].upper() + val[1:]
 

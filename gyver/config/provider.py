@@ -135,7 +135,18 @@ class ConfigLoader:
         cls,
         root: Path,
     ) -> dict[type[ProviderConfig], tuple[tuple[str, str], ...]]:
-        """resolves confignames and returns in a dict of {class: (configs)}"""
+        """
+        The resolve_confignames function resolves the names of all environment
+        variables required by the configs in
+        a ProviderConfig subclass.
+        It returns them in a dict of {class: (configs)}.
+
+        :param cls: Call the class_validator function, which is used to validate that a
+        class has all of the required attributes
+        :param root: Path: Specify the root directory of the project
+        :return: A dictionary of {class: (configs)}
+        """
+
         validator = finder.class_validator(ProviderConfig)
         provider_finder = finder.Finder(validator, root)
         provider_finder.find()

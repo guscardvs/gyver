@@ -15,6 +15,15 @@ from .config import DatabaseConfig
 
 @cache
 def make_uri(config: DatabaseConfig, sync: bool = False) -> str:
+    """Construct a database URI from a database configuration .
+
+    Args:
+        config (DatabaseConfig): configuration object
+        sync (bool, optional): If uses async or sync drivers. Defaults to False.
+
+    Returns:
+        str: database URI
+    """
     if config.dialect.only_host:
         return (
             f"{drivers.build_dialect_scheme(config.dialect, sync)}"
