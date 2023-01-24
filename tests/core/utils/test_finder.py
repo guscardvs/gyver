@@ -22,9 +22,7 @@ def test_finder_by_instance_finds_only_instances_of_given_class():
 
 
 def test_finder_by_class_finds_only_subclasses_of_given_class():
-    class_finder = finder.Finder(
-        finder.class_validator(base.Base), ROOT, MOD_PATH
-    )
+    class_finder = finder.Finder(finder.class_validator(base.Base), ROOT, MOD_PATH)
     class_finder.find()
     result = class_finder.output
 

@@ -43,15 +43,9 @@ class OrderBy:
 
     def _find_column(self, query: Select) -> ColumnElement:
         try:
-            return next(
-                col for col in query.selected_columns if col.key == self.field
-            )
+            return next(col for col in query.selected_columns if col.key == self.field)
         except StopIteration:
-            raise ValueError(
-                f"Field {self.field} does not exist in query"
-            ) from None
+            raise ValueError(f"Field {self.field} does not exist in query") from None
 
     def _apply_order(self, col: ColumnElement):
-        return (
-            col.asc() if self.direction is OrderDirection.ASC else col.desc()
-        )
+        return col.asc() if self.direction is OrderDirection.ASC else col.desc()

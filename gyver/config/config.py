@@ -29,9 +29,7 @@ class EnvMapping(MutableMapping[str, str]):
 
     def __setitem__(self, name: str, value: str):
         if name in self._already_read:
-            raise panic(
-                KeyError, f"{name} already read, cannot change its value"
-            )
+            raise panic(KeyError, f"{name} already read, cannot change its value")
         self._mapping[name] = value
 
     def __delitem__(self, name: str) -> None:
@@ -80,9 +78,7 @@ class Config:
         try:
             val = cast(val)
         except Exception as e:
-            raise panic(
-                InvalidCast, f"{name} received and invalid value {val}"
-            ) from e
+            raise panic(InvalidCast, f"{name} received and invalid value {val}") from e
         else:
             return val
 
@@ -99,9 +95,7 @@ class Config:
     ) -> Any:
         val = self._get_val(name, default)
         if val is MISSING:
-            raise panic(
-                MissingName, f"{name} not found and no default was given"
-            )
+            raise panic(MissingName, f"{name} not found and no default was given")
         return self._cast(name, val, cast)
 
     @overload

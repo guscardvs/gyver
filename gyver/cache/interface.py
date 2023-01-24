@@ -38,16 +38,12 @@ class AsyncCacheInterface(typing.Protocol):
     ) -> None:
         ...
 
-    async def delete(
-        self, name: str, map_name: typing.Optional[str] = None
-    ) -> None:
+    async def delete(self, name: str, map_name: typing.Optional[str] = None) -> None:
         ...
 
 
 class CacheInterface(typing.Protocol):
-    def get(
-        self, name: str, cast: typing.Callable[[typing.Any], T] = json.loads
-    ) -> T:
+    def get(self, name: str, cast: typing.Callable[[typing.Any], T] = json.loads) -> T:
         ...
 
     def set(

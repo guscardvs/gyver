@@ -67,9 +67,7 @@ class QueueProvider:
         return Messages.parse_obj(response)
 
     def send_message(self, body: str, **kwargs: Any):
-        self.client.send_message(
-            QueueUrl=self.queue_url, MessageBody=body, **kwargs
-        )
+        self.client.send_message(QueueUrl=self.queue_url, MessageBody=body, **kwargs)
 
     def stream(
         self,

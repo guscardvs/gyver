@@ -19,9 +19,7 @@ T = typing.TypeVar("T")
 class MockAsyncCache(AsyncCacheInterface):
     def __init__(
         self,
-        key_map: typing.Optional[
-            typing.MutableMapping[str, typing.Any]
-        ] = None,
+        key_map: typing.Optional[typing.MutableMapping[str, typing.Any]] = None,
     ) -> None:
         self._key_map = {} if key_map is None else key_map
         self._queue = self._setup_queue()
@@ -93,9 +91,7 @@ class MockAsyncCache(AsyncCacheInterface):
                 self._key_map[map_name] = {}
             self._key_map[map_name][name] = dumps(value)
 
-    async def delete(
-        self, name: str, map_name: typing.Optional[str] = None
-    ) -> None:
+    async def delete(self, name: str, map_name: typing.Optional[str] = None) -> None:
         async with self._in_queue():
             used_map = self._key_map
             if map_name is not None:
@@ -119,9 +115,7 @@ _KeyMapType = typing.MutableMapping[
 class MockCache(CacheInterface):
     def __init__(
         self,
-        key_map: typing.Optional[
-            typing.MutableMapping[str, typing.Any]
-        ] = None,
+        key_map: typing.Optional[typing.MutableMapping[str, typing.Any]] = None,
     ) -> None:
         self._key_map: _KeyMapType = {} if key_map is None else key_map
         self._queue = self._setup_queue()
@@ -141,9 +135,7 @@ class MockCache(CacheInterface):
         finally:
             self._queue.put(object())
 
-    def get(
-        self, name: str, cast: typing.Callable[[typing.Any], T] = json.loads
-    ) -> T:
+    def get(self, name: str, cast: typing.Callable[[typing.Any], T] = json.loads) -> T:
         with self._in_queue():
             try:
                 val = self._key_map[name]

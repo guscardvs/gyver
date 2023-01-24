@@ -18,9 +18,7 @@ class _BindCache:
         self._cached: dict[typing.Hashable, interface.Comparison] = {}
         self.maxlen = CACHE_MAXLEN
 
-    def get(
-        self, key: typing.Hashable
-    ) -> typing.Optional[interface.Comparison]:
+    def get(self, key: typing.Hashable) -> typing.Optional[interface.Comparison]:
         return self._cached.get(key)
 
     def set(
@@ -52,12 +50,8 @@ class Where(interface.BindClause, typing.Generic[T]):
         if self.comp is cp.always_true:
             return AlwaysTrue().bind(mapper)
         if not isinstance(mapper, typing.Hashable):
-            return self._get_comparison(
-                _helpers.retrieve_attr(mapper, self.field)
-            )
-        if (
-            value := _cache.get((mapper, self.expected, self.comp))
-        ) is not None:
+            return self._get_comparison(_helpers.retrieve_attr(mapper, self.field))
+        if (value := _cache.get((mapper, self.expected, self.comp))) is not None:
             return value
         attr = _helpers.retrieve_attr(mapper, self.field)
 
@@ -67,11 +61,7 @@ class Where(interface.BindClause, typing.Generic[T]):
         )
 
     def _get_comparison(self, attr):
-        return (
-            sa.true()
-            if self.expected is None
-            else self.comp(attr, self.expected)
-        )
+        return sa.true() if self.expected is None else self.comp(attr, self.expected)
 
 
 class _JoinBind(interface.BindClause):

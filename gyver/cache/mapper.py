@@ -35,9 +35,7 @@ class CacheMap:
         self._cache = cache
         self._name = name
 
-    def get(
-        self, name: str, cast: typing.Callable[[typing.Any], T] = json.loads
-    ) -> T:
+    def get(self, name: str, cast: typing.Callable[[typing.Any], T] = json.loads) -> T:
         return self._cache.map_get(self._name, name, cast)
 
     def set(

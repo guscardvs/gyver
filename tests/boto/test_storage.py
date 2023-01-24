@@ -35,9 +35,7 @@ def test_upload_file_uploads_file_correctly():
         object_name = "name.csv"
         provider.upload_file(buffer, object_name)
 
-        provider.client.head_object(
-            Bucket=provider.config.bucket_name, Key=object_name
-        )
+        provider.client.head_object(Bucket=provider.config.bucket_name, Key=object_name)
 
 
 def test_get_presigned_get_returns_url_for_object():

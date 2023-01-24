@@ -26,8 +26,7 @@ def make_uri(config: DatabaseConfig, sync: bool = False) -> str:
     """
     if config.dialect.only_host:
         return (
-            f"{drivers.build_dialect_scheme(config.dialect, sync)}"
-            f"://{config.host}"
+            f"{drivers.build_dialect_scheme(config.dialect, sync)}" f"://{config.host}"
         )
     return (
         f"{drivers.build_dialect_scheme(config.dialect, sync)}://"
@@ -98,9 +97,7 @@ def make_relation(
 
 
 def make_relation(
-    relation: typing.Union[
-        str, type[EntityT], typing.Callable[[], type[EntityT]]
-    ],
+    relation: typing.Union[str, type[EntityT], typing.Callable[[], type[EntityT]]],
     *,
     relation_name: str = "",
     back_populates: typing.Optional[str] = None,
@@ -129,9 +126,7 @@ def create_relation_table(table_name: str, *entities: str):
         default_metadata,
         sa.Column("id", sa.Integer, primary_key=True),
         *[
-            sa.Column(
-                f"{entity}_id", sa.Integer, sa.ForeignKey(f"{entity}.id")
-            )
+            sa.Column(f"{entity}_id", sa.Integer, sa.ForeignKey(f"{entity}.id"))
             for entity in entities
         ],
     )

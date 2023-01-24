@@ -1,6 +1,8 @@
-from gyver.database.typedef import ClauseType
-from . import interface
 import sqlalchemy as sa
+
+from gyver.database.typedef import ClauseType
+
+from . import interface
 
 
 class NullBind(interface.BindClause):

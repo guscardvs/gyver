@@ -7,9 +7,7 @@ from .mocks import build_query
 
 
 def test_limit_offset_paginate_return_valid_paginate_query():
-    built_query = (
-        query.select(Person).apply(query.LimitOffsetPaginate(10, 5)).get()
-    )
+    built_query = query.select(Person).apply(query.LimitOffsetPaginate(10, 5)).get()
     sa_query = sa.select(Person).limit(10).offset(5)
 
     assert build_query(built_query) == build_query(sa_query)

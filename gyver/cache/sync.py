@@ -27,9 +27,7 @@ class CacheProvider:
         self._test = test
 
     @staticmethod
-    def _make_concrete(
-        config: Optional[CacheConfig], test: bool
-    ) -> CacheInterface:
+    def _make_concrete(config: Optional[CacheConfig], test: bool) -> CacheInterface:
         return MockCache() if test else RedisWrapper(config)
 
     @lazyfield

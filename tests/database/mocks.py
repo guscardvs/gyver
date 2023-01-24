@@ -37,14 +37,10 @@ related_person_person_address = create_relation_table(
 class RelatedPerson(Entity):
     address_id = sa.Column(sa.Integer, sa.ForeignKey("personaddress.id"))
 
-    address = make_relation(
-        PersonAddress, secondary=related_person_person_address
-    )
+    address = make_relation(PersonAddress, secondary=related_person_person_address)
 
 
-mock_table = make_table(
-    "mock_table", sa.Column("id", sa.Integer, primary_key=True)
-)
+mock_table = make_table("mock_table", sa.Column("id", sa.Integer, primary_key=True))
 
 
 def build_query(query: Comparison):

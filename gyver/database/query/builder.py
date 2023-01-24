@@ -27,9 +27,7 @@ class Query(typing.Generic[ExecutableT]):
         self._entity = entity
         self._executable = executable
 
-    def _preprocess_params(
-        self, entity: Mapper
-    ) -> typing.Sequence[typing.Any]:
+    def _preprocess_params(self, entity: Mapper) -> typing.Sequence[typing.Any]:
         return (entity,)
 
     def _process_query(self, query: ExecutableT) -> ExecutableT:
@@ -64,9 +62,7 @@ class select(Query[Select]):
     def _default_apply(entity: Mapper) -> tuple[Mapper]:
         return (entity,)
 
-    def _preprocess_params(
-        self, entity: Mapper
-    ) -> typing.Sequence[typing.Any]:
+    def _preprocess_params(self, entity: Mapper) -> typing.Sequence[typing.Any]:
         return self._apply_func(entity)
 
     def apply(self: Self, *clauses: ApplyClause) -> Self:
@@ -76,9 +72,7 @@ class select(Query[Select]):
 
 
 class update(Query[Update]):
-    def __init__(
-        self, entity: Mapper, values: typing.Mapping[str, typing.Any]
-    ) -> None:
+    def __init__(self, entity: Mapper, values: typing.Mapping[str, typing.Any]) -> None:
         super().__init__(entity, sa.update)
         self._values = values
 
@@ -100,9 +94,7 @@ def count(entity: Mapper, field: str = "id"):
 
 def distinct(entity: Mapper, *fields: str):
     def _make_distinct(ent: Mapper):
-        return tuple(
-            _helpers.retrieve_attr(ent, field).distinct() for field in fields
-        )
+        return tuple(_helpers.retrieve_attr(ent, field).distinct() for field in fields)
 
     return select(entity, _make_distinct)
 

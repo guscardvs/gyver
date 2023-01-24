@@ -1,7 +1,8 @@
 from gyver.database.typedef import Driver
 
 from .interface import Dialect
-from .mysql import AsyncMyDialect, AsyncMyMariaDialect
+from .mysql import AsyncMyDialect
+from .mysql import AsyncMyMariaDialect
 from .postgres import PostgresDialect
 from .sqlite import SqliteDriver
 

@@ -13,9 +13,7 @@ def _make_converter(
     def _converter(
         comparator: interface.Comparator[T],
     ) -> interface.Comparator[T]:
-        def _comp(
-            field: interface.FieldType, target: T
-        ) -> interface.Comparison:
+        def _comp(field: interface.FieldType, target: T) -> interface.Comparison:
             return comparator(converter(field), target)
 
         return _comp

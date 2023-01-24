@@ -4,11 +4,11 @@ import sqlalchemy as sa
 
 from gyver.database.query.null import NullBind
 
+from .interface import BindClause
 from .interface import Comparator
 from .interface import Comparison
 from .interface import FieldType
 from .interface import Sortable
-from .interface import BindClause
 
 
 def always_true(field: FieldType, target: typing.Any) -> Comparison:
@@ -65,9 +65,7 @@ def llike(field: FieldType, target: str) -> Comparison:
 def insensitive_like(
     opt: typing.Literal["like", "rlike", "llike"] = "like"
 ) -> Comparator[str]:
-    fmt = {"like": "%{target}%", "rlike": "%{target}", "llike": "{target}%"}[
-        opt
-    ]
+    fmt = {"like": "%{target}%", "rlike": "%{target}", "llike": "{target}%"}[opt]
 
     def comparator(field: FieldType, target: str):
         return field.ilike(fmt.format(target=target))
@@ -101,11 +99,9 @@ def make_relation_check(clause: BindClause) -> Comparator:
         comp = clause.bind(field.class_)
         func = (
             field.has
-            if field.property.direction.name.lower()
-            not in ("onetomany", "manytomany")
+            if field.property.direction.name.lower() not in ("onetomany", "manytomany")
             else field.any
         )
-        print(field)
         result = func() if str(comp) == str(sa.true()) else func(comp)
         return result if target else ~result
 
@@ -113,6 +109,6 @@ def make_relation_check(clause: BindClause) -> Comparator:
 
 
 # Compat
-relation_exists = (
-    relation_exists_m2m
-) = relation_exists_o2m = make_relation_check(NullBind())
+relation_exists = relation_exists_m2m = relation_exists_o2m = make_relation_check(
+    NullBind()
+)

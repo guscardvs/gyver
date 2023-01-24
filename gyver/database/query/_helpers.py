@@ -33,9 +33,7 @@ def _is_entity(entity: Mapper) -> TypeGuard[type[AbstractEntity]]:
     return isclass(entity) and issubclass(entity, AbstractEntity)
 
 
-def _retrieve_related_field(
-    entity: type[AbstractEntity], field: str
-) -> FieldType:
+def _retrieve_related_field(entity: type[AbstractEntity], field: str) -> FieldType:
     *fields, target_field = field.split(".")
     current_mapper = entity
     for f in fields:

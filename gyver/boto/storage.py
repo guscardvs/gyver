@@ -84,16 +84,12 @@ class StorageProvider:
     ):
         bucket_name = bucket_name or self._config.bucket_name
         return (
-            self._generate_presigned_url(
-                "get_object", object_name, bucket_name
-            )
+            self._generate_presigned_url("get_object", object_name, bucket_name)
             if self.is_key(object_name, bucket_name)
             else object_name
         )
 
-    def is_key(
-        self, object_name: str, bucket_name: Optional[str] = None
-    ) -> bool:
+    def is_key(self, object_name: str, bucket_name: Optional[str] = None) -> bool:
         bucket_name = bucket_name or self._config.bucket_name
         try:
             self.client.head_object(Bucket=bucket_name, Key=object_name)

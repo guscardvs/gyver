@@ -23,6 +23,7 @@ class InvalidPath(GyverError, ValueError):
 class Finder:
     """Finder can be used to search for and import specific entities
     (defined by a user-provided validator function) from a codebase."""
+
     validator: Validator
     root: pathlib.Path
     look_on: typing.Optional[pathlib.Path] = None
@@ -30,9 +31,7 @@ class Finder:
 
     def __post_init__(self):
         if not self.root.exists():
-            raise InvalidPath(
-                f"root must be a valid path, received {self.root}"
-            )
+            raise InvalidPath(f"root must be a valid path, received {self.root}")
 
     @property
     def _look_on(self):
@@ -61,9 +60,7 @@ class Finder:
         )
 
     def _should_look(self, path: pathlib.Path):
-        str_exclude = tuple(
-            item for item in self._exclude if isinstance(item, str)
-        )
+        str_exclude = tuple(item for item in self._exclude if isinstance(item, str))
         path_exclude = tuple(
             item for item in self._exclude if isinstance(item, pathlib.Path)
         )
