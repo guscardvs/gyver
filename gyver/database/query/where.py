@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 import typing
 
 import sqlalchemy as sa
@@ -18,7 +19,9 @@ class _BindCache:
         self._cached: dict[typing.Hashable, interface.Comparison] = {}
         self.maxlen = CACHE_MAXLEN
 
-    def get(self, key: typing.Hashable) -> typing.Optional[interface.Comparison]:
+    def get(
+        self, key: typing.Hashable
+    ) -> typing.Optional[interface.Comparison]:
         return self._cached.get(key)
 
     def set(
@@ -33,15 +36,33 @@ class _BindCache:
 _cache = _BindCache()
 
 
+@dataclass(frozen=True)
+class Resolver(typing.Generic[T]):
+    val: typing.Any
+
+    def resolve(self, mapper: interface.Mapper):
+        del mapper
+        return self.val
+
+    def __bool__(self):
+        return self.val is not None
+
+
+class FieldResolver(Resolver[str]):
+    def resolve(self, mapper: interface.Mapper):
+        return _helpers.retrieve_attr(mapper, self.val)
+
+
 class Where(interface.BindClause, typing.Generic[T]):
     def __init__(
         self,
         field: str,
         expected: typing.Optional[T] = None,
         comp: interface.Comparator[T] = cp.equals,
+        resolver_class: type[Resolver[T]] = Resolver,
     ) -> None:
         self.field = field
-        self.expected = expected
+        self.expected = resolver_class(expected)
         self.comp = comp
 
     type_ = ClauseType.BIND
@@ -49,19 +70,23 @@ class Where(interface.BindClause, typing.Generic[T]):
     def bind(self, mapper: interface.Mapper) -> interface.Comparison:
         if self.comp is cp.always_true:
             return AlwaysTrue().bind(mapper)
+        resolved = self.expected.resolve(mapper)
         if not isinstance(mapper, typing.Hashable):
-            return self._get_comparison(_helpers.retrieve_attr(mapper, self.field))
-        if (value := _cache.get((mapper, self.expected, self.comp))) is not None:
+            return self._get_comparison(
+                _helpers.retrieve_attr(mapper, self.field),
+                resolved,
+            )
+        if (value := _cache.get((mapper, resolved, self.comp))) is not None:
             return value
         attr = _helpers.retrieve_attr(mapper, self.field)
 
         return _cache.set(
-            (mapper, self.expected, self.comp),
-            self._get_comparison(attr),
+            (mapper, resolved, self.comp),
+            self._get_comparison(attr, resolved),
         )
 
-    def _get_comparison(self, attr):
-        return sa.true() if self.expected is None else self.comp(attr, self.expected)
+    def _get_comparison(self, attr: interface.FieldType, resolved: typing.Any):
+        return self.comp(attr, resolved) if self.expected else sa.true()
 
 
 class _JoinBind(interface.BindClause):

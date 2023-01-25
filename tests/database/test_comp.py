@@ -18,24 +18,24 @@ def test_comparison_matches_expected():  # sourcery skip: none-compare
     assert build_query(query.comp.equals(Person.name, "test")) == build_query(
         Person.name == "test"
     )
-    assert build_query(query.comp.not_equals(Person.name, "test")) == build_query(
-        Person.name != "test"
-    )
+    assert build_query(
+        query.comp.not_equals(Person.name, "test")
+    ) == build_query(Person.name != "test")
     assert build_query(query.comp.greater(Person.age, 46)) == build_query(
         Person.age > 46
     )
-    assert build_query(query.comp.greater_equals(Person.age, 46)) == build_query(
-        Person.age >= 46
-    )
+    assert build_query(
+        query.comp.greater_equals(Person.age, 46)
+    ) == build_query(Person.age >= 46)
     assert build_query(query.comp.lesser(Person.age, 46)) == build_query(
         Person.age < 46
     )
-    assert build_query(query.comp.lesser_equals(Person.age, 46)) == build_query(
-        Person.age <= 46
-    )
-    assert build_query(query.comp.between(Person.age, (45, 52))) == build_query(
-        Person.age.between(45, 52)
-    )
+    assert build_query(
+        query.comp.lesser_equals(Person.age, 46)
+    ) == build_query(Person.age <= 46)
+    assert build_query(
+        query.comp.between(Person.age, (45, 52))
+    ) == build_query(Person.age.between(45, 52))
     assert build_query(query.comp.range(Person.age, (45, 52))) == build_query(
         sa.and_(Person.age >= 45, Person.age < 52)
     )
@@ -77,26 +77,36 @@ def test_comparison_matches_expected():  # sourcery skip: none-compare
 def test_related_queries_return_expected_values():
     assert (
         build_query(query.comp.relation_exists(RelatedPerson.address, True))
-        == build_query(query.comp.relation_exists_m2m(RelatedPerson.address, True))
+        == build_query(
+            query.comp.relation_exists_m2m(RelatedPerson.address, True)
+        )
         == build_query(RelatedPerson.address.any())
     )
     assert (
         build_query(query.comp.relation_exists(PersonAddress.another, True))
-        == build_query(query.comp.relation_exists_o2m(PersonAddress.another, True))
+        == build_query(
+            query.comp.relation_exists_o2m(PersonAddress.another, True)
+        )
         == build_query(PersonAddress.another.has())
     )
     assert (
         build_query(query.comp.relation_exists(RelatedPerson.address, False))
-        == build_query(query.comp.relation_exists_m2m(RelatedPerson.address, False))
+        == build_query(
+            query.comp.relation_exists_m2m(RelatedPerson.address, False)
+        )
         == build_query(~RelatedPerson.address.any())
     )
     assert (
         build_query(query.comp.relation_exists(PersonAddress.another, False))
-        == build_query(query.comp.relation_exists_o2m(PersonAddress.another, False))
+        == build_query(
+            query.comp.relation_exists_o2m(PersonAddress.another, False)
+        )
         == build_query(~PersonAddress.another.has())
     )
     assert (
-        build_query(query.comp.relation_exists(PersonAddress.related_person, False))
+        build_query(
+            query.comp.relation_exists(PersonAddress.related_person, False)
+        )
         == build_query(
             query.comp.relation_exists_m2m(PersonAddress.related_person, False)
         )
@@ -107,3 +117,11 @@ def test_related_queries_return_expected_values():
     assert build_query(
         query.comp.make_relation_check(comp)(PersonAddress.another, False)
     ) == build_query(~PersonAddress.another.has(Another.name == "any"))
+
+
+def test_field_resolver_resolves_correctly():
+    assert build_query(
+        query.Where(
+            "another.id", "another_id", resolver_class=query.FieldResolver
+        ).bind(PersonAddress)
+    ) == build_query(Another.id_ == PersonAddress.another_id)

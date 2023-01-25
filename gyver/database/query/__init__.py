@@ -21,9 +21,11 @@ from .utils import as_upper
 from .where import Where
 from .where import and_
 from .where import or_
+from .where import FieldResolver
 
 __all__ = [
     "Where",
+    "FieldResolver",
     "and_",
     "or_",
     "OrderBy",
