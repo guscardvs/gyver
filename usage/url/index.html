@@ -9,17 +9,15 @@
       
       
       
-        <link rel="prev" href="../..">
+        <link rel="prev" href="../database/query/">
       
-      
-        <link rel="next" href="../utils/">
       
       <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
     
     
       
-        <title>Model - Gyver</title>
+        <title>URL - Gyver</title>
       
     
     
@@ -73,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#model" class="md-skip">
+        <a href="#url" class="md-skip">
           Skip to content
         </a>
       
@@ -108,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Model
+              URL
             
           </span>
         </div>
@@ -169,12 +167,10 @@
         
   
   
-    
-  
 
 
   <li class="md-tabs__item">
-    <a href="./" class="md-tabs__link md-tabs__link--active">
+    <a href="../model/" class="md-tabs__link">
       Model
     </a>
   </li>
@@ -223,10 +219,12 @@
         
   
   
+    
+  
 
 
   <li class="md-tabs__item">
-    <a href="../url/" class="md-tabs__link">
+    <a href="./" class="md-tabs__link md-tabs__link--active">
       URL
     </a>
   </li>
@@ -291,59 +289,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          Model
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../model/" class="md-nav__link">
         Model
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#mutable-model" class="md-nav__link">
-    Mutable Model
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -475,11 +425,80 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../url/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          URL
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         URL
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#initialization" class="md-nav__link">
+    Initialization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sub-classes" class="md-nav__link">
+    Sub-classes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -511,15 +530,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
+  <a href="#initialization" class="md-nav__link">
+    Initialization
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#mutable-model" class="md-nav__link">
-    Mutable Model
+  <a href="#properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#methods" class="md-nav__link">
+    Methods
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sub-classes" class="md-nav__link">
+    Sub-classes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
   </a>
   
 </li>
@@ -540,28 +580,75 @@
 
 
 
-<h1 id="model">Model</h1>
-<p><code>Model</code> is an abstract class used to create python objects with a few opinions.
-It is built entirely using <code>pydantic.BaseModel</code> and <code>orjson</code> for json parsing.
-By default all Model classes are:</p>
-<ul>
-<li>frozen</li>
-<li>with orm_mode enabled</li>
-<li>with allow_population_by_field_name enabled</li>
-<li>with support for all gyver features</li>
-<li>with alias generation for camelCase</li>
-</ul>
-<h2 id="usage">Usage</h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">gyver.model</span> <span class="kn">import</span> <span class="n">Model</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">class</span> <span class="nc">Person</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">type_</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
+<h1 id="url">URL</h1>
+<p>The URL module offers a convenient way of interacting with the different parts of a URL.</p>
+<h2 id="initialization">Initialization</h2>
+<p>You can create a new instance of the URL class by passing a string to the constructor.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">gyver.url</span> <span class="kn">import</span> <span class="n">URL</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">url</span> <span class="o">=</span> <span class="n">URL</span><span class="p">(</span><span class="s2">&quot;https://www.example.com/path?key=value#fragment&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="mutable-model">Mutable Model</h2>
-<p>If you need all the features of Model but don't want the immutability,
-you can use <code>gyver.model.MutableModel</code></p>
+<h2 id="properties">Properties</h2>
+<p>The URL class has the following properties:</p>
+<ul>
+<li><strong><code>scheme</code></strong>: The scheme of the URL (e.g. "http", "https").</li>
+<li><strong><code>netloc</code></strong>: The network location of the URL. It includes the hostname and port, as well as the username and password if present.</li>
+<li><strong><code>path</code></strong>: The path of the URL.</li>
+<li><strong><code>query</code></strong>: The query string of the URL, as a Query object.</li>
+<li><strong><code>fragment</code></strong>: The fragment of the URL, as a Fragment object.</li>
+<li><strong><code>port</code></strong>: The port of the URL, if present.</li>
+</ul>
+<h2 id="methods">Methods</h2>
+<p>The URL class has the following methods:</p>
+<ul>
+<li><strong><code>load(val: str)</code></strong></li>
+</ul>
+<p>You can use this method to update the URL with a new string. It will update all the properties accordingly.</p>
+<ul>
+<li><strong><code>encode(self, omit_empty_equal: bool = True):</code></strong></li>
+</ul>
+<p>This method returns the resolved string representation of the URL. By default, it will append an equal sign to null query parameters. If omit_empty_equal is set to False, null query parameters will be represented by only their name.</p>
+<ul>
+<li><strong><code>add(...)</code></strong></li>
+</ul>
+<p>This method allows you to add new elements to the URL. You can add new values to the query, path, fragment or netloc by passing the corresponding arguments.</p>
+<ul>
+<li><strong>set(...)</strong></li>
+</ul>
+<p>This method allows you to set elements of the URL. You can set new values to the query, path, fragment or netloc by passing the corresponding arguments.</p>
+<h2 id="sub-classes">Sub-classes</h2>
+<p>The URL class uses the following sub-classes to handle the different parts of the URL:</p>
+<ul>
+<li><strong><code>Query</code></strong>: handles the query string of the URL.</li>
+<li><strong><code>Path</code></strong>: handles the path of the URL.</li>
+<li><strong><code>Fragment</code></strong>: handles the fragment of the URL</li>
+<li><strong><code>Netloc</code></strong>: handles the netloc of the URL</li>
+</ul>
+<h2 id="examples">Examples</h2>
+<p>Here are some examples of how you can use the URL class:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Create a new URL</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">url</span> <span class="o">=</span> <span class="n">URL</span><span class="p">(</span><span class="s2">&quot;https://www.example.com/path?key=value#fragment&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1"># Add a new query parameter</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">url</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">query</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;new_key&quot;</span><span class="p">:</span> <span class="s2">&quot;new_value&quot;</span><span class="p">})</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># Set a new path</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">url</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s2">&quot;/new_path&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="c1"># Get the encoded string representation of the URL</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span> <span class="c1"># &quot;https://www.example.com/new_path?key=value&amp;new_key=new_value#fragment&quot;</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="c1"># Create a new URL</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">url</span> <span class="o">=</span> <span class="n">URL</span><span class="p">(</span><span class="s2">&quot;https://www.example.com/path?key=value#fragment&quot;</span><span class="p">)</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="c1"># Add a new netloc</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">url</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">netloc_args</span><span class="o">=</span><span class="n">Netloc</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">&quot;host&quot;</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">))</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="c1"># Change the fragment</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="n">url</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">fragment</span><span class="o">=</span><span class="s1">&#39;another&#39;</span><span class="p">)</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="c1"># Get the resolved string representation</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="nb">print</span><span class="p">(</span><span class="n">url</span><span class="o">.</span><span class="n">encode</span><span class="p">())</span> <span class="c1"># &quot;https://user@host:8080/path?key=value#another&quot;</span>
+</code></pre></div>
 
 
 
