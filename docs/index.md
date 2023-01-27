@@ -1,81 +1,47 @@
 # Gyver
 
+> Simple toolbox for python development to skip code boilerplate.
 
-> _Simple toolbox for python development to skip code boilerplate._
+[**Documentation**](https://guscardvs.github.io/gyver/)
 
----
- 
-**Documentation:** <a>Doclink</a>
+[**Source Code**](https://github.com/guscardvs/gyver)
 
-**Source Code:** <a href="https://github.com/guscardvs/gyver" target="_blank">github.com/guscardvs/gyver</a>
+## Authors
 
----
-
+> [@guscardvs](https://github.com/guscardvs)
 
 ## Requirements
 
-Python 3.9+
+* Python 3.9+
 
-### Required
+## Required
 
-* <a href="https://github.com/ijl/orjson" target="_blank">OrJSON</a> for json parsing.
-* <a href="https://docs.pydantic.dev" target="_blank">Pydantic</a> for data handling.
-* <a href="https://github.com/python/typing_extensions" target="_blank">Typing Extensions</a> for compatibility.
-* <a href="https://github.com/guscardvs/context-handler" target="_blank">Context Handler</a> for client lifetime management.
-* <a href="https://cryptography.io" target="_blank">Cryptography</a> to handle encryption.
-  
-### Optional
+* [OrJSON](https://github.com/ijl/orjson) for json parsing.
+* [Pydantic](https://docs.pydantic.dev) for data handling.
+* [Typing Extensions](https://github.com/python/typing_extensions) for compatibility.
+* [Cryptography](https://cryptography.io) to handle encryption.
 
-* To use the database parts:
-  * Mysql/MariaDB: AsyncMy, PyMySQL (use db-mysql or db-mariadb extras)
-  * Postgres: AsyncPG, Psycopg2
-  * SQLite: aiosqlite
-  * Redis: redis
-  * And SQLAlchemy
+## Optional
 
+To use the database parts:
+* **Mysql/MariaDB:** AsyncMy, PyMySQL (use db-mysql or db-mariadb extras)
+* **Postgres:** AsyncPG, Psycopg2
+* **SQLite:** aiosqlite
+* **Redis:** redis
+* And **SQLAlchemy**
 
 ## Installation
 
 ```console
 $ pip install gyver
-
 ---> 100%
+Done!
 ```
 
-## Example
+## Roadmap
 
-Add this to any python file
+> Improve test coverage to edge cases and create stable release
 
-```python
-from gyver.config import Config, ConfigLoader
-from gyver.database import SyncDatabaseProvider, DatabaseConfig
-import sqlalchemy as sa
-
-# Creates a config instance to load environment variables
-config = Config()
-
-# loads all the DatabaseConfig attributes as environment
-# variables, as such:
-# DatabaseConfig.driver: DB_DRIVER
-# DatabaseConfig.host: DB_HOST
-# etc
-db_config = ConfigLoader(config, prefix='db').load(DatabaseConfig)
-
-# Creates a provider with the given configuration
-# with an internal sqlalchemy engine setup
-provider = SyncDatabaseProvider(db_config)
-
-# opens a sqlalchemy connection
-# connection using the context provided by
-# the context-handler library
-with provider.context().begin() as connection:
-    # Do a hello world
-    connection.execute(sa.select(sa.text('"Hello World"')))
-
-```
-
-This is one of the many features of **Gyver**
-
-# License
+##  License
 
 This project is licensed under the terms of the MIT license.
