@@ -68,6 +68,10 @@ def test_query():  # sourcery skip: extract-duplicate-method
     assert q.encode() == "param1=value1"
 
     # Test sorting with multiple values
-    q = Query("param1=value1&param1=value2&param2=value3")
-    q.sort()
+    q = Query("param1=value1&param1=value2&param2=value3").sort()
     assert q.encode() == "param1=value1&param1=value2&param2=value3"
+
+    # Test Query properly encodes slashes
+    q = Query("param1=va/lue").add({"param2": "val/ie"})
+
+    assert q.encode() == "param1=va%2Flue&param2=val%2Fie"

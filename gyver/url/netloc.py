@@ -23,8 +23,7 @@ class Netloc(Encodable):
         if ":" in host:
             host, _, port = host.partition(":")
         self.host = host
-        if port:
-            port = int(port)
+        port = int(port) if port else None
         self.port = port
 
     def encode(self):

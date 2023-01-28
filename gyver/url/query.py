@@ -9,7 +9,7 @@ from gyver.url.encode import Encodable
 
 class Query(Encodable):
     def __init__(self, querystr: str) -> None:
-        self.params = defaultdict[str, list[str]](list)
+        self.params: defaultdict[str, list[str]] = defaultdict(list)
         self.params.update(parse_qs(querystr, keep_blank_values=True))
 
     def encode(self):
@@ -47,6 +47,8 @@ class Query(Encodable):
     def remove(self, *keys: str):
         for key in keys:
             self.params.pop(key, None)
+        return self
 
     def sort(self):
-        self.params = dict(sorted(self.params.items()))
+        self.params = defaultdict(list, sorted(self.params.items()))
+        return self

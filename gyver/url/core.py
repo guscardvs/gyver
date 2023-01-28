@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import Mapping
 from typing import Optional
 from urllib.parse import urlparse
@@ -32,7 +33,9 @@ class URL(Encodable):
 
     def encode(self, omit_empty_equal: bool = True):
         resolved_query = (
-            self.query.encode() if omit_empty_equal else self.query.omit_empty_equal()
+            self.query.encode()
+            if omit_empty_equal
+            else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (
@@ -43,9 +46,6 @@ class URL(Encodable):
                 self.fragment.encode(),
             )
         )
-
-    def __str__(self) -> str:
-        return self.encode()
 
     def __repr__(self) -> str:
         return object.__repr__(self)
@@ -72,6 +72,7 @@ class URL(Encodable):
             self.netloc.set(netloc)
         if netloc_args:
             self.netloc = self.netloc.merge(netloc_args)
+        return self
 
     def set(
         self,
@@ -95,3 +96,16 @@ class URL(Encodable):
             self.netloc.set(netloc)
         if netloc_args:
             self.netloc = netloc_args
+        return self
+
+    def copy(self):
+        new_url = URL("")
+        new_url.scheme = self.scheme
+        new_url.fragment.fragment_str = self.fragment.fragment_str
+        new_url.path.segments = self.path.segments.copy()
+        new_url.query.params = defaultdict(
+            list,
+            ((key, list(value)) for key, value in self.query.params.items()),
+        )
+        new_url.add(netloc_args=self.netloc)
+        return new_url

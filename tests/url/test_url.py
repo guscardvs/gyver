@@ -9,7 +9,10 @@ def test_url():
     url = URL("https://www.example.com/path?key1=value1")
     url.add(query={"key2": "value2", "key3": "value3"})
     assert url.query == Query("key1=value1&key2=value2&key3=value3")
-    assert url == "https://www.example.com/path?key1=value1&key2=value2&key3=value3"
+    assert (
+        url
+        == "https://www.example.com/path?key1=value1&key2=value2&key3=value3"
+    )
 
     # Test adding path segments
     url = URL("https://www.example.com/path")
@@ -48,8 +51,7 @@ def test_url():
     assert url == "https://www.example2.com:8080/path"
 
     # Test adding multiple components
-    url = URL("https://www.example.com/path?key1=value1")
-    url.add(
+    url = URL("https://www.example.com/path?key1=value1").add(
         path="subpath",
         query={"key2": "value2", "key3": "value3"},
         fragment="section1",
@@ -68,3 +70,23 @@ def test_url():
         url == "https://username:password@www.example2.com"
         ":8080/path/subpath?key1=value1&key2=value2&key3=value3#section1"
     )
+
+    # Test copying the url makes the an equal url
+
+    url = URL("https://www.example.com/path?key1=value1").add(
+        query={"key2": "value2", "key3": "value3"}
+    )
+    assert url.encode() == url.copy().encode()
+
+    # Test copying the url returns a new instance
+    url = URL("http://www.example.com")
+    new_url = url.copy()
+    assert new_url is not url
+
+    # Test copying the url does not override any values on the old url
+    url = URL("https://www.example.com/path?key1=value1").add(
+        query={"key2": "value2", "key3": "value3"}
+    )
+    new_url = url.copy()
+    assert url.path.segments is not new_url.path.segments
+    assert url.query.params is not new_url.query.params

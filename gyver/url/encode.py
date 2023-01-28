@@ -11,3 +11,6 @@ class Encodable(abc.ABC):
         if isinstance(other, str):
             return self.encode() == other
         return self.encode() == other.encode() or super().__eq__(other)
+
+    def __str__(self) -> str:
+        return self.encode()
