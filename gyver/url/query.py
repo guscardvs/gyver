@@ -14,7 +14,7 @@ class Query(Encodable):
 
     def encode(self):
         return "&".join(
-            "=".join(map(quote, (key, item or "")))
+            "=".join((quote(key, safe=""), quote(item or "", safe="")))
             for key, value in self.params.items()
             for item in value
         )
