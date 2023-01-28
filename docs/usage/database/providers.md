@@ -90,7 +90,7 @@ Has the following methods and attributes:
 * `.is_closed(client: sqlalchemy.engine.Connection) -> bool`: returns if connection passed on parameter is closed
 * `new() -> sqlalchemy.engine.Connection`: returns new sqlalchemy connection
 * `release(client: sqlalchemy.engine.Connection) -> None`: close and release the connection
-* `context(*, transaction_on: typing.Literal['open', 'begin'] | None = 'open') -> context_handler.ext.sqlalchemy.SaContext`: returns a context handler for a sqlalchemy connection. The transaction_on will begin a transaction either on an open call, a begin call, or never if none is passed.
+* `context(*, transaction_on: typing.Literal['open', 'begin'] | None = 'open') -> gyver.database.SaContext`: returns a context handler for a sqlalchemy connection. The transaction_on will begin a transaction either on an open call, a begin call, or never if none is passed.
 
 `SaContext` has the following methods:
 
@@ -150,7 +150,7 @@ Has the following methods and attributes:
 * `async def is_closed(client: sqlalchemy.engine.Connection) -> bool`: returns if connection passed on parameter is closed
 * `async def new() -> sqlalchemy.engine.Connection`: returns new sqlalchemy connection
 * `async def release(client: sqlalchemy.engine.Connection) -> None`: close and release the connection
-* `def context(*, transaction_on: typing.Literal['open', 'begin'] | None = 'open') -> context_handler.ext.sqlalchemy.AsyncSaContext`: returns a context handler for a sqlalchemy connection. The transaction_on will begin a transaction either on an open call, a begin call, or never if none is passed. AsyncSaContext `.begin` and `.open` are asynccontextmanagers
+* `def context(*, transaction_on: typing.Literal['open', 'begin'] | None = 'open') -> gyver.databaseAsyncSaContext`: returns a context handler for a sqlalchemy connection. The transaction_on will begin a transaction either on an open call, a begin call, or never if none is passed. AsyncSaContext `.begin` and `.open` are asynccontextmanagers
 
 
 `AsyncSaContext` has the following methods:

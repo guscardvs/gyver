@@ -11,7 +11,7 @@ Let's take as an example an generic function to run select on N fields on the fo
 
 ```python
 from gyver.database import Entity
-from context_handler.ext.sqlalchemy import SaContext
+from gyver.database.sqlalchemy import SaContext
 import sqlalchemy as sa
 
 class Address(Entity):

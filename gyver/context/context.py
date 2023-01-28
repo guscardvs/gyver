@@ -1,10 +1,10 @@
 import contextlib
 import typing
 
-from context_handler import interfaces
-from context_handler.typedef import AsyncT
-from context_handler.typedef import T
-from context_handler.utils import lazy
+from . import interfaces
+from .typedef import AsyncT
+from .typedef import T
+from gyver.utils import lazyfield
 
 
 class Context(typing.Generic[T]):
@@ -12,7 +12,7 @@ class Context(typing.Generic[T]):
         self._adapter = adapter
         self._stack = 0
 
-    @lazy.lazy_property
+    @lazyfield
     def client(self) -> T:
         return self.adapter.new()
 
