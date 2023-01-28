@@ -1,5 +1,5 @@
+import contextlib
 import threading
-import pytest
 
 from .mocks import MockAdapter
 from gyver.context import Context
@@ -66,3 +66,32 @@ def test_context_multi_threading():
         threads.append(t)
     for t in threads:
         t.join()
+
+
+def test_context_releases_resource_even_on_error():
+    # sourcery skip: raise-specific-error
+    adapter = MockAdapter()
+    context = Context(adapter)
+
+    with contextlib.suppress(Exception):
+        with context.begin() as client:
+            raise Exception
+
+    assert client.closed  # type: ignore
+    assert context.stack == 0
+
+    with contextlib.suppress(Exception):
+        with context.open():
+            client = context.acquire()
+            context.release()
+            raise Exception
+
+    assert client.closed  # type: ignore
+    assert context.stack == 0
+
+    with contextlib.suppress(Exception):
+        with context as client:
+            raise Exception
+
+    assert client.closed  # type: ignore
+    assert context.stack == 0

@@ -1,4 +1,5 @@
 import asyncio
+import contextlib
 import pytest
 
 from .mocks import MockAsyncAdapter
@@ -42,7 +43,7 @@ async def test_asynccontext_double_release():
         await context.release()
 
 
-async def test_context_multi_threading():
+async def test_asynccontext_multitask():
     adapter = MockAsyncAdapter()
     context = AsyncContext(adapter)
 
@@ -61,3 +62,32 @@ async def test_context_multi_threading():
     for _ in range(5):
         tasks.append(asyncio.create_task(worker()))
     await asyncio.gather(*tasks)
+
+
+async def test_asynccontext_releases_resource_even_on_error():
+    # sourcery skip: raise-specific-error
+    adapter = MockAsyncAdapter()
+    context = AsyncContext(adapter)
+
+    with contextlib.suppress(Exception):
+        async with context.begin() as client:
+            raise Exception
+
+    assert client.closed  # type: ignore
+    assert context.stack == 0
+
+    with contextlib.suppress(Exception):
+        async with context.open():
+            client = await context.acquire()
+            await context.release()
+            raise Exception
+
+    assert client.closed  # type: ignore
+    assert context.stack == 0
+
+    with contextlib.suppress(Exception):
+        async with context as client:
+            raise Exception
+
+    assert client.closed  # type: ignore
+    assert context.stack == 0
