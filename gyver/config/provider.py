@@ -30,6 +30,12 @@ class ProviderConfig(Model):
         fields = {"exclude": {}}
 
 
+class InlineConfig(Model):
+    class Config:
+        alias_generator = str.upper
+        fields = {"exclude": {}}
+
+
 ProviderT = TypeVar("ProviderT", bound=ProviderConfig)
 
 _default_config = Config()
@@ -48,7 +54,9 @@ def _tryeach(*names: str, default: Any, cast: Any, config: Config) -> Any:
     for name in names:
         with suppress(MissingName):
             return config(name, cast, default)
-    raise panic(MissingName, f"{', '.join(names)} not found and no default was given")
+    raise panic(
+        MissingName, f"{', '.join(names)} not found and no default was given"
+    )
 
 
 def _get_cast(field: ModelField):
@@ -59,7 +67,9 @@ def _get_cast(field: ModelField):
         return boolean_cast
     if origin is None:
         return (
-            make_lex_separator(outer_type) if outer_type in _sequences else outer_type
+            make_lex_separator(outer_type)
+            if outer_type in _sequences
+            else outer_type
         )
     if (origin := get_origin(outer_type)) in _sequences:
         args = get_args(outer_type)
@@ -71,7 +81,9 @@ def _get_cast(field: ModelField):
 def _get_default(field: ModelField):
     if field.default not in (None, Ellipsis):
         return field.default
-    return MISSING if field.default_factory is None else field.default_factory()
+    return (
+        MISSING if field.default_factory is None else field.default_factory()
+    )
 
 
 class ConfigLoader:
@@ -86,32 +98,58 @@ class ConfigLoader:
         self._without_prefix = without_prefix
 
     def load(self, model_cls: type[ProviderT], **presets: Any) -> ProviderT:
-        self._without_prefix = (
-            *self._without_prefix,
-            *model_cls.__without_prefix__,
-        )
         fields = tuple(
             field
             for field in model_cls.__fields__.values()
             if field.name not in (*presets, "__without_prefix__")
         )
-        result = {field.alias: self._get_value(model_cls, field) for field in fields}
+        result = {
+            field.alias: self._get_value(model_cls, field) for field in fields
+        }
+
         return model_cls.parse_obj(result | presets)
 
-    def _get_value(self, model_cls: type, field: ModelField):
+    def _get_value(self, model_cls: type[ProviderConfig], field: ModelField):
+        if not get_origin(field.outer_type_) and issubclass(
+            field.outer_type_, InlineConfig
+        ):
+            return self._resolve_inline(model_cls, field.outer_type_)
         names = self.resolve_names(model_cls, field)
         default = _get_default(field)
         cast = _get_cast(field)
-        return _tryeach(*names, default=default, cast=cast, config=self._config)
+        return _tryeach(
+            *names, default=default, cast=cast, config=self._config
+        )
+
+    def _resolve_inline(
+        self,
+        model_cls: type[ProviderConfig],
+        inline_config: type[InlineConfig],
+    ):
+        output = {}
+        for field in inline_config.__fields__.values():
+            if issubclass(field.outer_type_, InlineConfig):
+                return self._resolve_inline(model_cls, field.outer_type_)
+            names = self.resolve_names(model_cls, field)
+            default = _get_default(field)
+            cast = _get_cast(field)
+            output[field.alias] = _tryeach(
+                *names, default=default, cast=cast, config=self._config
+            )
+        return inline_config.parse_obj(output)
 
     def resolve_names(
         self, model_cls: type[ProviderConfig], field: ModelField
     ) -> tuple[str, ...]:
         name = field.name
         alias = field.alias
-        prefix = self._prefix if self._prefix is not None else model_cls.__prefix__
+        prefix = (
+            self._prefix if self._prefix is not None else model_cls.__prefix__
+        )
         prefix = prefix.removesuffix("_")
-        if not prefix or {name, alias}.intersection(self._without_prefix):
+        if not prefix or {name, alias}.intersection(
+            self._without_prefix
+        ).intersection(model_cls.__without_prefix__):
             return (name, alias)
         name = name.removeprefix("_")
         alias = alias.removeprefix("_")

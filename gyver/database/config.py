@@ -13,6 +13,28 @@ from . import drivers
 from .typedef import Driver
 
 
+class ConnectionPoolConfig(ProviderConfig):
+
+    """
+    A configuration object for a connection pool.
+    """
+
+    pool_size: int = 20
+    """
+    The maximum number of connections to keep in the pool.
+    """
+
+    pool_recycle: int = 3600
+    """
+    The number of seconds to keep a connection alive, after which it will be closed and replaced.
+    """
+
+    max_overflow: int = 0
+    """
+    The maximum number of connections to allow above the pool_size, or None to disable overflow.
+    """
+
+
 class DatabaseConfig(ProviderConfig):
     driver: Driver
     host: str
@@ -25,12 +47,12 @@ class DatabaseConfig(ProviderConfig):
     max_overflow: int = 0
 
     @utils.lazyfield
-    def real_port(self) -> int:
+    def effective_port(self) -> int:
         return self.port if self.port != -1 else self.dialect.default_port
 
     @utils.lazyfield
     def dialect(self) -> drivers.Dialect:
-        if self.driver is Driver.CUSTOM and not self.resolved:
+        if self.driver is Driver.CUSTOM and not self.dialect_overriden:
             raise panic(
                 InvalidField,
                 'Field driver of value "custom" missing custom dialect,'
@@ -39,12 +61,12 @@ class DatabaseConfig(ProviderConfig):
         return drivers.resolve_driver(self.driver)
 
     @utils.lazyfield
-    def resolved(self):
+    def dialect_overriden(self):
         return False
 
     def override_dialect(self, dialect: drivers.Dialect) -> None:
         self.dialect = dialect
-        self.resolved = True
+        self.dialect_overriden = True
 
 
 def make_database_config(

@@ -7,7 +7,9 @@ import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 
 from gyver.database import default_metadata
+from gyver.url.netloc import Netloc
 from gyver.utils import cache
+from gyver.url import URL
 
 from . import drivers
 from .config import DatabaseConfig
@@ -18,22 +20,30 @@ def make_uri(config: DatabaseConfig, sync: bool = False) -> str:
     """Construct a database URI from a database configuration .
 
     Args:
-        config (DatabaseConfig): configuration object
+        config (DatabaseConfig): configuration object containing information about the
+        database such as dialect, host, username, password, etc.
         sync (bool, optional): If uses async or sync drivers. Defaults to False.
 
     Returns:
-        str: database URI
+        str: database URI in the format
+        'dialect_name(+driver)?://username:password@host:port/dbname'
+        if not only host else 'dialect_name(+driver)?://host'
     """
+
+    url = URL("").set(netloc=config.host)
+    url.scheme = f"{drivers.build_dialect_scheme(config.dialect, sync)}"
+
     if config.dialect.only_host:
-        return (
-            f"{drivers.build_dialect_scheme(config.dialect, sync)}" f"://{config.host}"
-        )
-    return (
-        f"{drivers.build_dialect_scheme(config.dialect, sync)}://"
-        f"{quote(config.user)}:{quote(config.password)}@"
-        f"{config.host}:{config.real_port}/"
-        f"{quote(config.name)}"
-    )
+        return url.encode()
+
+    return url.add(
+        path=config.name,
+        netloc_args=Netloc("").set(
+            username=config.user,
+            password=config.password,
+            port=config.effective_port,
+        ),
+    ).encode()
 
 
 EntityT = typing.TypeVar("EntityT")
@@ -97,7 +107,9 @@ def make_relation(
 
 
 def make_relation(
-    relation: typing.Union[str, type[EntityT], typing.Callable[[], type[EntityT]]],
+    relation: typing.Union[
+        str, type[EntityT], typing.Callable[[], type[EntityT]]
+    ],
     *,
     relation_name: str = "",
     back_populates: typing.Optional[str] = None,
@@ -126,7 +138,9 @@ def create_relation_table(table_name: str, *entities: str):
         default_metadata,
         sa.Column("id", sa.Integer, primary_key=True),
         *[
-            sa.Column(f"{entity}_id", sa.Integer, sa.ForeignKey(f"{entity}.id"))
+            sa.Column(
+                f"{entity}_id", sa.Integer, sa.ForeignKey(f"{entity}.id")
+            )
             for entity in entities
         ],
     )

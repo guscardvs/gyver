@@ -132,7 +132,7 @@ def test_provider_uses_json_loads_if_receives_dict_as_param():
         }
     )
     cfg = config.Config(mapping=mapping)
-    person_config = config.from_config(PersonConfig, __config__=cfg)
+    person_config = config.ConfigLoader(cfg).load(PersonConfig)
     assert person_config.meta == {"hello": "world"}
 
 
@@ -142,11 +142,15 @@ def test_boolean_cast_works_correctly():
 
     assert not config.from_config(
         CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "False"})),
+        __config__=config.Config(
+            mapping=config.EnvMapping({"IS_VALID": "False"})
+        ),
     ).is_valid
     assert not config.from_config(
         CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "false"})),
+        __config__=config.Config(
+            mapping=config.EnvMapping({"IS_VALID": "false"})
+        ),
     ).is_valid
     assert not config.from_config(
         CustomConfig,
@@ -158,15 +162,21 @@ def test_boolean_cast_works_correctly():
     ).is_valid
     assert not config.from_config(
         CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "invalid"})),
+        __config__=config.Config(
+            mapping=config.EnvMapping({"IS_VALID": "invalid"})
+        ),
     ).is_valid
     assert config.from_config(
         CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "True"})),
+        __config__=config.Config(
+            mapping=config.EnvMapping({"IS_VALID": "True"})
+        ),
     ).is_valid
     assert config.from_config(
         CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "true"})),
+        __config__=config.Config(
+            mapping=config.EnvMapping({"IS_VALID": "true"})
+        ),
     ).is_valid
     assert config.from_config(
         CustomConfig,
@@ -184,13 +194,21 @@ def test_envconfig_identifies_correct_layer_of_dotfile():
         config.DotFile(curdir / "local.env", config.Env.LOCAL), mapping=mapping
     )
     third_envconfig = config.EnvConfig(
-        config.DotFile(curdir / "test.env", config.Env.TEST, apply_to_lower=True),
+        config.DotFile(
+            curdir / "test.env", config.Env.TEST, apply_to_lower=True
+        ),
         config.DotFile(curdir / "local.env", config.Env.LOCAL),
         mapping=mapping,
     )
     assert env_config.dotfile is None
-    assert second_envconfig.dotfile and second_envconfig.dotfile.env is config.Env.LOCAL
-    assert third_envconfig.dotfile and third_envconfig.dotfile.env is config.Env.TEST
+    assert (
+        second_envconfig.dotfile
+        and second_envconfig.dotfile.env is config.Env.LOCAL
+    )
+    assert (
+        third_envconfig.dotfile
+        and third_envconfig.dotfile.env is config.Env.TEST
+    )
 
 
 def test_envconfig_ignores_dotfiles_without_valid_files():
