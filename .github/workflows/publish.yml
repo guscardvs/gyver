@@ -2,9 +2,8 @@ name: Publish Python Package
 
 on:
   push:
-    branches:
-      - release
-
+    tags:
+      - '*'
 env:
   POETRY_VERSION: 1.3.1
 
