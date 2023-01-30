@@ -1,15 +1,14 @@
 import typing
 from functools import partial
 from types import FunctionType
-from urllib.parse import quote
 
 import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 
 from gyver.database import default_metadata
+from gyver.url import URL
 from gyver.url.netloc import Netloc
 from gyver.utils import cache
-from gyver.url import URL
 
 from . import drivers
 from .config import DatabaseConfig
@@ -107,9 +106,7 @@ def make_relation(
 
 
 def make_relation(
-    relation: typing.Union[
-        str, type[EntityT], typing.Callable[[], type[EntityT]]
-    ],
+    relation: typing.Union[str, type[EntityT], typing.Callable[[], type[EntityT]]],
     *,
     relation_name: str = "",
     back_populates: typing.Optional[str] = None,
@@ -138,9 +135,7 @@ def create_relation_table(table_name: str, *entities: str):
         default_metadata,
         sa.Column("id", sa.Integer, primary_key=True),
         *[
-            sa.Column(
-                f"{entity}_id", sa.Integer, sa.ForeignKey(f"{entity}.id")
-            )
+            sa.Column(f"{entity}_id", sa.Integer, sa.ForeignKey(f"{entity}.id"))
             for entity in entities
         ],
     )

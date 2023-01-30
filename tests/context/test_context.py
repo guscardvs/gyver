@@ -1,8 +1,9 @@
 import contextlib
 import threading
 
-from .mocks import MockAdapter
 from gyver.context import Context
+
+from .mocks import MockAdapter
 
 
 def test_context_acquisition():

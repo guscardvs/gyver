@@ -1,14 +1,13 @@
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 
-from gyver.crypto import RSACryptoProvider, RSACryptoConfig
+from gyver.crypto import RSACryptoConfig
+from gyver.crypto import RSACryptoProvider
 
 
 def test_rsa_oaep_crypto_provider():
     # Generate a private/public key pair
-    private_key = rsa.generate_private_key(
-        public_exponent=65537, key_size=2048
-    )
+    private_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     public_key = private_key.public_key()
 
     # Serialize the private key

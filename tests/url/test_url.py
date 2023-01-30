@@ -9,10 +9,7 @@ def test_url():
     url = URL("https://www.example.com/path?key1=value1")
     url.add(query={"key2": "value2", "key3": "value3"})
     assert url.query == Query("key1=value1&key2=value2&key3=value3")
-    assert (
-        url
-        == "https://www.example.com/path?key1=value1&key2=value2&key3=value3"
-    )
+    assert url == "https://www.example.com/path?key1=value1&key2=value2&key3=value3"
 
     # Test adding path segments
     url = URL("https://www.example.com/path")
