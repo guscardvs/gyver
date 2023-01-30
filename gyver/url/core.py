@@ -33,9 +33,7 @@ class URL(Encodable):
 
     def encode(self, omit_empty_equal: bool = True):
         resolved_query = (
-            self.query.encode()
-            if omit_empty_equal
-            else self.query.omit_empty_equal()
+            self.query.encode() if omit_empty_equal else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (

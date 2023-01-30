@@ -1,10 +1,10 @@
 import typing
 
-from gyver.database import AsyncSaContext
-from gyver.database import SaContext
 from starlette.applications import Starlette
 from starlette.requests import Request
 
+from gyver.database import AsyncSaContext
+from gyver.database import SaContext
 from gyver.database.config import DatabaseConfig
 from gyver.database.provider import AsyncDatabaseProvider
 from gyver.database.provider import SyncDatabaseProvider
@@ -28,9 +28,7 @@ def setup_database_session(
 
 def get_async_context(transaction_on: TrxOptions = "open"):
     def _get(request: Request) -> AsyncSaContext:
-        provider = typing.cast(
-            AsyncDatabaseProvider, request.app.state.gyver_database
-        )
+        provider = typing.cast(AsyncDatabaseProvider, request.app.state.gyver_database)
         return provider.context(transaction_on=transaction_on)
 
     return _get
@@ -38,9 +36,7 @@ def get_async_context(transaction_on: TrxOptions = "open"):
 
 def get_sync_context(transaction_on: TrxOptions = "open"):
     def _get(request: Request) -> SaContext:
-        provider = typing.cast(
-            SyncDatabaseProvider, request.app.state.gyver_database
-        )
+        provider = typing.cast(SyncDatabaseProvider, request.app.state.gyver_database)
         return provider.context(transaction_on=transaction_on)
 
     return _get

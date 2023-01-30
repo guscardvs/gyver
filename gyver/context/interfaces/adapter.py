@@ -1,6 +1,5 @@
 import typing
 
-from gyver.context.typedef import AsyncT
 from gyver.context.typedef import T
 
 
@@ -18,17 +17,17 @@ class Adapter(typing.Protocol[T]):
         ...
 
 
-class AsyncAdapter(typing.Protocol[AsyncT]):
+class AsyncAdapter(typing.Protocol[T]):
     """Represents an Adapter to a Specific Service"""
 
-    async def is_closed(self, client: AsyncT) -> bool:
+    async def is_closed(self, client: T) -> bool:
         """Returns if client state is closed or released"""
         ...
 
-    async def release(self, client: AsyncT) -> None:
+    async def release(self, client: T) -> None:
         """Closes or releases client"""
         ...
 
-    async def new(self) -> AsyncT:
+    async def new(self) -> T:
         """Creates new client"""
         ...

@@ -3,10 +3,10 @@ import contextlib
 import threading
 import typing
 
-from . import interfaces
-from .typedef import AsyncT
-from .typedef import T
 from gyver.utils import lazyfield
+
+from . import interfaces
+from .typedef import T
 
 
 class Context(typing.Generic[T]):
@@ -16,9 +16,7 @@ class Context(typing.Generic[T]):
         :param adapter: An adapter that will be used to acquire and release resources.
         """
         self._adapter = adapter
-        self._stack = (
-            0  # Keeps track of how many frames are using this context
-        )
+        self._stack = 0  # Keeps track of how many frames are using this context
         self._lock = threading.Lock()  # A lock to ensure thread safety
 
     @lazyfield
@@ -99,20 +97,16 @@ class Context(typing.Generic[T]):
         self.release()
 
 
-class AsyncContext(typing.Generic[AsyncT]):
-    def __init__(self, adapter: interfaces.AsyncAdapter[AsyncT]) -> None:
+class AsyncContext(typing.Generic[T]):
+    def __init__(self, adapter: interfaces.AsyncAdapter[T]) -> None:
         """
         Initialize a new AsyncContext.
         :param adapter: An async adapter that will be used to acquire
         and release resources.
         """
         self._adapter = adapter
-        self._stack = (
-            0  # Keeps track of how many frames are using this context
-        )
-        self._client: typing.Optional[
-            AsyncT
-        ] = None  # The current resource being used
+        self._stack = 0  # Keeps track of how many frames are using this context
+        self._client: typing.Optional[T] = None  # The current resource being used
         self._lock = asyncio.Lock()  # A lock to ensure thread safety
 
     @property
@@ -123,7 +117,7 @@ class AsyncContext(typing.Generic[AsyncT]):
         return self._stack
 
     @property
-    def adapter(self) -> interfaces.AsyncAdapter[AsyncT]:
+    def adapter(self) -> interfaces.AsyncAdapter[T]:
         """
         Returns the adapter that is being used by this context
         """
@@ -135,7 +129,7 @@ class AsyncContext(typing.Generic[AsyncT]):
         """
         return self._stack > 0
 
-    async def client(self) -> AsyncT:
+    async def client(self) -> T:
         """
         Returns the current resource being used by the context.
         Acquires a new resource if the current one is closed or doesn't exist.
@@ -171,7 +165,8 @@ class AsyncContext(typing.Generic[AsyncT]):
     @contextlib.asynccontextmanager
     async def open(self):
         """
-        An async context manager that acquires and releases resources without returning it.
+        An async context manager that acquires
+        and releases resources without returning it.
         """
         async with self:
             yield
@@ -192,6 +187,7 @@ class AsyncContext(typing.Generic[AsyncT]):
 
     async def __aexit__(self, *_):
         """
-        Releases the current resource if the stack count is 1, and decreases the stack count.
+        Releases the current resource if the stack count
+        is 1, and decreases the stack count.
         """
         await self.release()

@@ -43,11 +43,13 @@ def cache(f: Callable[P, T]) -> Callable[P, T]:
 def deprecated(func: Callable[P, T]) -> Callable[P, T]:
     @functools.wraps(func)
     def inner(*args: P.args, **kwargs: P.kwargs) -> T:
-        warnings.warn(
-            f"Function {func.__qualname__} is "
-            "deprecated and can be removed without notice",
-            DeprecationWarning,
-        )
+        if not hasattr(func, "__warn_deprecated__"):
+            warnings.warn(
+                f"{func.__qualname__} is "
+                "deprecated and can be removed without notice",
+                DeprecationWarning,
+            )
+            func.__warn_deprecated__ = True
         return func(*args, **kwargs)
 
     return inner
