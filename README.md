@@ -38,7 +38,7 @@ $ pip install gyver
 
 ## Roadmap
 
-> Improve test coverage to edge cases and create stable release
+> Migrate from pydantic to dataclass/attrs for a lighter version of the library
 
 ##  License
 
