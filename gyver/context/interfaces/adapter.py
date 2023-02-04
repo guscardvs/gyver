@@ -31,3 +31,25 @@ class AsyncAdapter(typing.Protocol[T]):
     async def new(self) -> T:
         """Creates new client"""
         ...
+
+
+class AtomicAdapter(Adapter[T], typing.Protocol[T]):
+    """Represents an Adapter to a Specific Service that
+    can do atomic operations"""
+
+    def begin(self, client: T) -> None:
+        ...
+
+    def end(self, client: T) -> None:
+        ...
+
+
+class AtomicAsyncAdapter(AsyncAdapter[T], typing.Protocol[T]):
+    """Represents an Adapter to a Specific Service that
+    can do atomic operations"""
+
+    async def begin(self, client: T) -> None:
+        ...
+
+    async def end(self, client: T) -> None:
+        ...
