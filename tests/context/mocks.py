@@ -1,10 +1,12 @@
 from gyver.context import Adapter
 from gyver.context import AsyncAdapter
+from gyver.context.interfaces.adapter import AtomicAdapter, AtomicAsyncAdapter
 
 
 class MockClient:
     def __init__(self) -> None:
         self._active = True
+        self._count = 0
 
     def toggle_active(self):
         self._active = not self._active
@@ -12,9 +14,19 @@ class MockClient:
     def deactivate(self):
         self._active = False
 
+    def increment(self):
+        self._count += 1
+
+    def decrement(self):
+        self._count -= 1
+
     @property
     def closed(self):
         return not self._active
+
+    @property
+    def count(self):
+        return self._count
 
     def __enter__(self):
         self.toggle_active()
@@ -31,7 +43,7 @@ class MockClient:
         self.toggle_active()
 
 
-class MockAdapter(Adapter[MockClient]):
+class MockAdapter(AtomicAdapter[MockClient]):
     def is_closed(self, client: MockClient) -> bool:
         return client.closed
 
@@ -41,8 +53,14 @@ class MockAdapter(Adapter[MockClient]):
     def new(self) -> MockClient:
         return MockClient()
 
+    def begin(self, client: MockClient) -> None:
+        client.increment()
 
-class MockAsyncAdapter(AsyncAdapter[MockClient]):
+    def end(self, client: MockClient) -> None:
+        client.decrement()
+
+
+class MockAsyncAdapter(AtomicAsyncAdapter[MockClient]):
     async def is_closed(self, client: MockClient) -> bool:
         return client.closed
 
@@ -51,3 +69,9 @@ class MockAsyncAdapter(AsyncAdapter[MockClient]):
 
     async def new(self) -> MockClient:
         return MockClient()
+
+    async def begin(self, client: MockClient) -> None:
+        client.increment()
+
+    async def end(self, client: MockClient) -> None:
+        client.decrement()
