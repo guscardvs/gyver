@@ -56,8 +56,14 @@ class MockAdapter(AtomicAdapter[MockClient]):
     def begin(self, client: MockClient) -> None:
         client.increment()
 
-    def end(self, client: MockClient) -> None:
+    def commit(self, client: MockClient) -> None:
         client.decrement()
+
+    def rollback(self, client: MockClient) -> None:
+        client.decrement()
+
+    def in_atomic(self, client: MockClient) -> bool:
+        return client.count > 0
 
 
 class MockAsyncAdapter(AtomicAsyncAdapter[MockClient]):
@@ -73,5 +79,11 @@ class MockAsyncAdapter(AtomicAsyncAdapter[MockClient]):
     async def begin(self, client: MockClient) -> None:
         client.increment()
 
-    async def end(self, client: MockClient) -> None:
+    async def commit(self, client: MockClient) -> None:
         client.decrement()
+
+    async def rollback(self, client: MockClient) -> None:
+        client.decrement()
+
+    async def in_atomic(self, client: MockClient) -> bool:
+        return client.count > 0

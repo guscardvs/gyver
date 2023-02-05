@@ -1,6 +1,5 @@
-from urllib.parse import quote
-
 from .config import CacheConfig
+from gyver.url import URL, Netloc
 
 
 def make_uri(config: CacheConfig) -> str:
@@ -10,11 +9,11 @@ def make_uri(config: CacheConfig) -> str:
     :param config: CacheConfig: Pass the configuration to the function
     :return: A string that is a valid uri for connecting to redis
     """
-    return (
-        (
-            f"redis://{quote(config.user)}:{quote(config.password)}"
-            f"@{config.host}:{config.port}/"
+    url = URL("")
+    url.scheme = "redis"
+    url.add(
+        netloc_args=Netloc("").set(
+            config.host, config.user, config.password, config.port
         )
-        if all((config.user, config.password))
-        else f"redis://{config.host}:{config.port}"
     )
+    return url.encode()
