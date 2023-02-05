@@ -35,7 +35,9 @@ class lazyfield(typing.Generic[SelfT, T]):
         ...
 
     @typing.overload
-    def __get__(self, instance: typing.Literal[None], owner: type[SelfT]) -> Self:
+    def __get__(
+        self, instance: typing.Literal[None], owner: type[SelfT]
+    ) -> Self:
         ...
 
     def __get__(
@@ -72,4 +74,7 @@ class lazyfield(typing.Generic[SelfT, T]):
         object.__setattr__(instance, self.private_name, value)
 
     def __delete__(self, instance: SelfT):
+        self.cleanup(instance)
+
+    def cleanup(self, instance: SelfT):
         object.__delattr__(instance, self.private_name)

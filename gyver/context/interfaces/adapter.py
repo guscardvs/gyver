@@ -40,7 +40,13 @@ class AtomicAdapter(Adapter[T], typing.Protocol[T]):
     def begin(self, client: T) -> None:
         ...
 
-    def end(self, client: T) -> None:
+    def commit(self, client: T) -> None:
+        ...
+
+    def rollback(self, client: T) -> None:
+        ...
+
+    def in_atomic(self, client: T) -> bool:
         ...
 
 
@@ -51,5 +57,11 @@ class AtomicAsyncAdapter(AsyncAdapter[T], typing.Protocol[T]):
     async def begin(self, client: T) -> None:
         ...
 
-    async def end(self, client: T) -> None:
+    async def commit(self, client: T) -> None:
+        ...
+
+    async def rollback(self, client: T) -> None:
+        ...
+
+    async def in_atomic(self, client: T) -> bool:
         ...

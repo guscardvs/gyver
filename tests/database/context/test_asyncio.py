@@ -1,7 +1,11 @@
+from contextlib import suppress
+from functools import wraps
 import sqlalchemy as sa
 
 from gyver.context import AsyncContext
-from gyver.database.context.asyncio import AsyncSaAdapter
+from gyver.context.atomic import in_atomic
+from gyver.database.context.asyncio import AsyncSaAdapter, AsyncSessionAdapter
+from tests.database.context.signal import Signal
 
 sqlite_uri = "sqlite+aiosqlite:///:memory:"
 
@@ -32,10 +36,10 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context():
 
 async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context_transaction():  # noqa
     adapter = AsyncSaAdapter(uri=sqlite_uri)
-    context = adapter.context(transaction_on="begin")
+    context = adapter.context(transaction_on=None)
 
     async with context.open():
-        async with context.begin() as conn:
+        async with in_atomic(context) as conn:
             result = await conn.execute(sa.text("SELECT 1"))
             response = result.first()
             assert response
@@ -44,11 +48,17 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context_transact
             (first,) = response
             assert first == 1
 
-    context = adapter.context(transaction_on="open")
-    async with context.open():
+    async with in_atomic(context):
         async with context.begin() as conn:
             assert conn.in_transaction()
             assert not conn.in_nested_transaction()
+
+    async with in_atomic(context):
+        async with in_atomic(context) as conn:
+            assert conn.in_transaction()
+            assert conn.in_nested_transaction()
+        assert conn.in_transaction()
+        assert not conn.in_nested_transaction()
 
 
 async def test_sqlalchemy_async_adapter_works_correctly_with_sa_acquire_session():  # noqa
@@ -61,3 +71,73 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_acquire_session(
         assert response
         (first,) = response
         assert first == 1
+
+
+async def test_sqlalchemy_context_and_adapter_are_compliant_to_atomic():
+    adapter = AsyncSaAdapter(uri=sqlite_uri)
+    context = adapter.context()
+
+    async with in_atomic(context) as client:
+        result = await client.execute(sa.text("SELECT 1"))
+        response = result.first()
+        assert response
+        (first,) = response
+        assert first == 1
+        assert await adapter.in_atomic(client)
+    assert not await adapter.in_atomic(client)
+
+
+async def test_sqlalchemy_session_and_adapter_are_compliant_to_atomic():
+    adapter = AsyncSessionAdapter(AsyncSaAdapter(uri=sqlite_uri))
+    context = adapter.context()
+
+    async with in_atomic(context) as client:
+        result = await client.execute(sa.text("SELECT 1"))
+        response = result.first()
+        assert response
+        (first,) = response
+        assert first == 1
+        assert await adapter.in_atomic(client)
+    assert not await adapter.in_atomic(client)
+
+    async with in_atomic(context):
+        async with in_atomic(context) as client:
+            assert client.bind.in_transaction()
+            assert client.bind.in_nested_transaction()
+        assert client.bind.in_transaction()
+        assert not client.bind.in_nested_transaction()
+
+
+class MockException(Exception):
+    pass
+
+
+def make_rollback(func, signal: Signal):
+    @wraps(func)
+    async def rollback(*args, **kwargs):
+        signal.do()
+        return await func(*args, **kwargs)
+
+    return rollback
+
+
+async def test_transaction_did_rollback_with_atomic():
+    adapter = AsyncSaAdapter(uri=sqlite_uri)
+    context = adapter.context()
+    signal = Signal()
+    with suppress(MockException):
+        async with in_atomic(context):
+            adapter.rollback = make_rollback(adapter.rollback, signal)
+            raise MockException
+    assert signal.did
+
+
+async def test_transaction_did_rollback_with_atomic_session():
+    adapter = AsyncSessionAdapter(AsyncSaAdapter(uri=sqlite_uri))
+    context = adapter.context()
+    signal = Signal()
+    with suppress(MockException):
+        async with in_atomic(context):
+            adapter.rollback = make_rollback(adapter.rollback, signal)
+            raise MockException
+    assert signal.did
