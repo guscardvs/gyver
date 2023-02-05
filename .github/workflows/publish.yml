@@ -2,15 +2,15 @@ name: Publish Python Package
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - release
 env:
   POETRY_VERSION: 1.3.1
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'refs/heads/release' }}
+    if: ${{ github.ref_type == 'tag' }}
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
