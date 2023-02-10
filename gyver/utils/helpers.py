@@ -53,3 +53,16 @@ def deprecated(func: Callable[P, T]) -> Callable[P, T]:
         return func(*args, **kwargs)
 
     return inner
+
+
+class DeprecatedClass:
+    __warn_deprecated__ = False
+
+    def __init__(self) -> None:
+        if not type(self).__warn_deprecated__:
+            warnings.warn(
+                f"{'.'.join((type(self).__module__, type(self).__name__))} is "
+                "deprecated and can be removed without notice",
+                DeprecationWarning,
+            )
+            type(self).__warn_deprecated__ = True
