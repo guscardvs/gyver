@@ -1,18 +1,43 @@
+from gyver.database.drivers.dialect import DialectInfo
 from gyver.database.typedef import Driver
 
 from .interface import Dialect
-from .mysql import AsyncMyDialect
-from .mysql import AsyncMyMariaDialect
-from .postgres import PostgresDialect
-from .sqlite import SqliteDriver
 
 
 def resolve_driver(driver: Driver) -> Dialect:
     _table: dict[Driver, Dialect] = {
-        Driver.MYSQL: AsyncMyDialect(),
-        Driver.POSTGRES: PostgresDialect(),
-        Driver.SQLITE: SqliteDriver(),
-        Driver.MARIADB: AsyncMyMariaDialect(),
+        Driver.MYSQL: DialectInfo(
+            default_port=3306,
+            driver=Driver.MYSQL,
+            dialect_name="mysql",
+            async_driver="aiomysql",
+            sync_driver="pymysql",
+            only_host=False,
+        ),
+        Driver.POSTGRES: DialectInfo(
+            default_port=5432,
+            driver=Driver.POSTGRES,
+            dialect_name="postgresql",
+            async_driver="asyncpg",
+            sync_driver="psycopg2",
+            only_host=False,
+        ),
+        Driver.SQLITE: DialectInfo(
+            default_port=0,
+            driver=Driver.SQLITE,
+            dialect_name="sqlite",
+            async_driver="aiosqlite",
+            sync_driver="",
+            only_host=True,
+        ),
+        Driver.MARIADB: DialectInfo(
+            default_port=3306,
+            driver=Driver.MARIADB,
+            dialect_name="mariadb",
+            async_driver="aiomysql",
+            sync_driver="pymysql",
+            only_host=False,
+        ),
     }
     return _table[driver]
 
