@@ -1,4 +1,3 @@
-from dataclasses import asdict
 import pytest
 
 from gyver import database
