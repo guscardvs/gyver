@@ -1,25 +1,29 @@
-from gyver.context.context import Context, AsyncContext
-from .bound import BoundContext, AsyncBoundContext
-from .core import AsyncAtomicContext, AtomicContext
-from typing import Union, overload
+from typing import Union
+from typing import overload
+
+from gyver.context.context import AsyncContext
+from gyver.context.context import Context
 from gyver.context.typedef import T
 
+from .bound import AsyncBoundContext
+from .bound import BoundContext
+from .core import AsyncAtomicContext
+from .core import AtomicContext
+
 
 @overload
-def in_atomic(context: Context[T], bound: bool = True) -> AtomicContext[T]:
+def atomic(context: Context[T], bound: bool = True) -> AtomicContext[T]:
     ...
 
 
 @overload
-def in_atomic(
-    context: AsyncContext[T], bound: bool = True
-) -> AsyncAtomicContext[T]:
+def atomic(context: AsyncContext[T], bound: bool = True) -> AsyncAtomicContext[T]:
     ...
 
 
-def in_atomic(
+def atomic(
     context: Union[Context[T], AsyncContext[T]], bound: bool = True
-) -> Union[AtomicContext[T], AsyncAtomicContext[T]]:
+) -> Union[Context[T], AsyncContext[T]]:
     required_methods = {"begin", "commit", "rollback", "in_atomic"}
     adapter_methods = set(dir(context.adapter))
 

@@ -5,7 +5,7 @@ import typing
 import sqlalchemy.ext.asyncio as sa_asyncio
 
 from gyver import context
-from gyver.context.atomic.resolver import in_atomic
+from gyver.context import atomic
 from gyver.utils import lazyfield
 from gyver.utils.helpers import deprecated
 
@@ -117,7 +117,7 @@ class AsyncSaContext(context.AsyncContext[sa_asyncio.AsyncConnection]):
         return (
             asyncnullcontext()
             if self._transaction_on is None
-            else in_atomic(self)
+            else atomic(self)
         )
 
     def open(self):

@@ -1,11 +1,13 @@
-from .core import AtomicContext, AsyncAtomicContext
-from gyver.context.context import Context, AsyncContext
-from gyver.context.typedef import T
-from gyver.context.interfaces.adapter import AtomicAdapter, AtomicAsyncAdapter
 from typing import Generic
 
+from gyver.context.context import AsyncContext
+from gyver.context.context import Context
+from gyver.context.interfaces.adapter import AtomicAdapter
+from gyver.context.interfaces.adapter import AtomicAsyncAdapter
+from gyver.context.typedef import T
 
-class BoundContext(AtomicContext[T], Generic[T]):
+
+class BoundContext(Context[T], Generic[T]):
     adapter: AtomicAdapter[T]
 
     def __init__(self, adapter: AtomicAdapter[T], context: Context[T]) -> None:
@@ -30,8 +32,11 @@ class BoundContext(AtomicContext[T], Generic[T]):
                 self._context.release()
             self._stack -= 1
 
+    def __exit__(self, *exc):
+        self.release(not any(exc))
 
-class AsyncBoundContext(AsyncAtomicContext[T], Generic[T]):
+
+class AsyncBoundContext(AsyncContext[T], Generic[T]):
     adapter: AtomicAsyncAdapter[T]
 
     def __init__(
@@ -61,3 +66,6 @@ class AsyncBoundContext(AsyncAtomicContext[T], Generic[T]):
                     await self.adapter.rollback(self._context._client)
             self._stack -= 1
         await self._context.release()
+
+    async def __aexit__(self, *exc):
+        await self.release(not any(exc))

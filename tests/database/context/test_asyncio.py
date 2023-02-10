@@ -3,7 +3,7 @@ from functools import wraps
 import sqlalchemy as sa
 
 from gyver.context import AsyncContext
-from gyver.context.atomic import in_atomic
+from gyver.context import atomic
 from gyver.database.context.asyncio import AsyncSaAdapter, AsyncSessionAdapter
 from tests.database.context.signal import Signal
 
@@ -39,7 +39,7 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context_transact
     context = adapter.context(transaction_on=None)
 
     async with context.open():
-        async with in_atomic(context) as conn:
+        async with atomic(context) as conn:
             result = await conn.execute(sa.text("SELECT 1"))
             response = result.first()
             assert response
@@ -48,13 +48,13 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context_transact
             (first,) = response
             assert first == 1
 
-    async with in_atomic(context):
+    async with atomic(context):
         async with context.begin() as conn:
             assert conn.in_transaction()
             assert not conn.in_nested_transaction()
 
-    async with in_atomic(context):
-        async with in_atomic(context) as conn:
+    async with atomic(context):
+        async with atomic(context) as conn:
             assert conn.in_transaction()
             assert conn.in_nested_transaction()
         assert conn.in_transaction()
@@ -77,7 +77,7 @@ async def test_sqlalchemy_context_and_adapter_are_compliant_to_atomic():
     adapter = AsyncSaAdapter(uri=sqlite_uri)
     context = adapter.context()
 
-    async with in_atomic(context) as client:
+    async with atomic(context) as client:
         result = await client.execute(sa.text("SELECT 1"))
         response = result.first()
         assert response
@@ -91,7 +91,7 @@ async def test_sqlalchemy_session_and_adapter_are_compliant_to_atomic():
     adapter = AsyncSessionAdapter(AsyncSaAdapter(uri=sqlite_uri))
     context = adapter.context()
 
-    async with in_atomic(context) as client:
+    async with atomic(context) as client:
         result = await client.execute(sa.text("SELECT 1"))
         response = result.first()
         assert response
@@ -100,8 +100,8 @@ async def test_sqlalchemy_session_and_adapter_are_compliant_to_atomic():
         assert await adapter.in_atomic(client)
     assert not await adapter.in_atomic(client)
 
-    async with in_atomic(context):
-        async with in_atomic(context) as client:
+    async with atomic(context):
+        async with atomic(context) as client:
             assert client.bind.in_transaction()
             assert client.bind.in_nested_transaction()
         assert client.bind.in_transaction()
@@ -126,7 +126,7 @@ async def test_transaction_did_rollback_with_atomic():
     context = adapter.context()
     signal = Signal()
     with suppress(MockException):
-        async with in_atomic(context):
+        async with atomic(context):
             adapter.rollback = make_rollback(adapter.rollback, signal)
             raise MockException
     assert signal.did
@@ -137,7 +137,7 @@ async def test_transaction_did_rollback_with_atomic_session():
     context = adapter.context()
     signal = Signal()
     with suppress(MockException):
-        async with in_atomic(context):
+        async with atomic(context):
             adapter.rollback = make_rollback(adapter.rollback, signal)
             raise MockException
     assert signal.did

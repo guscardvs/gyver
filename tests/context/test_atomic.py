@@ -1,9 +1,9 @@
 import asyncio
 import threading
-from gyver.context.atomic import (
+from gyver.context.atomic_ import (
     AtomicContext,
     AsyncAtomicContext,
-    in_atomic,
+    atomic,
 )
 from gyver.context.context import AsyncContext, Context
 from .mocks import MockAdapter, MockAsyncAdapter
@@ -22,7 +22,7 @@ def test_atomic_context_acquire_release():
 
 def test_atomic_context_multi_threading():
     adapter = MockAdapter()
-    context = in_atomic(Context(adapter), bound=False)
+    context = atomic(Context(adapter), bound=False)
 
     def worker():
         with context.open():
@@ -48,7 +48,7 @@ def test_atomic_context_multi_threading():
 def test_bound_context_client_yields_the_same_client_instantiated_in_context():
     adapter = MockAdapter()
     context = Context(adapter)
-    bound_context = in_atomic(context)
+    bound_context = atomic(context)
     with context.begin() as ctx_client:
         with bound_context.begin() as bnd_ctx_client:
             assert ctx_client is bnd_ctx_client
@@ -68,7 +68,7 @@ async def test_atomic_async_context_acquire_release():
 
 def test_atomic_function_works_as_expected_with_context():
     context = Context(MockAdapter())
-    with in_atomic(context) as client:
+    with atomic(context) as client:
         assert not client.closed
         assert client.count == 1
     assert client.closed
@@ -77,7 +77,7 @@ def test_atomic_function_works_as_expected_with_context():
 
 async def test_atomic_function_works_as_expected_with_async_context():
     context = AsyncContext(MockAsyncAdapter())
-    async with in_atomic(context) as client:
+    async with atomic(context) as client:
         assert not client.closed
         assert client.count == 1
     assert client.closed
@@ -86,7 +86,7 @@ async def test_atomic_function_works_as_expected_with_async_context():
 
 async def test_asynccontext_multitask():
     adapter = MockAsyncAdapter()
-    context = in_atomic(AsyncContext(adapter), bound=False)
+    context = atomic(AsyncContext(adapter), bound=False)
 
     async def worker():
         async with context.open():
@@ -108,7 +108,7 @@ async def test_asynccontext_multitask():
 async def test_bound_async_context_client_yields_the_same_client_in_context():
     adapter = MockAsyncAdapter()
     context = AsyncContext(adapter)
-    bound_context = in_atomic(context)
+    bound_context = atomic(context)
     async with context.begin() as ctx_client:
         async with bound_context.begin() as bnd_ctx_client:
             assert ctx_client is bnd_ctx_client

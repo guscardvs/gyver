@@ -6,7 +6,7 @@ import sqlalchemy.engine as sa_engine
 import sqlalchemy.orm as sa_orm
 
 from gyver import context
-from gyver.context.atomic.resolver import in_atomic
+from gyver.context import atomic
 from gyver.utils import lazyfield
 from gyver.utils.helpers import deprecated
 
@@ -102,7 +102,7 @@ class SaContext(context.Context[sa_engine.Connection]):
     def _make_transaction(self):
         if self._transaction_on is None:
             return contextlib.nullcontext()
-        return in_atomic(self)
+        return atomic(self)
 
     def open(self):
         if self._transaction_on != "open":
