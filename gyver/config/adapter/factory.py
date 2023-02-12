@@ -11,6 +11,7 @@ from typing import get_origin
 
 from pydantic import BaseModel
 
+from gyver.config.config import MISSING
 from gyver.config.config import Config
 from gyver.config.utils import boolean_cast
 from gyver.exc import MissingName
@@ -33,7 +34,9 @@ T = TypeVar("T")
 def _try_each(*names: str, default: Any, cast: Any, config: Config):
     for name in names:
         with suppress(MissingName):
-            return config(name, cast, default)
+            return config(name, cast)
+    if default is not MISSING:
+        return default
     raise panic(MissingName, f"{', '.join(names)} not found and no default was given")
 
 

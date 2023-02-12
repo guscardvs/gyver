@@ -3,7 +3,6 @@ import pathlib
 import pytest
 
 from gyver.future.utils import finder
-
 from tests.core.utils.mock_module import base
 
 ROOT = pathlib.Path(__file__).parent.parent
@@ -12,10 +11,7 @@ MOD_PATH = ROOT / "core" / "utils" / "mock_module"
 
 def test_finder_by_instance_finds_only_instances_of_given_class():
     instance_finder = (
-        finder.FinderBuilder()
-        .instance_of(base.Base)
-        .from_path(ROOT)
-        .build(MOD_PATH)
+        finder.FinderBuilder().instance_of(base.Base).from_path(ROOT).build(MOD_PATH)
     )
 
     result = instance_finder.find()
@@ -26,10 +22,7 @@ def test_finder_by_instance_finds_only_instances_of_given_class():
 
 def test_finder_by_class_finds_only_subclasses_of_given_class():
     class_finder = (
-        finder.FinderBuilder()
-        .child_of(base.Base)
-        .from_path(ROOT)
-        .build(MOD_PATH)
+        finder.FinderBuilder().child_of(base.Base).from_path(ROOT).build(MOD_PATH)
     )
 
     result = class_finder.find()

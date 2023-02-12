@@ -9,6 +9,10 @@ from gyver.config.adapter.attrs import AttrsResolverStrategy
 from gyver.config.adapter.dataclass import DataclassResolverStrategy
 from gyver.config.adapter.factory import AdapterConfigFactory
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
+from gyver.database import DatabaseConfig
+from gyver.database.utils import make_uri
+from gyver.url import URL
+from gyver.url import Netloc
 from gyver.utils import json
 
 
@@ -148,3 +152,33 @@ def test_boolean_cast_works_correctly():
         .load(CustomConfig)
         .is_valid
     )
+
+
+def test_old_config_works_with_adapter_factory():
+    factory = config.AdapterConfigFactory(
+        config.Config(
+            mapping=config.EnvMapping(
+                {
+                    "DB_USER": "internal-api",
+                    "DB_PASSWORD": "Pa5$worD",
+                    "DB_NAME": "internal_api",
+                    "DB_HOST": "localhost",
+                    "DB_DRIVER": "postgres",
+                }
+            )
+        )
+    )
+
+    cfg = factory.load(DatabaseConfig, "db")
+    db_url = URL("")
+    db_url.scheme = "postgresql+asyncpg"
+    db_url.add(
+        path="internal_api",
+        netloc_args=Netloc("").set(
+            host="localhost",
+            username="internal-api",
+            password="Pa5$worD",
+            port=5432,
+        ),
+    )
+    assert make_uri(cfg) == db_url.encode()
