@@ -1,5 +1,7 @@
+from gyver.url import URL
+from gyver.url import Netloc
+
 from .config import CacheConfig
-from gyver.url import URL, Netloc
 
 
 def make_uri(config: CacheConfig) -> str:

@@ -66,15 +66,11 @@ class AsyncSaAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncConnection]):
             await client.begin()
 
     async def commit(self, client: sa_asyncio.AsyncConnection) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             await trx.commit()
 
     async def rollback(self, client: sa_asyncio.AsyncConnection) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             await trx.rollback()
 
     async def in_atomic(self, client: sa_asyncio.AsyncConnection) -> bool:
@@ -114,11 +110,7 @@ class AsyncSaContext(context.AsyncContext[sa_asyncio.AsyncConnection]):
 
     @deprecated
     def _make_transaction(self):
-        return (
-            asyncnullcontext()
-            if self._transaction_on is None
-            else atomic(self)
-        )
+        return asyncnullcontext() if self._transaction_on is None else atomic(self)
 
     def open(self):
         if self._transaction_on != "open":

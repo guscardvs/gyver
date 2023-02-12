@@ -1,12 +1,14 @@
 import asyncio
 import threading
-from gyver.context.atomic_ import (
-    AtomicContext,
-    AsyncAtomicContext,
-    atomic,
-)
-from gyver.context.context import AsyncContext, Context
-from .mocks import MockAdapter, MockAsyncAdapter
+
+from gyver.context.atomic_ import AsyncAtomicContext
+from gyver.context.atomic_ import AtomicContext
+from gyver.context.atomic_ import atomic
+from gyver.context.context import AsyncContext
+from gyver.context.context import Context
+
+from .mocks import MockAdapter
+from .mocks import MockAsyncAdapter
 
 
 def test_atomic_context_acquire_release():

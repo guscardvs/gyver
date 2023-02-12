@@ -4,10 +4,10 @@ from .exc import panic
 from .finder import Finder
 from .finder import class_validator
 from .finder import instance_validator
-from .helpers import cache
-from .helpers import frozen
-from .helpers import deprecated
 from .helpers import DeprecatedClass
+from .helpers import cache
+from .helpers import deprecated
+from .helpers import frozen
 from .lazy import lazyfield
 from .singleton import make_singleton
 from .strings import to_camel

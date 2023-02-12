@@ -4,7 +4,11 @@ from typing import Callable
 from typing import TypeVar
 from typing import cast
 
+from attr import attrib
+from attr import field
+from attrs import define
 from typing_extensions import ParamSpec
+from typing_extensions import dataclass_transform
 
 from .exc import panic
 
@@ -20,20 +24,10 @@ P = ParamSpec("P")
 T = TypeVar("T")
 
 
+@dataclass_transform(order_default=True, field_specifiers=(attrib, field))
 def frozen(cls: type[T]) -> type[T]:
-    """Removes setattr and delattr from class"""
-    type.__setattr__(
-        cls,
-        "__setattr__",
-        _not_implemented(f"{cls.__name__} is frozen, cannot change values"),
-    )
-    type.__setattr__(
-        cls,
-        "__delattr__",
-        _not_implemented(f"{cls.__name__} is frozen, cannot delete values"),
-    )
-
-    return cls
+    """Defines a frozen class with the help of attrs"""
+    return define(slots=False, frozen=True, weakref_slot=False)(cls)
 
 
 def cache(f: Callable[P, T]) -> Callable[P, T]:

@@ -1,9 +1,9 @@
 import pytest
+from attrs import asdict
 
 from gyver import database
-from gyver.database.drivers.dialect import DialectInfo
 from gyver.database.drivers import resolve_driver
-from attrs import asdict
+from gyver.database.drivers.dialect import DialectInfo
 from gyver.database.typedef import Driver
 from gyver.exc import InvalidField
 

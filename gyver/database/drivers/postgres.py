@@ -1,5 +1,6 @@
 from gyver.database.typedef import Driver
-from gyver.utils import frozen, DeprecatedClass
+from gyver.utils import DeprecatedClass
+from gyver.utils import frozen
 
 
 @frozen

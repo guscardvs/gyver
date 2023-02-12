@@ -1,10 +1,12 @@
 from contextlib import suppress
 from functools import wraps
+
 import sqlalchemy as sa
 
 from gyver.context import Context
 from gyver.context import atomic
-from gyver.database.context.sync import SaAdapter, SessionAdapter
+from gyver.database.context.sync import SaAdapter
+from gyver.database.context.sync import SessionAdapter
 from tests.database.context.signal import Signal
 
 sqlite_uri = "sqlite:///:memory:"

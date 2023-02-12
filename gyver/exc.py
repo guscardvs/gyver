@@ -25,3 +25,13 @@ class CacheMiss(GyverError, KeyError):
 class QueueNotFound(InvalidField):
     """Exception raised when queue name provider
     does not exist on given credentials"""
+
+
+class MissingParams(GyverError, NotImplementedError):
+    """Exception raised when no params where passed in a
+    *args function
+    """
+
+
+class InvalidPath(GyverError, ValueError):
+    """Equivalent to FileNotFound but also for directories"""

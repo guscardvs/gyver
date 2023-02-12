@@ -2,10 +2,11 @@ import importlib
 import inspect
 import pathlib
 import typing
-from dataclasses import dataclass
 
-from gyver.exc import GyverError
+from gyver.exc import InvalidPath
+from gyver.exc import MissingParams
 
+from .helpers import frozen
 from .lazy import lazyfield
 
 T = typing.TypeVar("T")
@@ -15,11 +16,7 @@ StrOrPath = typing.Union[str, pathlib.Path]
 _convert_path = pathlib.Path.as_posix
 
 
-class InvalidPath(GyverError, ValueError):
-    pass
-
-
-@dataclass(frozen=True)
+@frozen
 class Finder:
     """Finder can be used to search for and import specific entities
     (defined by a user-provided validator function) from a codebase."""
@@ -29,7 +26,7 @@ class Finder:
     look_on: typing.Optional[pathlib.Path] = None
     exclude: typing.Sequence[StrOrPath] = ()
 
-    def __post_init__(self):
+    def __attrs_post_init__(self):
         if not self.root.exists():
             raise InvalidPath(f"root must be a valid path, received {self.root}")
 
@@ -84,10 +81,6 @@ class Finder:
         for name, obj in inspect.getmembers(mod):
             if self.validator(obj):
                 self.output[name] = obj
-
-
-class MissingParams(GyverError, NotImplementedError):
-    pass
 
 
 def class_validator(*types: type):

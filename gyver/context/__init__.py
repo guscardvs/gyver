@@ -1,10 +1,10 @@
+from .atomic_ import atomic
 from .context import AsyncContext
 from .context import Context
 from .interfaces.adapter import Adapter
-from .interfaces.adapter import AtomicAdapter
 from .interfaces.adapter import AsyncAdapter
+from .interfaces.adapter import AtomicAdapter
 from .interfaces.adapter import AtomicAsyncAdapter
-from .atomic_ import atomic
 
 # Compat
 in_atomic = atomic

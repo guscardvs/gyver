@@ -5,6 +5,8 @@ from typing_extensions import Self
 T = typing.TypeVar("T")
 SelfT = typing.TypeVar("SelfT")
 
+_obj_setattr = object.__setattr__
+
 
 class lazyfield(typing.Generic[SelfT, T]):
     """
@@ -35,9 +37,7 @@ class lazyfield(typing.Generic[SelfT, T]):
         ...
 
     @typing.overload
-    def __get__(
-        self, instance: typing.Literal[None], owner: type[SelfT]
-    ) -> Self:
+    def __get__(self, instance: typing.Literal[None], owner: type[SelfT]) -> Self:
         ...
 
     def __get__(
@@ -67,14 +67,17 @@ class lazyfield(typing.Generic[SelfT, T]):
             # remove exception context to create easier traceback
             raise e from None
         else:
-            object.__setattr__(instance, self.private_name, val)
+            _obj_setattr(instance, self.private_name, val)
             return val
 
     def __set__(self, instance: SelfT, value: T):
-        object.__setattr__(instance, self.private_name, value)
+        self.manual_set(instance, value)
 
     def __delete__(self, instance: SelfT):
         self.cleanup(instance)
 
     def cleanup(self, instance: SelfT):
         object.__delattr__(instance, self.private_name)
+
+    def manual_set(self, instance: SelfT, value: T):
+        _obj_setattr(instance, self.private_name, value)
