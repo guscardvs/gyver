@@ -6,7 +6,7 @@ from gyver.context import Context
 from .mocks import MockAdapter
 
 
-def test_context_acquisition():
+def test_context_acquisition():  # sourcery skip: extract-method
     adapter = MockAdapter()
     context = Context(adapter)
     with context.open():

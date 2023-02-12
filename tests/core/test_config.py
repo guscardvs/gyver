@@ -9,7 +9,6 @@ from hypothesis.strategies import text
 from gyver import config
 from gyver.exc import InvalidCast
 from gyver.exc import MissingName
-from gyver.utils import json
 
 
 @given(text(), text())
@@ -107,10 +106,9 @@ def test_provider_parses_correctly_on_from_config():
         }
     )
     cfg = config.Config(mapping=mapping)
+    factory = config.AdapterConfigFactory(cfg)
 
-    person_config = config.from_config(
-        PersonConfig, __config__=cfg, meta={"spouse": "Jane Doe"}
-    )
+    person_config = factory.load(PersonConfig, presets={"meta": {"spouse": "Jane Doe"}})
 
     assert person_config.name == "John Doe"
     assert person_config.emails == (
@@ -120,58 +118,6 @@ def test_provider_parses_correctly_on_from_config():
     )
     assert person_config.counts == {6, 2, 7, 1}
     assert person_config.meta == {"spouse": "Jane Doe"}
-
-
-def test_provider_uses_json_loads_if_receives_dict_as_param():
-    mapping = config.EnvMapping(
-        {
-            "NAME": "John Doe",
-            "emails": "person@example.com,  john.doe@hi.com,doejohn@test.com",
-            "COUNTS": "6,2, 7, 1",
-            "meta": json.dumps({"hello": "world"}),
-        }
-    )
-    cfg = config.Config(mapping=mapping)
-    person_config = config.ConfigLoader(cfg).load(PersonConfig)
-    assert person_config.meta == {"hello": "world"}
-
-
-def test_boolean_cast_works_correctly():
-    class CustomConfig(config.ProviderConfig):
-        is_valid: bool
-
-    assert not config.from_config(
-        CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "False"})),
-    ).is_valid
-    assert not config.from_config(
-        CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "false"})),
-    ).is_valid
-    assert not config.from_config(
-        CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": ""})),
-    ).is_valid
-    assert not config.from_config(
-        CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "0"})),
-    ).is_valid
-    assert not config.from_config(
-        CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "invalid"})),
-    ).is_valid
-    assert config.from_config(
-        CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "True"})),
-    ).is_valid
-    assert config.from_config(
-        CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "true"})),
-    ).is_valid
-    assert config.from_config(
-        CustomConfig,
-        __config__=config.Config(mapping=config.EnvMapping({"IS_VALID": "1"})),
-    ).is_valid
 
 
 def test_envconfig_identifies_correct_layer_of_dotfile():

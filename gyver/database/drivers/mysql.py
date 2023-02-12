@@ -1,9 +1,10 @@
 from gyver.database.typedef import Driver
+from gyver.utils import DeprecatedClass
 from gyver.utils import frozen
 
 
 @frozen
-class MysqlDialect:
+class MysqlDialect(DeprecatedClass):
     default_port = 3306
     driver = Driver.MYSQL
     dialect_name = "mysql"

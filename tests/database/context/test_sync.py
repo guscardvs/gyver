@@ -1,10 +1,12 @@
 from contextlib import suppress
 from functools import wraps
+
 import sqlalchemy as sa
 
 from gyver.context import Context
-from gyver.context.atomic import in_atomic
-from gyver.database.context.sync import SaAdapter, SessionAdapter
+from gyver.context import atomic
+from gyver.database.context.sync import SaAdapter
+from gyver.database.context.sync import SessionAdapter
 from tests.database.context.signal import Signal
 
 sqlite_uri = "sqlite:///:memory:"
@@ -55,8 +57,8 @@ def test_sqlalchemy_adapter_works_correctly_with_sa_context_transaction():
 
     context = adapter.context(transaction_on=None)
 
-    with in_atomic(context):
-        with in_atomic(context) as client:
+    with atomic(context):
+        with atomic(context) as client:
             assert client.in_transaction()
             assert client.in_nested_transaction()
         assert client.in_transaction()
@@ -78,7 +80,7 @@ def test_sqlalchemy_context_and_adapter_are_compliant_to_atomic():
     adapter = SaAdapter(uri=sqlite_uri)
     context = adapter.context()
 
-    with in_atomic(context) as client:
+    with atomic(context) as client:
         result = client.execute(sa.text("SELECT 1")).first()
         assert result
         (first,) = result
@@ -91,7 +93,7 @@ def test_sqlalchemy_session_and_adapter_are_compliant_to_atomic():
     adapter = SessionAdapter(SaAdapter(uri=sqlite_uri))
     context = adapter.context()
 
-    with in_atomic(context) as client:
+    with atomic(context) as client:
         result = client.execute(sa.text("SELECT 1")).first()
         assert result
         (first,) = result
@@ -118,7 +120,7 @@ def test_transaction_did_rollback_with_atomic():
     context = adapter.context()
     signal = Signal()
     with suppress(Exception):
-        with in_atomic(context) as client:
+        with atomic(context) as client:
             trx = client.get_transaction()
             assert trx is not None
             adapter.rollback = make_rollback(adapter.rollback, signal)
@@ -131,7 +133,7 @@ def test_transaction_did_rollback_with_atomic_session():
     context = adapter.context()
     signal = Signal()
     with suppress(Exception):
-        with in_atomic(context) as client:
+        with atomic(context) as client:
             trx = client.get_transaction()
             assert trx is not None
             adapter.rollback = make_rollback(adapter.rollback, signal)

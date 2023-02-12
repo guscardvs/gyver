@@ -1,6 +1,5 @@
-from gyver.context import Adapter
-from gyver.context import AsyncAdapter
-from gyver.context.interfaces.adapter import AtomicAdapter, AtomicAsyncAdapter
+from gyver.context.interfaces.adapter import AtomicAdapter
+from gyver.context.interfaces.adapter import AtomicAsyncAdapter
 
 
 class MockClient:

@@ -1,4 +1,3 @@
-"""Simulates env-star features to support py3.9"""
 import os
 from os import environ
 from pathlib import Path
@@ -78,7 +77,7 @@ class Config:
         try:
             val = cast(val)
         except Exception as e:
-            raise panic(InvalidCast, f"{name} received and invalid value {val}") from e
+            raise panic(InvalidCast, f"{name} received an invalid value {val}") from e
         else:
             return val
 

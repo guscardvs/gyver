@@ -6,7 +6,7 @@ import sqlalchemy.engine as sa_engine
 import sqlalchemy.orm as sa_orm
 
 from gyver import context
-from gyver.context.atomic.resolver import in_atomic
+from gyver.context import atomic
 from gyver.utils import lazyfield
 from gyver.utils.helpers import deprecated
 
@@ -65,15 +65,11 @@ class SaAdapter(context.Adapter[sa_engine.Connection]):
             client.begin()
 
     def commit(self, client: sa_engine.Connection) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             trx.commit()
 
     def rollback(self, client: sa_engine.Connection) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             trx.rollback()
 
     def in_atomic(self, client: sa_engine.Connection) -> bool:
@@ -102,7 +98,7 @@ class SaContext(context.Context[sa_engine.Connection]):
     def _make_transaction(self):
         if self._transaction_on is None:
             return contextlib.nullcontext()
-        return in_atomic(self)
+        return atomic(self)
 
     def open(self):
         if self._transaction_on != "open":
@@ -141,9 +137,7 @@ class SaContext(context.Context[sa_engine.Connection]):
 
 
 class SessionAdapter(context.AtomicAdapter[sa_orm.Session]):
-    def __init__(
-        self, adapter: context.AtomicAdapter[sa_engine.Connection]
-    ) -> None:
+    def __init__(self, adapter: context.AtomicAdapter[sa_engine.Connection]) -> None:
         self._internal_adapter = adapter
 
     def new(self):
@@ -163,15 +157,11 @@ class SessionAdapter(context.AtomicAdapter[sa_orm.Session]):
             client.begin()
 
     def commit(self, client: sa_orm.Session) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             trx.commit()
 
     def rollback(self, client: sa_orm.Session) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             trx.rollback()
 
     def in_atomic(self, client: sa_orm.Session) -> bool:

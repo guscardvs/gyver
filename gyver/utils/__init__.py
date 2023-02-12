@@ -4,7 +4,9 @@ from .exc import panic
 from .finder import Finder
 from .finder import class_validator
 from .finder import instance_validator
+from .helpers import DeprecatedClass
 from .helpers import cache
+from .helpers import deprecated
 from .helpers import frozen
 from .lazy import lazyfield
 from .singleton import make_singleton
@@ -21,6 +23,8 @@ __all__ = [
     "timezone",
     "frozen",
     "cache",
+    "deprecated",
+    "DeprecatedClass",
     "Finder",
     "class_validator",
     "instance_validator",

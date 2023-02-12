@@ -5,12 +5,10 @@ from cryptography.fernet import MultiFernet
 
 from gyver.config import from_config
 from gyver.utils import lazyfield
-from gyver.utils import make_singleton
 
 from .config import CryptoConfig
 
 
-@make_singleton
 class CryptoProvider:
     def __init__(self, config: Optional[CryptoConfig] = None) -> None:
         self._config = config or from_config(CryptoConfig)
