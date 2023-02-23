@@ -5,7 +5,7 @@ from typing import Sequence
 from typing import Union
 
 from gyver import utils
-from gyver.config import ProviderConfig
+from gyver.config import as_config
 from gyver.exc import InvalidField
 from gyver.utils.exc import panic
 
@@ -13,7 +13,8 @@ from . import drivers
 from .typedef import Driver
 
 
-class ConnectionPoolConfig(ProviderConfig):
+@as_config
+class ConnectionPoolConfig:
 
     """
     A configuration object for a connection pool.
@@ -26,16 +27,19 @@ class ConnectionPoolConfig(ProviderConfig):
 
     pool_recycle: int = 3600
     """
-    The number of seconds to keep a connection alive, after which it will be closed and replaced.
+    The number of seconds to keep a connection alive,
+    after which it will be closed and replaced.
     """
 
     max_overflow: int = 0
     """
-    The maximum number of connections to allow above the pool_size, or None to disable overflow.
+    The maximum number of connections to allow above the pool_size,
+    or None to disable overflow.
     """
 
 
-class DatabaseConfig(ProviderConfig):
+@as_config
+class DatabaseConfig:
     driver: Driver
     host: str
     port: int = -1
@@ -65,8 +69,8 @@ class DatabaseConfig(ProviderConfig):
         return False
 
     def override_dialect(self, dialect: drivers.Dialect) -> None:
-        self.dialect = dialect
-        self.dialect_overriden = True
+        DatabaseConfig.dialect.manual_set(self, dialect)
+        DatabaseConfig.dialect_overriden.manual_set(self, True)
 
 
 def make_database_config(

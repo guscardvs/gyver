@@ -27,18 +27,18 @@ class ProviderConfig(Model):
         fields = {"exclude": {}}
 
 
-ProviderT = TypeVar("ProviderT", bound=ProviderConfig)
+T = TypeVar("T")
 
 _default_config = Config()
 
 
 @deprecated
 def from_config(
-    provider: type[ProviderT],
+    provider: type[T],
     *,
     __config__: Config = _default_config,
     **presets: Any,
-) -> ProviderT:
+) -> T:
     return ConfigLoader(__config__).load(provider, **presets)
 
 
@@ -54,7 +54,7 @@ class ConfigLoader(DeprecatedClass):
         self._prefix = prefix
         self._without_prefix = without_prefix
 
-    def load(self, model_cls: type[ProviderT], **presets: Any) -> ProviderT:
+    def load(self, model_cls: type[T], **presets: Any) -> T:
         return self._adapter_factory.load(
             model_cls, __prefix__=self._prefix or "", presets=presets
         )

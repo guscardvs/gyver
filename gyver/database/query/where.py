@@ -1,9 +1,11 @@
+import contextlib
+from inspect import signature
 import typing
-from dataclasses import dataclass
 
 import sqlalchemy as sa
 
 from gyver.database.typedef import ClauseType
+from gyver.attrs import define
 
 from . import _helpers
 from . import comp as cp
@@ -19,28 +21,39 @@ class _BindCache:
         self._cached: dict[typing.Hashable, interface.Comparison] = {}
         self.maxlen = CACHE_MAXLEN
 
-    def get(self, key: typing.Hashable) -> typing.Optional[interface.Comparison]:
-        return self._cached.get(key)
+    def get(
+        self, key: typing.Hashable
+    ) -> typing.Optional[interface.Comparison]:
+        try:
+            return self._cached.get(key)
+        except TypeError:
+            return None
 
     def set(
         self, key: typing.Hashable, value: interface.Comparison
     ) -> interface.Comparison:
         if len(self._cached) >= CACHE_MAXLEN:
             self._cached.pop(tuple(self._cached)[0])
-        self._cached[key] = value
+        with contextlib.suppress(TypeError):
+            self._cached[key] = value
         return value
 
 
 _cache = _BindCache()
 
 
-@dataclass(frozen=True)
+@define
 class Resolver(typing.Generic[T]):
     val: typing.Any
 
     def resolve(self, mapper: interface.Mapper):
         del mapper
-        return self.val
+        val = self.val
+        if isinstance(val, list):
+            return tuple(val)
+        elif isinstance(val, set):
+            return frozenset(val)
+        return val
 
     def __bool__(self):
         return self.val is not None
@@ -51,7 +64,12 @@ class FieldResolver(Resolver[str]):
         return _helpers.retrieve_attr(mapper, self.val)
 
 
+@define
 class Where(interface.BindClause, typing.Generic[T]):
+    field: str
+    expected: Resolver[T]
+    comp: interface.Comparator[T] = cp.equals
+
     def __init__(
         self,
         field: str,
@@ -59,9 +77,11 @@ class Where(interface.BindClause, typing.Generic[T]):
         comp: interface.Comparator[T] = cp.equals,
         resolver_class: type[Resolver[T]] = Resolver,
     ) -> None:
-        self.field = field
-        self.expected = resolver_class(expected)
-        self.comp = comp
+        self.__gattrs_init__(
+            field,
+            resolver_class(expected),
+            comp,
+        )
 
     type_ = ClauseType.BIND
 
@@ -74,7 +94,9 @@ class Where(interface.BindClause, typing.Generic[T]):
                 _helpers.retrieve_attr(mapper, self.field),
                 resolved,
             )
-        if (value := _cache.get((mapper, self.field, resolved, self.comp))) is not None:
+        if (
+            value := _cache.get((mapper, self.field, resolved, self.comp))
+        ) is not None:
             return value
         attr = _helpers.retrieve_attr(mapper, self.field)
 

@@ -6,7 +6,7 @@ from typing import overload
 
 from boto3 import Session
 
-from gyver.config import ProviderConfig
+from gyver.config import as_config
 from gyver.config import from_config
 from gyver.utils import make_singleton
 
@@ -15,7 +15,8 @@ if TYPE_CHECKING:
     from mypy_boto3_sqs.client import SQSClient
 
 
-class AWSCredentialsConfig(ProviderConfig):
+@as_config
+class AWSCredentialsConfig:
     __prefix__ = "aws"
 
     access_key_id: str

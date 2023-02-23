@@ -21,7 +21,7 @@ sqlalchemy = { version = "^1.4.43", optional = true }
 cryptography = "^38.0.4"
 asyncmy = { version = "^0.2.5", optional = true }
 redis = { version = "^4.4.0", optional = true }
-attrs = "^22.2.0"
+gyver-attrs = "^0.1.4"
 
 [tool.poetry.group.lint.dependencies]
 black = "^22.10.0"
@@ -57,6 +57,10 @@ boto3-stubs = { extras = ["s3", "sqs"], version = "^1.26.13" }
 [tool.poetry.group.docs.dependencies]
 mkdocs-material = "^9.0.6"
 termynal = "^0.2.1"
+
+
+[tool.poetry.group.opts.dependencies]
+attrs = "^22.2.0"
 
 [tool.poetry.extras]
 db-mysql = ['asyncmy', 'pymysql']

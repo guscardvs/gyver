@@ -7,11 +7,12 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 
 from gyver.config import ConfigLoader
-from gyver.config import ProviderConfig
+from gyver.config import as_config
 from gyver.utils import lazyfield
 
 
-class RSACryptoConfig(ProviderConfig):
+@as_config
+class RSACryptoConfig:
     __prefix__ = "crypto"
 
     private_key: str

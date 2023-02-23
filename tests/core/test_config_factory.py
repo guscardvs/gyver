@@ -3,11 +3,14 @@ from typing import Any
 
 from attrs import asdict
 from attrs import define
+from gyver.attrs import define as gdefine, asdict as gasdict
 
 from gyver import config
 from gyver.config.adapter.attrs import AttrsResolverStrategy
 from gyver.config.adapter.dataclass import DataclassResolverStrategy
 from gyver.config.adapter.factory import AdapterConfigFactory
+from gyver.config.adapter.gattrs import GyverAttrsResolverStrategy
+from gyver.config.adapter.mark import as_config
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
 from gyver.database import DatabaseConfig
 from gyver.database.utils import make_uri
@@ -39,11 +42,24 @@ class OtherConfig:
     meta: dict[str, Any]
 
 
+@gdefine
+class Another:
+    name: str
+    emails: tuple[str, ...]
+    counts: set[int]
+    meta: dict[str, Any]
+
+
 def test_adapter_factory_identifies_strategy_correctly():
     factory = AdapterConfigFactory()
-    assert factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
-    assert factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
+    assert (
+        factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
+    )
     assert factory.get_strategy_class(OtherConfig) is AttrsResolverStrategy
+    assert factory.get_strategy_class(Another) is GyverAttrsResolverStrategy
 
 
 def test_adapter_parses_correctly_on_from_config():
@@ -61,6 +77,7 @@ def test_adapter_parses_correctly_on_from_config():
     person_config = factory.load(PersonConfig, presets=presets)
     another_config = factory.load(AnotherConfig, presets=presets)
     other_config = factory.load(OtherConfig, presets=presets)
+    another = factory.load(Another, presets=presets)
 
     assert person_config.name == "John Doe"
     assert person_config.emails == (
@@ -74,6 +91,7 @@ def test_adapter_parses_correctly_on_from_config():
         dataclasses.asdict(person_config)
         == asdict(other_config)
         == another_config.dict()
+        == gasdict(another)
     )
 
 
@@ -93,7 +111,8 @@ def test_adapter_uses_json_loads_if_receives_dict_as_param():
 
 
 def test_boolean_cast_works_correctly():
-    class CustomConfig(config.ProviderConfig):
+    @as_config
+    class CustomConfig:
         is_valid: bool
 
     assert (

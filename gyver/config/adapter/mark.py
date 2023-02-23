@@ -1,7 +1,12 @@
 from typing import Any
 from typing import TypeVar
+from gyver.attrs import define
+from gyver.attrs.field import FieldInfo, info
+import typing_extensions
 
-# Sentinel object used to check if the __config_class__ attribute has been set on the class
+
+# Sentinel object used to check if the __config_class__ attribute
+# has been set on the class
 SENTINEL = object()
 
 # Generic type variable T
@@ -40,3 +45,13 @@ def is_config(obj: Any) -> bool:
     :rtype: bool
     """
     return getattr(obj, "__config_class__", None) is SENTINEL
+
+
+@typing_extensions.dataclass_transform(
+    order_default=True,
+    frozen_default=True,
+    kw_only_default=False,
+    field_specifiers=(FieldInfo, info),
+)
+def as_config(cls: type[T]) -> type[T]:
+    return mark(define(cls))

@@ -8,7 +8,7 @@ import typing
 
 from gyver.exc import InvalidPath
 from gyver.exc import MissingParams
-from gyver.utils import frozen
+from gyver.attrs import define
 from gyver.utils import lazyfield
 
 PathConverter = typing.Callable[[pathlib.Path], str]
@@ -38,7 +38,7 @@ def iterate_module(modpath: pathlib.Path, resolver: PathConverter):
     yield from inspect.getmembers(mod)
 
 
-@frozen
+@define
 class _Finder:
     validator: Validator
     root: pathlib.Path
@@ -57,10 +57,14 @@ class _Finder:
 
     def __attrs_post_init__(self):
         if not self.root.exists():
-            raise InvalidPath(f"root must be a valid path, received {self.root}")
+            raise InvalidPath(
+                f"root must be a valid path, received {self.root}"
+            )
 
     def _should_look(self, path: pathlib.Path):
-        str_exclude = tuple(item for item in self.exclude if isinstance(item, str))
+        str_exclude = tuple(
+            item for item in self.exclude if isinstance(item, str)
+        )
         path_exclude = tuple(
             item for item in self.exclude if isinstance(item, pathlib.Path)
         )
@@ -180,7 +184,9 @@ class FinderBuilder:
                 os.sep + caller_module_name, ""
             )
 
-            caller_root_path = caller_root_path.replace(project_related_folders, "")
+            caller_root_path = caller_root_path.replace(
+                project_related_folders, ""
+            )
 
         return self.from_path(pathlib.Path(caller_root_path))
 

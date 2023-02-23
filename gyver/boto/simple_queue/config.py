@@ -1,7 +1,8 @@
-from gyver.config import ProviderConfig
+from gyver.config import as_config
 
 
-class QueueConfig(ProviderConfig):
+@as_config
+class QueueConfig:
     __prefix__ = "queue"
 
     name: str

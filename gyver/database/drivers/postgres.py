@@ -1,9 +1,9 @@
 from gyver.database.typedef import Driver
 from gyver.utils import DeprecatedClass
-from gyver.utils import frozen
+from gyver.attrs import define
 
 
-@frozen
+@define
 class PostgresDialect(DeprecatedClass):
     default_port = 5432
     driver = Driver.POSTGRES

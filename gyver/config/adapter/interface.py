@@ -9,12 +9,13 @@ from typing import Union
 from gyver.config.config import MISSING
 
 if TYPE_CHECKING:
+    from gyver.attrs.field import Field as GField
     from dataclasses import Field
 
     from attrs import Attribute
     from pydantic.fields import ModelField
 
-T = TypeVar("T", "ModelField", "Attribute", "Field")
+T = TypeVar("T", "ModelField", "Attribute", "Field", "GField")
 
 
 class FieldResolverStrategy(Protocol[T]):

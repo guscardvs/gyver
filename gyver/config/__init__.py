@@ -1,5 +1,5 @@
 from .adapter import AdapterConfigFactory
-from .adapter.mark import mark
+from .adapter.mark import mark, as_config
 from .config import MISSING
 from .config import Config
 from .config import EnvMapping
@@ -19,6 +19,7 @@ __all__ = [
     "ProviderConfig",
     "AdapterConfigFactory",
     "mark",
+    "as_config",
     "ConfigLoader",
     "from_config",
     "EnvConfig",
