@@ -4,9 +4,9 @@ from typing import Callable
 from typing import TypeVar
 from typing import cast
 
+from typing_extensions import ParamSpec
 
 from gyver.attrs import define
-from typing_extensions import ParamSpec
 
 from .exc import panic
 

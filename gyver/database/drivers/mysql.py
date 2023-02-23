@@ -1,6 +1,6 @@
+from gyver.attrs import define
 from gyver.database.typedef import Driver
 from gyver.utils import DeprecatedClass
-from gyver.attrs import define
 
 
 @define

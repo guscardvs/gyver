@@ -3,9 +3,9 @@ import inspect
 import pathlib
 import typing
 
+from gyver.attrs import define
 from gyver.exc import InvalidPath
 from gyver.exc import MissingParams
-from gyver.attrs import define
 
 from .lazy import lazyfield
 

@@ -1,11 +1,10 @@
 import contextlib
-from inspect import signature
 import typing
 
 import sqlalchemy as sa
 
-from gyver.database.typedef import ClauseType
 from gyver.attrs import define
+from gyver.database.typedef import ClauseType
 
 from . import _helpers
 from . import comp as cp
@@ -38,6 +37,15 @@ class _BindCache:
             self._cached[key] = value
         return value
 
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.clear()
+
+    def clear(self):
+        self._cached.clear()
+
 
 _cache = _BindCache()
 
@@ -64,7 +72,7 @@ class FieldResolver(Resolver[str]):
         return _helpers.retrieve_attr(mapper, self.val)
 
 
-@define
+@define(frozen=False)
 class Where(interface.BindClause, typing.Generic[T]):
     field: str
     expected: Resolver[T]
@@ -120,8 +128,15 @@ class _JoinBind(interface.BindClause):
 
     type_ = ClauseType.BIND
 
+    def __bool__(self):
+        return bool(self.items)
+
     def bind(self, mapper: interface.Mapper) -> interface.Comparison:
-        return self.operator(*(item.bind(mapper) for item in self.items))
+        return (
+            self.operator(*(item.bind(mapper) for item in self.items))
+            if self
+            else sa.true()
+        )
 
 
 def and_(*bind: interface.BindClause) -> _JoinBind:

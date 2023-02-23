@@ -110,9 +110,7 @@ def test_provider_parses_correctly_on_from_config():
     cfg = config.Config(mapping=mapping)
     factory = config.AdapterConfigFactory(cfg)
 
-    person_config = factory.load(
-        PersonConfig, presets={"meta": {"spouse": "Jane Doe"}}
-    )
+    person_config = factory.load(PersonConfig, presets={"meta": {"spouse": "Jane Doe"}})
 
     assert person_config.name == "John Doe"
     assert person_config.emails == (
@@ -134,21 +132,13 @@ def test_envconfig_identifies_correct_layer_of_dotfile():
         config.DotFile(curdir / "local.env", config.Env.LOCAL), mapping=mapping
     )
     third_envconfig = config.EnvConfig(
-        config.DotFile(
-            curdir / "test.env", config.Env.TEST, apply_to_lower=True
-        ),
+        config.DotFile(curdir / "test.env", config.Env.TEST, apply_to_lower=True),
         config.DotFile(curdir / "local.env", config.Env.LOCAL),
         mapping=mapping,
     )
     assert env_config.dotfile is None
-    assert (
-        second_envconfig.dotfile
-        and second_envconfig.dotfile.env is config.Env.LOCAL
-    )
-    assert (
-        third_envconfig.dotfile
-        and third_envconfig.dotfile.env is config.Env.TEST
-    )
+    assert second_envconfig.dotfile and second_envconfig.dotfile.env is config.Env.LOCAL
+    assert third_envconfig.dotfile and third_envconfig.dotfile.env is config.Env.TEST
 
 
 def test_envconfig_ignores_dotfiles_without_valid_files():

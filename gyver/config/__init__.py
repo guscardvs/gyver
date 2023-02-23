@@ -1,5 +1,6 @@
 from .adapter import AdapterConfigFactory
-from .adapter.mark import mark, as_config
+from .adapter.mark import as_config
+from .adapter.mark import mark
 from .config import MISSING
 from .config import Config
 from .config import EnvMapping

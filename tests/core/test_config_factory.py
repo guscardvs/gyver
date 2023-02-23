@@ -3,9 +3,10 @@ from typing import Any
 
 from attrs import asdict
 from attrs import define
-from gyver.attrs import define as gdefine, asdict as gasdict
 
 from gyver import config
+from gyver.attrs import asdict as gasdict
+from gyver.attrs import define as gdefine
 from gyver.config.adapter.attrs import AttrsResolverStrategy
 from gyver.config.adapter.dataclass import DataclassResolverStrategy
 from gyver.config.adapter.factory import AdapterConfigFactory
@@ -52,12 +53,8 @@ class Another:
 
 def test_adapter_factory_identifies_strategy_correctly():
     factory = AdapterConfigFactory()
-    assert (
-        factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
-    )
-    assert (
-        factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
-    )
+    assert factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
+    assert factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
     assert factory.get_strategy_class(OtherConfig) is AttrsResolverStrategy
     assert factory.get_strategy_class(Another) is GyverAttrsResolverStrategy
 

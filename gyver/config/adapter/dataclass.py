@@ -6,7 +6,6 @@ from typing import Sequence
 from typing import Union
 
 from gyver.attrs import define
-
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.config.config import MISSING
 

@@ -6,8 +6,8 @@ from typing import Union
 from attr._make import Factory
 from attrs import NOTHING
 from attrs import Attribute
-from gyver.attrs import define
 
+from gyver.attrs import define
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.config.config import MISSING
 from gyver.exc import InvalidCast
@@ -25,9 +25,7 @@ class AttrsResolverStrategy(FieldResolverStrategy[Attribute]):
 
     def names(self) -> Sequence[str]:
         return tuple(
-            item
-            for item in (self.field.name, self.field.alias)
-            if item is not None
+            item for item in (self.field.name, self.field.alias) if item is not None
         )
 
     def init_name(self) -> str:
