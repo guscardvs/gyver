@@ -10,10 +10,11 @@ from typing import Union
 import redis
 from redis import asyncio as aioredis
 
-from gyver.config import from_config
+from gyver.config import AdapterConfigFactory
 from gyver.exc import CacheMiss
 from gyver.utils import json
 from gyver.utils import lazyfield
+from gyver.attrs import define, info
 
 from .config import CacheConfig
 from .interface import AsyncCacheInterface
@@ -22,13 +23,15 @@ from .utils import make_uri
 
 T = TypeVar("T")
 
+_cache_config_factory = AdapterConfigFactory().maker(CacheConfig)
 
+
+@define
 class AsyncRedisWrapper(AsyncCacheInterface):
-    def __init__(self, cache_config: Optional[CacheConfig] = None) -> None:
-        self._config = cache_config or from_config(CacheConfig)
+    config: CacheConfig = info(default=_cache_config_factory)
 
     def _pool(self):
-        return aioredis.ConnectionPool.from_url(make_uri(self._config))
+        return aioredis.ConnectionPool.from_url(make_uri(self.config))
 
     @lazyfield
     def _instance(self):
@@ -86,12 +89,12 @@ class AsyncRedisWrapper(AsyncCacheInterface):
             await self._instance.hdel(map_name, name)
 
 
+@define
 class RedisWrapper(CacheInterface):
-    def __init__(self, cache_config: Optional[CacheConfig] = None) -> None:
-        self._config = cache_config or from_config(CacheConfig)
+    config: CacheConfig = info(default=_cache_config_factory)
 
     def _pool(self):
-        return redis.ConnectionPool.from_url(make_uri(self._config))
+        return redis.ConnectionPool.from_url(make_uri(self.config))
 
     @lazyfield
     def _instance(self):

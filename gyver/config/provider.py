@@ -32,16 +32,6 @@ T = TypeVar("T")
 _default_config = Config()
 
 
-@deprecated
-def from_config(
-    provider: type[T],
-    *,
-    __config__: Config = _default_config,
-    **presets: Any,
-) -> T:
-    return ConfigLoader(__config__).load(provider, **presets)
-
-
 class ConfigLoader(DeprecatedClass):
     def __init__(
         self,

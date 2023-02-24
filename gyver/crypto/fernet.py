@@ -3,7 +3,7 @@ from typing import Optional
 from cryptography.fernet import Fernet
 from cryptography.fernet import MultiFernet
 
-from gyver.config import from_config
+from gyver.config import AdapterConfigFactory
 from gyver.utils import lazyfield
 
 from .config import CryptoConfig
@@ -11,7 +11,7 @@ from .config import CryptoConfig
 
 class FernetCryptoProvider:
     def __init__(self, config: Optional[CryptoConfig] = None) -> None:
-        self._config = config or from_config(CryptoConfig)
+        self._config = config or AdapterConfigFactory().load(CryptoConfig)
 
     @property
     def config(self):
