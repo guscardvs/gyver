@@ -9,7 +9,7 @@ from gyver.utils import lazyfield
 from .config import CryptoConfig
 
 
-class CryptoProvider:
+class FernetCryptoProvider:
     def __init__(self, config: Optional[CryptoConfig] = None) -> None:
         self._config = config or from_config(CryptoConfig)
 
