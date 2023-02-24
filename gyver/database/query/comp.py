@@ -65,7 +65,9 @@ def llike(field: FieldType, target: str) -> Comparison:
 def insensitive_like(
     opt: typing.Literal["like", "rlike", "llike"] = "like"
 ) -> Comparator[str]:
-    fmt = {"like": "%{target}%", "rlike": "%{target}", "llike": "{target}%"}[opt]
+    fmt = {"like": "%{target}%", "rlike": "%{target}", "llike": "{target}%"}[
+        opt
+    ]
 
     def comparator(field: FieldType, target: str):
         return field.ilike(fmt.format(target=target))
@@ -99,16 +101,11 @@ def make_relation_check(clause: BindClause) -> Comparator:
         comp = clause.bind(field.class_)
         func = (
             field.has
-            if field.property.direction.name.lower() not in ("onetomany", "manytomany")
+            if field.property.direction.name.lower()
+            not in ("onetomany", "manytomany")
             else field.any
         )
         result = func() if str(comp) == str(sa.true()) else func(comp)
         return result if target else ~result
 
     return _relation_exists
-
-
-# Compat
-relation_exists = relation_exists_m2m = relation_exists_o2m = make_relation_check(
-    NullBind()
-)
