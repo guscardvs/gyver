@@ -40,7 +40,9 @@ def _try_each(*names: str, default: Any, cast: Any, config: Config):
             return config(name, cast)
     if default is not MISSING:
         return default
-    raise panic(MissingName, f"{', '.join(names)} not found and no default was given")
+    raise panic(
+        MissingName, f"{', '.join(names)} not found and no default was given"
+    )
 
 
 def _resolve_cast(outer_type: type):
@@ -50,7 +52,9 @@ def _resolve_cast(outer_type: type):
         return boolean_cast
     if origin is None:
         return (
-            make_lex_separator(outer_type) if outer_type in _sequences else outer_type
+            make_lex_separator(outer_type)
+            if outer_type in _sequences
+            else outer_type
         )
     if (origin := get_origin(outer_type)) in _sequences:
         args = get_args(outer_type)
@@ -67,7 +71,9 @@ class AdapterConfigFactory:
     def __init__(self, config: Config = _default_config) -> None:
         self._config = config
 
-    def get_strategy_class(self, config_class: type) -> type[FieldResolverStrategy]:
+    def get_strategy_class(
+        self, config_class: type
+    ) -> type[FieldResolverStrategy]:
         if hasattr(config_class, "__gyver_attrs__"):
             return GyverAttrsResolverStrategy
         elif is_dataclass(config_class):
@@ -111,7 +117,9 @@ class AdapterConfigFactory:
     ) -> Callable[[], T]:
         @mark_factory
         def load():
-            return self.load(model_cls, __prefix__, presets=presets, **defaults)
+            return self.load(
+                model_cls, __prefix__, presets=presets, **defaults
+            )
 
         return load
 
@@ -128,7 +136,9 @@ class AdapterConfigFactory:
             resolver.default(),
         )
         cast = _resolve_cast(resolver.cast())
-        return _try_each(*names, default=default, cast=cast, config=self._config)
+        return _try_each(
+            *names, default=default, cast=cast, config=self._config
+        )
 
     def resolve_names(
         self, model_cls: type, resolver: FieldResolverStrategy, prefix: str
@@ -163,13 +173,15 @@ class AdapterConfigFactory:
         :param root: Path: Specify the root directory of the project
         :return: A dictionary of {class: (configs)}
         """
-        provider_finder = finder.Finder(is_config, root)
-        provider_finder.find()
+        builder = (
+            finder.FinderBuilder().add_validator(is_config).from_path(root)
+        )
+        output = builder.find()
         tempself = cls()
         return {
-            provider: tuple(
-                tempself.resolve_names(provider, field, "")
-                for field in provider.__fields__.values()
+            cfg: tuple(
+                tempself.resolve_names(cfg, field, "")
+                for field in cfg.__fields__.values()
             )
-            for provider in provider_finder.output.values()
+            for cfg in output.values()
         }

@@ -5,13 +5,14 @@ from attrs import asdict
 from attrs import define
 
 from gyver import config
+from gyver.model import Model
 from gyver.attrs import asdict as gasdict
 from gyver.attrs import define as gdefine
 from gyver.config.adapter.attrs import AttrsResolverStrategy
 from gyver.config.adapter.dataclass import DataclassResolverStrategy
 from gyver.config.adapter.factory import AdapterConfigFactory
 from gyver.config.adapter.gattrs import GyverAttrsResolverStrategy
-from gyver.config.adapter.mark import as_config
+from gyver.config.adapter.mark import as_config, mark
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
 from gyver.database import DatabaseConfig
 from gyver.database.utils import make_uri
@@ -28,7 +29,8 @@ class PersonConfig:
     meta: dict[str, Any]
 
 
-class AnotherConfig(config.ProviderConfig):
+@mark
+class AnotherConfig(Model):
     name: str
     emails: tuple[str, ...]
     counts: set[int]
@@ -51,10 +53,22 @@ class Another:
     meta: dict[str, Any]
 
 
+factory = AdapterConfigFactory()
+
+
 def test_adapter_factory_identifies_strategy_correctly():
-    factory = AdapterConfigFactory()
-    assert factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
-    assert factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
+    assert (
+        factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
+    )
     assert factory.get_strategy_class(OtherConfig) is AttrsResolverStrategy
     assert factory.get_strategy_class(Another) is GyverAttrsResolverStrategy
 
