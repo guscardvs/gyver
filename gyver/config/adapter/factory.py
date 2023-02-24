@@ -1,7 +1,7 @@
 from contextlib import suppress
 from dataclasses import is_dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 from typing import Mapping
 from typing import Optional
 from typing import Sequence
@@ -19,6 +19,7 @@ from gyver.utils import finder
 from gyver.utils import json
 from gyver.utils import panic
 from gyver.utils.strings import make_lex_separator
+from gyver.attrs import mark_factory
 
 from .attrs import AttrsResolverStrategy
 from .dataclass import DataclassResolverStrategy
@@ -38,7 +39,9 @@ def _try_each(*names: str, default: Any, cast: Any, config: Config):
             return config(name, cast)
     if default is not MISSING:
         return default
-    raise panic(MissingName, f"{', '.join(names)} not found and no default was given")
+    raise panic(
+        MissingName, f"{', '.join(names)} not found and no default was given"
+    )
 
 
 def _resolve_cast(outer_type: type):
@@ -48,7 +51,9 @@ def _resolve_cast(outer_type: type):
         return boolean_cast
     if origin is None:
         return (
-            make_lex_separator(outer_type) if outer_type in _sequences else outer_type
+            make_lex_separator(outer_type)
+            if outer_type in _sequences
+            else outer_type
         )
     if (origin := get_origin(outer_type)) in _sequences:
         args = get_args(outer_type)
@@ -65,7 +70,9 @@ class AdapterConfigFactory:
     def __init__(self, config: Config = _default_config) -> None:
         self._config = config
 
-    def get_strategy_class(self, config_class: type) -> type[FieldResolverStrategy]:
+    def get_strategy_class(
+        self, config_class: type
+    ) -> type[FieldResolverStrategy]:
         if hasattr(config_class, "__gyver_attrs__"):
             return GyverAttrsResolverStrategy
         elif is_dataclass(config_class):
@@ -99,6 +106,22 @@ class AdapterConfigFactory:
         }
         return model_cls(**result | presets)
 
+    def maker(
+        self,
+        model_cls: type[T],
+        __prefix__: str = "",
+        *,
+        presets: Optional[Mapping[str, Any]] = None,
+        **defaults: Any,
+    ) -> Callable[[], T]:
+        @mark_factory
+        def load():
+            return self.load(
+                model_cls, __prefix__, presets=presets, **defaults
+            )
+
+        return load
+
     def _get_value(
         self,
         model_cls: type,
@@ -112,7 +135,9 @@ class AdapterConfigFactory:
             resolver.default(),
         )
         cast = _resolve_cast(resolver.cast())
-        return _try_each(*names, default=default, cast=cast, config=self._config)
+        return _try_each(
+            *names, default=default, cast=cast, config=self._config
+        )
 
     def resolve_names(
         self, model_cls: type, resolver: FieldResolverStrategy, prefix: str

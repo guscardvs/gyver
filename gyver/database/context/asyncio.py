@@ -1,18 +1,18 @@
-import contextlib
-import sys
 import typing
 
 import sqlalchemy.ext.asyncio as sa_asyncio
 
 from gyver import context
-from gyver.context import atomic
 from gyver.utils import lazyfield
-from gyver.utils.helpers import deprecated
 
-TransactionOptions = typing.Optional[typing.Literal["open", "begin"]]
+AsyncSaContext = context.AsyncContext[sa_asyncio.AsyncConnection]
+
+AsyncSessionContext = context.AsyncContext[sa_asyncio.AsyncSession]
 
 
-class AsyncSaAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncConnection]):
+class AsyncConnectionAdapter(
+    context.AtomicAsyncAdapter[sa_asyncio.AsyncConnection]
+):
     @typing.overload
     def __init__(
         self,
@@ -66,11 +66,15 @@ class AsyncSaAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncConnection]):
             await client.begin()
 
     async def commit(self, client: sa_asyncio.AsyncConnection) -> None:
-        if trx := (client.get_nested_transaction() or client.get_transaction()):
+        if trx := (
+            client.get_nested_transaction() or client.get_transaction()
+        ):
             await trx.commit()
 
     async def rollback(self, client: sa_asyncio.AsyncConnection) -> None:
-        if trx := (client.get_nested_transaction() or client.get_transaction()):
+        if trx := (
+            client.get_nested_transaction() or client.get_transaction()
+        ):
             await trx.rollback()
 
     async def in_atomic(self, client: sa_asyncio.AsyncConnection) -> bool:
@@ -78,71 +82,8 @@ class AsyncSaAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncConnection]):
 
     def context(
         self,
-        transaction_on: TransactionOptions = "open",
     ) -> "AsyncSaContext":
-        return AsyncSaContext(self, transaction_on=transaction_on)
-
-    def session(self):
-        return AsyncSessionAdapter(self).context()
-
-
-if sys.version_info < (3, 10):
-
-    class asyncnullcontext(contextlib.nullcontext):
-        async def __aenter__(self):
-            return self.enter_result
-
-        async def __aexit__(self, *excinfo):
-            pass
-
-else:
-    asyncnullcontext = contextlib.nullcontext
-
-
-class AsyncSaContext(context.AsyncContext[sa_asyncio.AsyncConnection]):
-    def __init__(
-        self,
-        adapter: context.AtomicAsyncAdapter[sa_asyncio.AsyncConnection],
-        transaction_on: TransactionOptions = "open",
-    ) -> None:
-        super().__init__(adapter)
-        self._transaction_on = transaction_on
-
-    @deprecated
-    def _make_transaction(self):
-        return asyncnullcontext() if self._transaction_on is None else atomic(self)
-
-    def open(self):
-        if self._transaction_on != "open":
-            return super().open()
-        return self._transaction_open()
-
-    def begin(self):
-        if self._transaction_on != "begin":
-            return super().begin()
-        return self.transaction_begin()
-
-    @deprecated
-    @contextlib.asynccontextmanager
-    async def _transaction_open(self):
-        async with super().open():
-            async with self._make_transaction():
-                yield
-
-    @deprecated
-    @contextlib.asynccontextmanager
-    async def transaction_begin(self):
-        async with super().begin() as client:
-            async with self._make_transaction():
-                yield client
-
-    @contextlib.asynccontextmanager
-    async def acquire_session(
-        self,
-    ) -> typing.AsyncGenerator[sa_asyncio.AsyncSession, None]:
-        context = AsyncSessionAdapter(self.adapter).context()  # type: ignore
-        async with context as session:
-            yield session
+        return AsyncSaContext(self)
 
 
 class AsyncSessionAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncSession]):
@@ -178,6 +119,3 @@ class AsyncSessionAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncSession]):
         self,
     ) -> "AsyncSessionContext":
         return AsyncSessionContext(self)
-
-
-AsyncSessionContext = context.AsyncContext[sa_asyncio.AsyncSession]

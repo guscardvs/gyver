@@ -6,7 +6,6 @@ from gyver.database.query.where import (
     Resolver,
     FieldResolver,
     Where,
-    _JoinBind,
     and_,
     or_,
     AlwaysTrue,

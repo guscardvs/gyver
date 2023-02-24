@@ -36,11 +36,9 @@ def test_database_config_works_correctly_with_config(
 def test_database_provider_starts_correctly_with_working_factory(
     db_config: database.DatabaseConfig,
 ):
-    provider = database.SyncDatabaseProvider(db_config)
+    adapter = database.DatabaseAdapter(db_config)
 
-    context = provider.context()
-
-    with context as conn:
+    with adapter.context() as conn:
         result = conn.execute(sa.select(sa.text('"Hello World"')))
         assert result.scalar_one() == "Hello World"
 
@@ -48,9 +46,8 @@ def test_database_provider_starts_correctly_with_working_factory(
 async def test_async_provider_starts_correctyl_with_working_factory(
     db_config: database.DatabaseConfig,
 ):
-    provider = database.AsyncDatabaseProvider(db_config)
+    provider = database.DatabaseAdapter(db_config)
 
-    context = provider.context()
-    async with context as conn:
+    async with provider.async_context() as conn:
         result = await conn.execute(sa.select(sa.text('"Hello World"')))
         assert result.scalar_one() == "Hello World"

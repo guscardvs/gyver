@@ -38,24 +38,9 @@ def test_sqlalchemy_adapter_works_correctly_with_sa_context():
 def test_sqlalchemy_adapter_works_correctly_with_sa_context_transaction():
     # sourcery skip: extract-method
     adapter = SaAdapter(uri=sqlite_uri)
-    context = adapter.context(transaction_on="begin")
-    with context.open():
-        with context.begin() as conn:
-            result = conn.execute("SELECT 1").first()
-            assert result
-            assert conn.in_transaction()
-            assert not conn.in_nested_transaction()
-            (first,) = result
-            assert first == 1
+    context = adapter.context()
 
-    context = adapter.context(transaction_on="open")
-
-    with context.open():
-        with context.begin():
-            assert context.client.in_transaction()
-            assert not context.client.in_nested_transaction()
-
-    context = adapter.context(transaction_on=None)
+    context = adapter.context()
 
     with atomic(context):
         with atomic(context) as client:
@@ -67,7 +52,7 @@ def test_sqlalchemy_adapter_works_correctly_with_sa_context_transaction():
 
 def test_sqlalchemy_adapter_works_correctly_with_sa_acquire_session():
     adapter = SaAdapter(uri=sqlite_uri)
-    context = adapter.session()
+    context = SessionAdapter(adapter).context()
 
     with context as session:
         result = session.execute(sa.text("SELECT 1")).first()
