@@ -1,7 +1,7 @@
 from contextlib import suppress
 from dataclasses import is_dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 from typing import Callable
 from typing import Mapping
 from typing import Optional
@@ -146,7 +146,9 @@ class AdapterConfigFactory:
         names = resolver.names()
         prefix = prefix or getattr(model_cls, "__prefix__", "")
         prefix = prefix.removesuffix("_")
-        without_prefix = getattr(model_cls, "__without_prefix__", ())
+        without_prefix = cast(
+            Sequence[str], getattr(model_cls, "__without_prefix__", ())
+        )
         if not prefix or set(names).intersection(without_prefix):
             return (*names, *map(str.upper, names))
 

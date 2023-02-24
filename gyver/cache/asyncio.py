@@ -30,7 +30,13 @@ class AsyncCacheProvider:
     def _make_concrete(
         config: Optional[CacheConfig], test: bool
     ) -> AsyncCacheInterface:
-        return MockAsyncCache() if test else AsyncRedisWrapper(config)
+        if test:
+            return MockAsyncCache()
+        return (
+            AsyncRedisWrapper(config)
+            if config is not None
+            else AsyncRedisWrapper()
+        )
 
     @lazyfield
     def interface(self):
