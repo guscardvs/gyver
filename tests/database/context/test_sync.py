@@ -11,13 +11,15 @@ from tests.database.context.signal import Signal
 
 sqlite_uri = "sqlite:///:memory:"
 
+simple_healthcheck = sa.select(1)
+
 
 def test_sqlalchemy_adapter_works_correctly_with_default_context():
     adapter = SaAdapter(uri=sqlite_uri)
     context = Context(adapter)
 
     with context.begin() as conn:
-        result = conn.execute("SELECT 1").first()
+        result = conn.execute(simple_healthcheck).first()
         assert result
         (first,) = result
         assert first == 1
@@ -29,7 +31,7 @@ def test_sqlalchemy_adapter_works_correctly_with_sa_context():
     context = adapter.context()
 
     with context.begin() as conn:
-        result = conn.execute("SELECT 1").first()
+        result = conn.execute(simple_healthcheck).first()
         assert result
         (first,) = result
         assert first == 1
@@ -55,7 +57,7 @@ def test_sqlalchemy_adapter_works_correctly_with_sa_acquire_session():
     context = SessionAdapter(adapter).context()
 
     with context as session:
-        result = session.execute(sa.text("SELECT 1")).first()
+        result = session.execute(simple_healthcheck).first()
         assert result
         (first,) = result
         assert first == 1
@@ -66,7 +68,7 @@ def test_sqlalchemy_context_and_adapter_are_compliant_to_atomic():
     context = adapter.context()
 
     with atomic(context) as client:
-        result = client.execute(sa.text("SELECT 1")).first()
+        result = client.execute(simple_healthcheck).first()
         assert result
         (first,) = result
         assert first == 1
@@ -79,7 +81,7 @@ def test_sqlalchemy_session_and_adapter_are_compliant_to_atomic():
     context = adapter.context()
 
     with atomic(context) as client:
-        result = client.execute(sa.text("SELECT 1")).first()
+        result = client.execute(simple_healthcheck).first()
         assert result
         (first,) = result
         assert first == 1

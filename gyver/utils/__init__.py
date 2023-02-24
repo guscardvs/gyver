@@ -1,9 +1,8 @@
 from . import json
 from . import timezone
 from .exc import panic
-from .finder import Finder
-from .finder import class_validator
-from .finder import instance_validator
+from .finder import FinderBuilder
+from .finder import finder_builder
 from .helpers import DeprecatedClass
 from .helpers import cache
 from .helpers import deprecated
@@ -25,9 +24,8 @@ __all__ = [
     "cache",
     "deprecated",
     "DeprecatedClass",
-    "Finder",
-    "class_validator",
-    "instance_validator",
+    "FinderBuilder",
+    "finder_builder",
     "make_singleton",
     "panic",
 ]

@@ -1,8 +1,9 @@
 import pathlib
 
 import pytest
+from gyver.exc import InvalidPath
 
-from gyver.utils import finder
+from gyver.utils import finder_builder
 
 from .mock_module import base
 
@@ -11,8 +12,8 @@ MOD_PATH = ROOT / "core" / "utils" / "mock_module"
 
 
 def test_finder_by_instance_finds_only_instances_of_given_class():
-    instance_finder = finder.Finder(
-        finder.instance_validator(base.Base), ROOT, MOD_PATH
+    instance_finder = (
+        finder_builder.instance_of(base.Base).from_path(ROOT).build(MOD_PATH)
     )
     instance_finder.find()
     result = instance_finder.output
@@ -22,7 +23,9 @@ def test_finder_by_instance_finds_only_instances_of_given_class():
 
 
 def test_finder_by_class_finds_only_subclasses_of_given_class():
-    class_finder = finder.Finder(finder.class_validator(base.Base), ROOT, MOD_PATH)
+    class_finder = (
+        finder_builder.child_of(base.Base).from_path(ROOT).build(MOD_PATH)
+    )
     class_finder.find()
     result = class_finder.output
 
@@ -35,8 +38,8 @@ def test_finder_fails_if_finder_receives_unexistant_root():
     root = pathlib.Path("invalid")
 
     with pytest.raises(ValueError) as exc_info:
-        finder.Finder(lambda a: bool(a), root)
+        finder_builder.from_path(root)
 
     assert str(exc_info.value) == str(
-        finder.InvalidPath(f"root must be a valid path, received {root}")
+        InvalidPath(f"root must be a valid path, received {root}")
     )

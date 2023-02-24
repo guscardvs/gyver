@@ -83,7 +83,7 @@ class Where(interface.BindClause, typing.Generic[T]):
         comp: interface.Comparator[T] = cp.equals,
         resolver_class: type[Resolver[T]] = Resolver,
     ) -> None:
-        self.__gattrs_init__(
+        self.__gattrs_init__(  # type: ignore
             field,
             resolver_class(expected),
             comp,
