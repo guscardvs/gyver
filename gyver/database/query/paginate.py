@@ -1,11 +1,10 @@
-import typing
 from abc import ABC
 from abc import abstractmethod
 
 from sqlalchemy.sql import Select
 
+from gyver.attrs import define
 from gyver.database.typedef import ClauseType
-from gyver.utils.helpers import cache
 
 from . import comp as cp
 from .interface import ApplyClause
@@ -13,13 +12,11 @@ from .interface import Comparator
 from .where import Where
 
 
+@define
 class Paginate(ApplyClause, ABC):
     type_ = ClauseType.APPLY
-
-    @typing.final
-    def __init__(self, limit: int, offset: int) -> None:
-        self._limit = limit
-        self._offset = offset
+    limit: int
+    offset: int
 
     @abstractmethod
     def apply(self, query: Select) -> Select:
@@ -35,25 +32,20 @@ class Paginate(ApplyClause, ABC):
 
 class LimitOffsetPaginate(Paginate):
     def apply(self, query: Select) -> Select:
-        return query.limit(self._limit).offset(self._offset)
+        return query.limit(self.limit).offset(self.offset)
 
 
-@cache
-def make_field_paginate(
-    field: str, jump_comparison: Comparator = cp.greater
-) -> type[Paginate]:
-    class FieldPaginate(Paginate):
-        def apply(self, query: Select) -> Select:
-            return query.where(
-                Where(field, self._offset, jump_comparison).bind(
-                    query.selected_columns  # type: ignore
-                )
-            ).limit(self._limit)
+@define
+class FieldPaginate(Paginate):
+    field: str = "id"
+    jump_comparison: Comparator = cp.greater
 
-    return FieldPaginate
-
-
-IdPaginate = make_field_paginate("id")
+    def apply(self, query: Select) -> Select:
+        return query.where(
+            Where(self.field, self.offset, self.jump_comparison).bind(
+                query.selected_columns  # type: ignore
+            )
+        ).limit(self.limit)
 
 
 class _NullPaginate(Paginate):

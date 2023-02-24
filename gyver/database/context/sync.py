@@ -65,15 +65,11 @@ class SaAdapter(context.Adapter[sa_engine.Connection]):
             client.begin()
 
     def commit(self, client: sa_engine.Connection) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             trx.commit()
 
     def rollback(self, client: sa_engine.Connection) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             trx.rollback()
 
     def in_atomic(self, client: sa_engine.Connection) -> bool:
@@ -86,9 +82,7 @@ class SaAdapter(context.Adapter[sa_engine.Connection]):
 
 
 class SessionAdapter(context.AtomicAdapter[sa_orm.Session]):
-    def __init__(
-        self, adapter: context.AtomicAdapter[sa_engine.Connection]
-    ) -> None:
+    def __init__(self, adapter: context.AtomicAdapter[sa_engine.Connection]) -> None:
         self._internal_adapter = adapter
 
     def new(self):
@@ -108,15 +102,11 @@ class SessionAdapter(context.AtomicAdapter[sa_orm.Session]):
             client.begin()
 
     def commit(self, client: sa_orm.Session) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             trx.commit()
 
     def rollback(self, client: sa_orm.Session) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             trx.rollback()
 
     def in_atomic(self, client: sa_orm.Session) -> bool:

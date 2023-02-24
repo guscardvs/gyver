@@ -20,9 +20,7 @@ class _BindCache:
         self._cached: dict[typing.Hashable, interface.Comparison] = {}
         self.maxlen = CACHE_MAXLEN
 
-    def get(
-        self, key: typing.Hashable
-    ) -> typing.Optional[interface.Comparison]:
+    def get(self, key: typing.Hashable) -> typing.Optional[interface.Comparison]:
         try:
             return self._cached.get(key)
         except TypeError:
@@ -102,9 +100,7 @@ class Where(interface.BindClause, typing.Generic[T]):
                 _helpers.retrieve_attr(mapper, self.field),
                 resolved,
             )
-        if (
-            value := _cache.get((mapper, self.field, resolved, self.comp))
-        ) is not None:
+        if (value := _cache.get((mapper, self.field, resolved, self.comp))) is not None:
             return value
         attr = _helpers.retrieve_attr(mapper, self.field)
 

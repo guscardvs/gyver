@@ -2,14 +2,16 @@ import typing
 
 import sqlalchemy as sa
 from sqlalchemy.ext.asyncio import create_async_engine
-from gyver.context import atomic
 
+from gyver.attrs import define
+from gyver.attrs import info
+from gyver.attrs import mark_factory
 from gyver.config import AdapterConfigFactory
+from gyver.context import atomic
 from gyver.database.context.asyncio import AsyncSessionAdapter
 from gyver.database.context.sync import SessionAdapter
 from gyver.database.typedef import Driver
 from gyver.utils.lazy import lazyfield
-from gyver.attrs import define, info, mark_factory
 
 from .config import DatabaseConfig
 from .context import AsyncConnectionAdapter
@@ -40,9 +42,7 @@ class DatabaseAdapter:
 
     @lazyfield
     def engine(self):
-        return sa.create_engine(
-            make_uri(self.config, sync=True), **self.db_kwargs
-        )
+        return sa.create_engine(make_uri(self.config, sync=True), **self.db_kwargs)
 
     def context(self):
         context = SaAdapter(engine=self.engine).context()

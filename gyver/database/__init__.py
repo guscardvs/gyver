@@ -1,4 +1,5 @@
 from . import query
+from .adapter import DatabaseAdapter
 from .config import DatabaseConfig
 from .context import AsyncSaContext
 from .context import SaContext
@@ -7,7 +8,6 @@ from .entity import AbstractEntity
 from .entity import Entity
 from .entity import make_table
 from .metadata import metadata as default_metadata
-from .adapter import DatabaseAdapter
 from .typedef import Driver
 from .utils import make_uri
 
