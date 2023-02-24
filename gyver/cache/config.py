@@ -1,7 +1,8 @@
-from gyver.config import ProviderConfig
+from gyver.config import as_config
 
 
-class CacheConfig(ProviderConfig):
+@as_config
+class CacheConfig:
     __prefix__ = "cache"
 
     host: str

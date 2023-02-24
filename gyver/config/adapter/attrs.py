@@ -6,15 +6,15 @@ from typing import Union
 from attr._make import Factory
 from attrs import NOTHING
 from attrs import Attribute
-from attrs import define
 
+from gyver.attrs import define
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.config.config import MISSING
 from gyver.exc import InvalidCast
 from gyver.utils import panic
 
 
-@define(frozen=True, slots=True)
+@define
 class AttrsResolverStrategy(FieldResolverStrategy[Attribute]):
     field: Attribute
 

@@ -5,7 +5,7 @@ import sqlalchemy as sa
 
 from gyver.context import AsyncContext
 from gyver.context import atomic
-from gyver.database.context.asyncio import AsyncSaAdapter
+from gyver.database.context.asyncio import AsyncConnectionAdapter
 from gyver.database.context.asyncio import AsyncSessionAdapter
 from tests.database.context.signal import Signal
 
@@ -13,7 +13,7 @@ sqlite_uri = "sqlite+aiosqlite:///:memory:"
 
 
 async def test_sqlalchemy_async_adapter_works_correctly_with_default_context():
-    adapter = AsyncSaAdapter(uri=sqlite_uri)
+    adapter = AsyncConnectionAdapter(uri=sqlite_uri)
     context = AsyncContext(adapter)
 
     async with context.begin() as conn:
@@ -25,7 +25,7 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_default_context():
 
 
 async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context():
-    adapter = AsyncSaAdapter(uri=sqlite_uri)
+    adapter = AsyncConnectionAdapter(uri=sqlite_uri)
     context = adapter.context()
 
     async with context.begin() as conn:
@@ -37,8 +37,8 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context():
 
 
 async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context_transaction():  # noqa
-    adapter = AsyncSaAdapter(uri=sqlite_uri)
-    context = adapter.context(transaction_on=None)
+    adapter = AsyncConnectionAdapter(uri=sqlite_uri)
+    context = adapter.context()
 
     async with context.open():
         async with atomic(context) as conn:
@@ -64,10 +64,10 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context_transact
 
 
 async def test_sqlalchemy_async_adapter_works_correctly_with_sa_acquire_session():  # noqa
-    adapter = AsyncSaAdapter(uri=sqlite_uri)
-    context = adapter.context()
+    adapter = AsyncConnectionAdapter(uri=sqlite_uri)
+    context = AsyncSessionAdapter(adapter).context()
 
-    async with context.acquire_session() as session:
+    async with context as session:
         result = await session.execute(sa.text("SELECT 1"))
         response = result.first()
         assert response
@@ -76,7 +76,7 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_acquire_session(
 
 
 async def test_sqlalchemy_context_and_adapter_are_compliant_to_atomic():
-    adapter = AsyncSaAdapter(uri=sqlite_uri)
+    adapter = AsyncConnectionAdapter(uri=sqlite_uri)
     context = adapter.context()
 
     async with atomic(context) as client:
@@ -90,7 +90,7 @@ async def test_sqlalchemy_context_and_adapter_are_compliant_to_atomic():
 
 
 async def test_sqlalchemy_session_and_adapter_are_compliant_to_atomic():
-    adapter = AsyncSessionAdapter(AsyncSaAdapter(uri=sqlite_uri))
+    adapter = AsyncSessionAdapter(AsyncConnectionAdapter(uri=sqlite_uri))
     context = adapter.context()
 
     async with atomic(context) as client:
@@ -124,7 +124,7 @@ def make_rollback(func, signal: Signal):
 
 
 async def test_transaction_did_rollback_with_atomic():
-    adapter = AsyncSaAdapter(uri=sqlite_uri)
+    adapter = AsyncConnectionAdapter(uri=sqlite_uri)
     context = adapter.context()
     signal = Signal()
     with suppress(MockException):
@@ -135,7 +135,7 @@ async def test_transaction_did_rollback_with_atomic():
 
 
 async def test_transaction_did_rollback_with_atomic_session():
-    adapter = AsyncSessionAdapter(AsyncSaAdapter(uri=sqlite_uri))
+    adapter = AsyncSessionAdapter(AsyncConnectionAdapter(uri=sqlite_uri))
     context = adapter.context()
     signal = Signal()
     with suppress(MockException):

@@ -4,11 +4,9 @@ from typing import Callable
 from typing import TypeVar
 from typing import cast
 
-from attr import attrib
-from attr import field
-from attrs import define
 from typing_extensions import ParamSpec
-from typing_extensions import dataclass_transform
+
+from gyver.attrs import define
 
 from .exc import panic
 
@@ -22,12 +20,6 @@ def _not_implemented(msg: str):
 
 P = ParamSpec("P")
 T = TypeVar("T")
-
-
-@dataclass_transform(order_default=True, field_specifiers=(attrib, field))
-def frozen(cls: type[T]) -> type[T]:
-    """Defines a frozen class with the help of attrs"""
-    return define(slots=False, frozen=True, weakref_slot=False)(cls)
 
 
 def cache(f: Callable[P, T]) -> Callable[P, T]:
@@ -47,6 +39,9 @@ def deprecated(func: Callable[P, T]) -> Callable[P, T]:
         return func(*args, **kwargs)
 
     return inner
+
+
+frozen = deprecated(define)
 
 
 class DeprecatedClass:

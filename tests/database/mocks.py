@@ -1,8 +1,8 @@
+from typing import Any, Callable, Protocol
 import sqlalchemy as sa
 
 from gyver.database import Entity
 from gyver.database.entity import make_table
-from gyver.database.query.interface import Comparison
 from gyver.database.utils import create_relation_table
 from gyver.database.utils import make_relation
 
@@ -37,11 +37,19 @@ related_person_person_address = create_relation_table(
 class RelatedPerson(Entity):
     address_id = sa.Column(sa.Integer, sa.ForeignKey("personaddress.id"))
 
-    address = make_relation(PersonAddress, secondary=related_person_person_address)
+    address = make_relation(
+        PersonAddress, secondary=related_person_person_address
+    )
 
 
-mock_table = make_table("mock_table", sa.Column("id", sa.Integer, primary_key=True))
+mock_table = make_table(
+    "mock_table", sa.Column("id", sa.Integer, primary_key=True)
+)
 
 
-def build_query(query: Comparison):
+class HasCompile(Protocol):
+    compile: Callable[..., Any]
+
+
+def build_query(query: HasCompile):
     return str(query.compile(compile_kwargs={"literal_binds": True}))

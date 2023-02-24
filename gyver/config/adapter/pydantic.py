@@ -3,15 +3,15 @@ from typing import Generator
 from typing import Sequence
 from typing import Union
 
-from attrs import define
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
+from gyver.attrs import define
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.config.config import MISSING
 
 
-@define(frozen=True, slots=True)
+@define
 class PydanticResolverStrategy(FieldResolverStrategy[ModelField]):
     field: ModelField
 

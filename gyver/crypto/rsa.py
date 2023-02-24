@@ -6,12 +6,13 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 
-from gyver.config import ConfigLoader
-from gyver.config import ProviderConfig
+from gyver.config import AdapterConfigFactory
+from gyver.config import as_config
 from gyver.utils import lazyfield
 
 
-class RSACryptoConfig(ProviderConfig):
+@as_config
+class RSACryptoConfig:
     __prefix__ = "crypto"
 
     private_key: str
@@ -20,7 +21,7 @@ class RSACryptoConfig(ProviderConfig):
 
 class RSACryptoProvider:
     def __init__(self, config: Optional[RSACryptoConfig] = None) -> None:
-        self._config = config or ConfigLoader().load(RSACryptoConfig)
+        self._config = config or AdapterConfigFactory().load(RSACryptoConfig)
 
     @property
     def config(self):

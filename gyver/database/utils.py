@@ -5,7 +5,7 @@ from types import FunctionType
 import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 
-from gyver.database import default_metadata
+from gyver.database.metadata import metadata as default_metadata
 from gyver.url import URL
 from gyver.url.netloc import Netloc
 from gyver.utils import cache

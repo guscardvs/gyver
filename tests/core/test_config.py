@@ -7,6 +7,7 @@ from hypothesis import given
 from hypothesis.strategies import text
 
 from gyver import config
+from gyver.config.adapter.mark import as_config
 from gyver.exc import InvalidCast
 from gyver.exc import MissingName
 
@@ -90,7 +91,8 @@ def test_config_reads_from_env_file():
         cfg("EMAIL")
 
 
-class PersonConfig(config.ProviderConfig):
+@as_config
+class PersonConfig:
     name: str
     emails: tuple[str, ...]
     counts: set[int]

@@ -14,7 +14,9 @@ if TYPE_CHECKING:
     from attrs import Attribute
     from pydantic.fields import ModelField
 
-T = TypeVar("T", "ModelField", "Attribute", "Field")
+    from gyver.attrs.field import Field as GField
+
+T = TypeVar("T", "ModelField", "Attribute", "Field", "GField")
 
 
 class FieldResolverStrategy(Protocol[T]):

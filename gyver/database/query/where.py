@@ -1,8 +1,9 @@
+import contextlib
 import typing
-from dataclasses import dataclass
 
 import sqlalchemy as sa
 
+from gyver.attrs import define
 from gyver.database.typedef import ClauseType
 
 from . import _helpers
@@ -20,27 +21,45 @@ class _BindCache:
         self.maxlen = CACHE_MAXLEN
 
     def get(self, key: typing.Hashable) -> typing.Optional[interface.Comparison]:
-        return self._cached.get(key)
+        try:
+            return self._cached.get(key)
+        except TypeError:
+            return None
 
     def set(
         self, key: typing.Hashable, value: interface.Comparison
     ) -> interface.Comparison:
         if len(self._cached) >= CACHE_MAXLEN:
             self._cached.pop(tuple(self._cached)[0])
-        self._cached[key] = value
+        with contextlib.suppress(TypeError):
+            self._cached[key] = value
         return value
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *_):
+        self.clear()
+
+    def clear(self):
+        self._cached.clear()
 
 
 _cache = _BindCache()
 
 
-@dataclass(frozen=True)
+@define
 class Resolver(typing.Generic[T]):
     val: typing.Any
 
     def resolve(self, mapper: interface.Mapper):
         del mapper
-        return self.val
+        val = self.val
+        if isinstance(val, list):
+            return tuple(val)
+        elif isinstance(val, set):
+            return frozenset(val)
+        return val
 
     def __bool__(self):
         return self.val is not None
@@ -51,7 +70,12 @@ class FieldResolver(Resolver[str]):
         return _helpers.retrieve_attr(mapper, self.val)
 
 
+@define(frozen=False)
 class Where(interface.BindClause, typing.Generic[T]):
+    field: str
+    expected: Resolver[T]
+    comp: interface.Comparator[T] = cp.equals
+
     def __init__(
         self,
         field: str,
@@ -59,9 +83,11 @@ class Where(interface.BindClause, typing.Generic[T]):
         comp: interface.Comparator[T] = cp.equals,
         resolver_class: type[Resolver[T]] = Resolver,
     ) -> None:
-        self.field = field
-        self.expected = resolver_class(expected)
-        self.comp = comp
+        self.__gattrs_init__(  # type: ignore
+            field,
+            resolver_class(expected),
+            comp,
+        )
 
     type_ = ClauseType.BIND
 
@@ -98,8 +124,15 @@ class _JoinBind(interface.BindClause):
 
     type_ = ClauseType.BIND
 
+    def __bool__(self):
+        return bool(self.items)
+
     def bind(self, mapper: interface.Mapper) -> interface.Comparison:
-        return self.operator(*(item.bind(mapper) for item in self.items))
+        return (
+            self.operator(*(item.bind(mapper) for item in self.items))
+            if self
+            else sa.true()
+        )
 
 
 def and_(*bind: interface.BindClause) -> _JoinBind:

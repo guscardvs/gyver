@@ -3,7 +3,7 @@ from attr import define
 from gyver.database.typedef import Driver
 
 
-@define(frozen=True)
+@define
 class DialectInfo:
     default_port: int
     driver: Driver

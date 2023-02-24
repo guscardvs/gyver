@@ -10,7 +10,7 @@ from gyver.exc import InvalidField
 
 def test_make_uri_should_return_expected_uri():
     expected = "mysql+aiomysql://user:Pas%24word@localhost:3306/database_name"
-    config = database.DefaultDatabaseConfig(
+    config = database.DatabaseConfig(
         driver=database.Driver.MYSQL,
         host="localhost",
         user="user",
@@ -28,7 +28,7 @@ def test_make_uri_builds_correctly_with_custom_dialect():
         **{**asdict(resolve_driver(Driver.MARIADB)), "async_driver": "asyncmy"}
     )
 
-    config = database.DefaultDatabaseConfig(
+    config = database.DatabaseConfig(
         driver=database.Driver.CUSTOM,
         host="localhost",
         user="user",
@@ -41,7 +41,7 @@ def test_make_uri_builds_correctly_with_custom_dialect():
 
 def test_dialect_resolution_fails_if_custom_not_provided():
 
-    config = database.DefaultDatabaseConfig(
+    config = database.DatabaseConfig(
         driver=database.Driver.CUSTOM,
         host="localhost",
         user="user",

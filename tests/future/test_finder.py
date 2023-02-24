@@ -2,7 +2,7 @@ import pathlib
 
 import pytest
 
-from gyver.future.utils import finder
+from gyver.utils import finder
 from tests.core.utils.mock_module import base
 
 ROOT = pathlib.Path(__file__).parent.parent
@@ -57,7 +57,7 @@ def test_builder_selects_correct_package_folder():
 
 
 def test_builder_works_correctly_without_setting_path():
-    instance_finder = finder.builder.instance_of(base.Base).build(MOD_PATH)
+    instance_finder = finder.finder_builder.instance_of(base.Base).build(MOD_PATH)
 
     result = instance_finder.find()
 

@@ -1,7 +1,8 @@
 from contextlib import suppress
 from dataclasses import is_dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
+from typing import Callable
 from typing import Mapping
 from typing import Optional
 from typing import Sequence
@@ -11,6 +12,7 @@ from typing import get_origin
 
 from pydantic import BaseModel
 
+from gyver.attrs import mark_factory
 from gyver.config.config import MISSING
 from gyver.config.config import Config
 from gyver.config.utils import boolean_cast
@@ -22,6 +24,7 @@ from gyver.utils.strings import make_lex_separator
 
 from .attrs import AttrsResolverStrategy
 from .dataclass import DataclassResolverStrategy
+from .gattrs import GyverAttrsResolverStrategy
 from .interface import FieldResolverStrategy
 from .mark import is_config
 from .pydantic import PydanticResolverStrategy
@@ -37,7 +40,9 @@ def _try_each(*names: str, default: Any, cast: Any, config: Config):
             return config(name, cast)
     if default is not MISSING:
         return default
-    raise panic(MissingName, f"{', '.join(names)} not found and no default was given")
+    raise panic(
+        MissingName, f"{', '.join(names)} not found and no default was given"
+    )
 
 
 def _resolve_cast(outer_type: type):
@@ -47,7 +52,9 @@ def _resolve_cast(outer_type: type):
         return boolean_cast
     if origin is None:
         return (
-            make_lex_separator(outer_type) if outer_type in _sequences else outer_type
+            make_lex_separator(outer_type)
+            if outer_type in _sequences
+            else outer_type
         )
     if (origin := get_origin(outer_type)) in _sequences:
         args = get_args(outer_type)
@@ -64,8 +71,12 @@ class AdapterConfigFactory:
     def __init__(self, config: Config = _default_config) -> None:
         self._config = config
 
-    def get_strategy_class(self, config_class: type) -> type[FieldResolverStrategy]:
-        if is_dataclass(config_class):
+    def get_strategy_class(
+        self, config_class: type
+    ) -> type[FieldResolverStrategy]:
+        if hasattr(config_class, "__gyver_attrs__"):
+            return GyverAttrsResolverStrategy
+        elif is_dataclass(config_class):
             return DataclassResolverStrategy
         elif issubclass(config_class, BaseModel):
             return PydanticResolverStrategy
@@ -96,6 +107,22 @@ class AdapterConfigFactory:
         }
         return model_cls(**result | presets)
 
+    def maker(
+        self,
+        model_cls: type[T],
+        __prefix__: str = "",
+        *,
+        presets: Optional[Mapping[str, Any]] = None,
+        **defaults: Any,
+    ) -> Callable[[], T]:
+        @mark_factory
+        def load():
+            return self.load(
+                model_cls, __prefix__, presets=presets, **defaults
+            )
+
+        return load
+
     def _get_value(
         self,
         model_cls: type,
@@ -109,7 +136,9 @@ class AdapterConfigFactory:
             resolver.default(),
         )
         cast = _resolve_cast(resolver.cast())
-        return _try_each(*names, default=default, cast=cast, config=self._config)
+        return _try_each(
+            *names, default=default, cast=cast, config=self._config
+        )
 
     def resolve_names(
         self, model_cls: type, resolver: FieldResolverStrategy, prefix: str
@@ -117,7 +146,9 @@ class AdapterConfigFactory:
         names = resolver.names()
         prefix = prefix or getattr(model_cls, "__prefix__", "")
         prefix = prefix.removesuffix("_")
-        without_prefix = getattr(model_cls, "__without_prefix__", ())
+        without_prefix = cast(
+            Sequence[str], getattr(model_cls, "__without_prefix__", ())
+        )
         if not prefix or set(names).intersection(without_prefix):
             return (*names, *map(str.upper, names))
 
@@ -144,13 +175,15 @@ class AdapterConfigFactory:
         :param root: Path: Specify the root directory of the project
         :return: A dictionary of {class: (configs)}
         """
-        provider_finder = finder.Finder(is_config, root)
-        provider_finder.find()
+        builder = (
+            finder.FinderBuilder().add_validator(is_config).from_path(root)
+        )
+        output = builder.find()
         tempself = cls()
         return {
-            provider: tuple(
-                tempself.resolve_names(provider, field, "")
-                for field in provider.__fields__.values()
+            cfg: tuple(
+                tempself.resolve_names(cfg, field, "")
+                for field in cfg.__fields__.values()
             )
-            for provider in provider_finder.output.values()
+            for cfg in output.values()
         }
