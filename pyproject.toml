@@ -19,7 +19,6 @@ aiosqlite = { version = "^0.18.0", optional = true }
 tzdata = { markers = "sys_platform != \"linux\"", version = "^2022.6" }
 sqlalchemy = { version = "^2.0.4", optional = true }
 cryptography = "^38.0.4"
-asyncmy = { version = "^0.2.5", optional = true }
 redis = { version = "^4.4.0", optional = true }
 gyver-attrs = "^0.1.4"
 
@@ -63,12 +62,11 @@ termynal = "^0.2.1"
 attrs = "^22.2.0"
 
 [tool.poetry.extras]
-db-mysql = ['asyncmy', 'pymysql']
-db-mariadb = ['asyncmy', 'pymysql']
-db-pg = ['asyncpg', 'psycopg2']
-db-sqlite = ['aiosqlite']
+db-mysql = ['aiomysql', 'pymysql', 'sqlalchemy']
+db-mariadb = ['aiomysql', 'pymysql', 'sqlalchemy']
+db-pg = ['asyncpg', 'psycopg2', 'sqlalchemy']
+db-sqlite = ['aiosqlite', 'sqlalchemy']
 cache = ['redis']
-sqlalchemy = ['sqlalchemy']
 
 [tool.black]
 line_length = 88

@@ -77,29 +77,6 @@ files = [
 ]
 
 [[package]]
-name = "asyncmy"
-version = "0.2.5"
-description = "A fast asyncio MySQL driver"
-category = "main"
-optional = true
-python-versions = ">=3.7,<4.0"
-files = [
-    {file = "asyncmy-0.2.5-cp310-cp310-macosx_10_16_x86_64.whl", hash = "sha256:f176b55c82d3bdb10f0ecb3a518a54777f3d247e00f06add138f63df4edc0e3d"},
-    {file = "asyncmy-0.2.5-cp310-cp310-manylinux_2_31_x86_64.whl", hash = "sha256:f404d351d4f9fc741cdb8b49da8278e63a8551be6ccd03b514c2c0828500633d"},
-    {file = "asyncmy-0.2.5-cp310-cp310-win_amd64.whl", hash = "sha256:9824184d180753d23101b1d9fdc7955783b08fbc6f3cc88d6acce7ff019c0eaf"},
-    {file = "asyncmy-0.2.5-cp37-cp37m-macosx_10_16_x86_64.whl", hash = "sha256:02add8063bd00762a469dcb9915563f66520ffda598851a957443b1012182f43"},
-    {file = "asyncmy-0.2.5-cp37-cp37m-manylinux_2_31_x86_64.whl", hash = "sha256:a341d8a22d9a1f3236a81f17836002291567aa7d878ab75b37ed9bf4ce401290"},
-    {file = "asyncmy-0.2.5-cp37-cp37m-win_amd64.whl", hash = "sha256:2dc25f0bb723a71445d5c5b46ab2ae71c9dd3123fea9eae1bee4c36af5eda2bc"},
-    {file = "asyncmy-0.2.5-cp38-cp38-macosx_10_16_x86_64.whl", hash = "sha256:e184e701fa153dd456f6b351136c0a7a7524b8f5959f7f4b47848efe434a9c7d"},
-    {file = "asyncmy-0.2.5-cp38-cp38-manylinux_2_31_x86_64.whl", hash = "sha256:2275cc0036fa39f888c0770173ffb8ed16b89eecf2e380499275bfa6bf4ee088"},
-    {file = "asyncmy-0.2.5-cp38-cp38-win_amd64.whl", hash = "sha256:527ccc24a9bd76d565f1024f4a50ee6fd92cac518e6d884281ad61ffc424e7cd"},
-    {file = "asyncmy-0.2.5-cp39-cp39-macosx_10_16_x86_64.whl", hash = "sha256:6606e296dc161d71629f1163c3c82dda97431e25ee7240b6b7f139c2c35cff94"},
-    {file = "asyncmy-0.2.5-cp39-cp39-manylinux_2_31_x86_64.whl", hash = "sha256:61ed1b9e69dafe476f02c20962b8ee4ec5ba130b760bdf504015fcb80bbe6787"},
-    {file = "asyncmy-0.2.5-cp39-cp39-win_amd64.whl", hash = "sha256:f5dcc1a29d608cc5270f37328253032c554321b85bcf5653f1affa01f185c29c"},
-    {file = "asyncmy-0.2.5.tar.gz", hash = "sha256:cf3ef3d1ada385d231f23fffcbf1fe040bae8575b187746633fbef6e7cff2844"},
-]
-
-[[package]]
 name = "asyncpg"
 version = "0.27.0"
 description = "An asyncio PostgreSQL driver"
@@ -2939,13 +2916,12 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 
 [extras]
 cache = ["redis"]
-db-mariadb = ["asyncmy", "pymysql"]
-db-mysql = ["asyncmy", "pymysql"]
-db-pg = ["asyncpg", "psycopg2"]
-db-sqlite = ["aiosqlite"]
-sqlalchemy = ["sqlalchemy"]
+db-mariadb = ["aiomysql", "pymysql", "sqlalchemy"]
+db-mysql = ["aiomysql", "pymysql", "sqlalchemy"]
+db-pg = ["asyncpg", "psycopg2", "sqlalchemy"]
+db-sqlite = ["aiosqlite", "sqlalchemy"]
 
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "1f7e9d0c5b9d3212181475cf1b1ac342860db73aa5927b15bbe4817e1216a2ad"
+content-hash = "34e355152f1fdb8286aa5fd10f2f574d928f797f3af5f8e61ac0b2312637699f"
