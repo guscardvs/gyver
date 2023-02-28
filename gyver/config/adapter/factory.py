@@ -22,7 +22,7 @@ from gyver.utils import json
 from gyver.utils import panic
 from gyver.utils.strings import make_lex_separator
 
-from .attrs import AttrsResolverStrategy
+
 from .dataclass import DataclassResolverStrategy
 from .gattrs import GyverAttrsResolverStrategy
 from .interface import FieldResolverStrategy
@@ -81,6 +81,8 @@ class AdapterConfigFactory:
         elif issubclass(config_class, BaseModel):
             return PydanticResolverStrategy
         elif hasattr(config_class, "__attrs_attrs__"):
+            from .attrs import AttrsResolverStrategy
+
             return AttrsResolverStrategy
         raise ValueError("Unknown class definition")
 
