@@ -1,3 +1,9 @@
+## 2.0.1 (2023-02-28)
+
+### Fix
+
+- removed asycmy and added sqlalchemy to db extras
+
 ## 2.0.0 (2023-02-24)
 
 ### Feat
