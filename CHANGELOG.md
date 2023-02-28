@@ -1,3 +1,9 @@
+## 2.0.2 (2023-02-28)
+
+### Fix
+
+- **config**: now does not require attrs to be installed
+
 ## 2.0.1 (2023-02-28)
 
 ### Fix
