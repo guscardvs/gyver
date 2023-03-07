@@ -32,11 +32,7 @@ class AsyncCacheProvider:
     ) -> AsyncCacheInterface:
         if test:
             return MockAsyncCache()
-        return (
-            AsyncRedisWrapper(config)
-            if config is not None
-            else AsyncRedisWrapper()
-        )
+        return AsyncRedisWrapper(config) if config is not None else AsyncRedisWrapper()
 
     @lazyfield
     def interface(self):

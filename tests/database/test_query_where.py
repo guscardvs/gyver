@@ -5,7 +5,7 @@ import sqlalchemy as sa
 
 from gyver.database import default_metadata
 from gyver.database.query import comp
-from gyver.database.query.where import CACHE_MAXLEN
+from gyver.database.query.where import CACHE_MAXLEN, ApplyWhere
 from gyver.database.query.where import AlwaysTrue
 from gyver.database.query.where import FieldResolver
 from gyver.database.query.where import RawQuery
@@ -163,14 +163,14 @@ def test_join_bind_runs_equally_without_args():
 
 def test_join_bind_returns_expected_value():
     assert build_query(
-        and_(Where("id", 5, comp.greater), Where("id", 10, comp.lesser_equals)).bind(
-            mapper
-        )
+        and_(
+            Where("id", 5, comp.greater), Where("id", 10, comp.lesser_equals)
+        ).bind(mapper)
     ) == build_query(sa.and_(mapper.c.id > 5, mapper.c.id <= 10))
     assert build_query(
-        or_(Where("id", 5, comp.greater), Where("id", 10, comp.lesser_equals)).bind(
-            mapper
-        )
+        or_(
+            Where("id", 5, comp.greater), Where("id", 10, comp.lesser_equals)
+        ).bind(mapper)
     ) == build_query(sa.or_(mapper.c.id > 5, mapper.c.id <= 10))
 
 
@@ -178,3 +178,11 @@ def test_raw_query_returns_same_value_received():
     q = mapper.c.id > 5
 
     assert RawQuery(q).bind(mapper) is q
+
+
+def test_apply_where_returns_the_expected_result():
+    initial = sa.select(mapper)
+
+    assert build_query(
+        ApplyWhere(mapper, Where("id", 5, comp.greater)).apply(initial)
+    ) == build_query(initial.where(mapper.c.id > 5))

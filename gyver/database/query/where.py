@@ -162,3 +162,13 @@ class RawQuery(interface.BindClause):
     def bind(self, mapper: interface.Mapper) -> interface.Comparison:
         del mapper
         return self._cmp
+
+
+class ApplyWhere(interface.ApplyClause):
+    type_ = ClauseType.APPLY
+
+    def __init__(self, mapper: interface.Mapper, *where: interface.BindClause) -> None:
+        self.where = and_(*where).bind(mapper)
+
+    def apply(self, query: interface.ExecutableT) -> interface.ExecutableT:
+        return query.where(self.where)

@@ -1,4 +1,7 @@
-from typing import Any, Callable, Protocol
+from typing import Any
+from typing import Callable
+from typing import Protocol
+
 import sqlalchemy as sa
 
 from gyver.database import Entity
@@ -37,14 +40,10 @@ related_person_person_address = create_relation_table(
 class RelatedPerson(Entity):
     address_id = sa.Column(sa.Integer, sa.ForeignKey("personaddress.id"))
 
-    address = make_relation(
-        PersonAddress, secondary=related_person_person_address
-    )
+    address = make_relation(PersonAddress, secondary=related_person_person_address)
 
 
-mock_table = make_table(
-    "mock_table", sa.Column("id", sa.Integer, primary_key=True)
-)
+mock_table = make_table("mock_table", sa.Column("id", sa.Integer, primary_key=True))
 
 
 class HasCompile(Protocol):

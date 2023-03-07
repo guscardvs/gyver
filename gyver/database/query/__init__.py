@@ -16,11 +16,13 @@ from .utils import as_time
 from .utils import as_upper
 from .where import FieldResolver
 from .where import Where
+from .where import ApplyWhere
 from .where import and_
 from .where import or_
 
 __all__ = [
     "Where",
+    "ApplyWhere",
     "FieldResolver",
     "and_",
     "or_",
