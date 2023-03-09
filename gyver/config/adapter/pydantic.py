@@ -37,4 +37,4 @@ class PydanticResolverStrategy(FieldResolverStrategy[ModelField]):
     def iterfield(
         config_class: type[BaseModel],
     ) -> Generator[ModelField, Any, Any]:
-        yield from config_class.__fields__.values()  # type: ignore
+        yield from config_class.__fields__.values()

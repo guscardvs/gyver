@@ -33,7 +33,9 @@ class URL(Encodable):
 
     def encode(self, omit_empty_equal: bool = True):
         resolved_query = (
-            self.query.encode() if omit_empty_equal else self.query.omit_empty_equal()
+            self.query.encode()
+            if omit_empty_equal
+            else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (
@@ -67,7 +69,7 @@ class URL(Encodable):
         if fragment:
             self.fragment.set(fragment)
         if netloc:
-            self.netloc.set(netloc)
+            self.netloc = self.netloc.merge(Netloc(netloc))
         if netloc_args:
             self.netloc = self.netloc.merge(netloc_args)
         return self
@@ -91,7 +93,7 @@ class URL(Encodable):
         if fragment:
             self.fragment.set(fragment)
         if netloc:
-            self.netloc.set(netloc)
+            self.netloc.load(netloc)
         if netloc_args:
             self.netloc = netloc_args
         return self

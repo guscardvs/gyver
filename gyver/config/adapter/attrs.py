@@ -5,7 +5,7 @@ from typing import Union
 
 from attr._make import Factory
 from attrs import NOTHING
-from attrs import Attribute
+from attrs import Attribute, fields
 
 from gyver.attrs import define
 from gyver.config.adapter.interface import FieldResolverStrategy
@@ -25,7 +25,9 @@ class AttrsResolverStrategy(FieldResolverStrategy[Attribute]):
 
     def names(self) -> Sequence[str]:
         return tuple(
-            item for item in (self.field.name, self.field.alias) if item is not None
+            item
+            for item in (self.field.name, self.field.alias)
+            if item is not None
         )
 
     def init_name(self) -> str:
@@ -39,4 +41,4 @@ class AttrsResolverStrategy(FieldResolverStrategy[Attribute]):
 
     @staticmethod
     def iterfield(config_class: type) -> Generator[Attribute, Any, Any]:
-        yield from config_class.__attrs_attrs__  # type: ignore
+        yield from fields(config_class)

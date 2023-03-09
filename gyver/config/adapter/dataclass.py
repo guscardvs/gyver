@@ -1,5 +1,5 @@
 from dataclasses import MISSING as dc_MISSING
-from dataclasses import Field
+from dataclasses import Field, fields
 from typing import Any
 from typing import Generator
 from typing import Sequence
@@ -34,4 +34,4 @@ class DataclassResolverStrategy(FieldResolverStrategy[Field]):
 
     @staticmethod
     def iterfield(config_class: type) -> Generator[Field, Any, Any]:
-        yield from config_class.__dataclass_fields__.values()  # type: ignore
+        yield from fields(config_class)

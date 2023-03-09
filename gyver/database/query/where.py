@@ -3,7 +3,7 @@ import typing
 
 import sqlalchemy as sa
 
-from gyver.attrs import define
+from gyver.attrs import define, call_init
 from gyver.database.typedef import ClauseType
 
 from . import _helpers
@@ -20,7 +20,9 @@ class _BindCache:
         self._cached: dict[typing.Hashable, interface.Comparison] = {}
         self.maxlen = CACHE_MAXLEN
 
-    def get(self, key: typing.Hashable) -> typing.Optional[interface.Comparison]:
+    def get(
+        self, key: typing.Hashable
+    ) -> typing.Optional[interface.Comparison]:
         try:
             return self._cached.get(key)
         except TypeError:
@@ -83,7 +85,8 @@ class Where(interface.BindClause, typing.Generic[T]):
         comp: interface.Comparator[T] = cp.equals,
         resolver_class: type[Resolver[T]] = Resolver,
     ) -> None:
-        self.__gattrs_init__(  # type: ignore
+        call_init(
+            self,
             field,
             resolver_class(expected),
             comp,
@@ -100,7 +103,9 @@ class Where(interface.BindClause, typing.Generic[T]):
                 _helpers.retrieve_attr(mapper, self.field),
                 resolved,
             )
-        if (value := _cache.get((mapper, self.field, resolved, self.comp))) is not None:
+        if (
+            value := _cache.get((mapper, self.field, resolved, self.comp))
+        ) is not None:
             return value
         attr = _helpers.retrieve_attr(mapper, self.field)
 
@@ -167,7 +172,9 @@ class RawQuery(interface.BindClause):
 class ApplyWhere(interface.ApplyClause):
     type_ = ClauseType.APPLY
 
-    def __init__(self, mapper: interface.Mapper, *where: interface.BindClause) -> None:
+    def __init__(
+        self, mapper: interface.Mapper, *where: interface.BindClause
+    ) -> None:
         self.where = and_(*where).bind(mapper)
 
     def apply(self, query: interface.ExecutableT) -> interface.ExecutableT:
