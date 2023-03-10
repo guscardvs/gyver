@@ -3,6 +3,7 @@ from typing import Optional
 from typing import overload
 
 from gyver.utils import lazyfield
+from gyver.attrs import define, call_init
 
 from .config import CacheConfig
 from .interface import CacheInterface
@@ -11,7 +12,11 @@ from .mock import MockCache
 from .redis import RedisWrapper
 
 
+@define
 class CacheProvider:
+    config: CacheConfig
+    test: bool
+
     @overload
     def __init__(self, *, config: CacheConfig):
         ...
@@ -23,18 +28,19 @@ class CacheProvider:
     def __init__(
         self, *, config: Optional[CacheConfig] = None, test: bool = False
     ) -> None:
-        self._config = config
-        self._test = test
+        call_init(self, config, test)
 
     @staticmethod
-    def _make_concrete(config: Optional[CacheConfig], test: bool) -> CacheInterface:
+    def _make_concrete(
+        config: Optional[CacheConfig], test: bool
+    ) -> CacheInterface:
         if test:
             return MockCache()
         return RedisWrapper() if config is None else RedisWrapper(config)
 
     @lazyfield
     def interface(self):
-        return self._make_concrete(self._config, self._test)
+        return self._make_concrete(self.config, self.test)
 
     def mapper(self, name: str) -> CacheMap:
         return CacheMap(self.interface, name)

@@ -13,7 +13,7 @@ from typing import get_origin
 
 from pydantic import BaseModel
 
-from gyver.attrs import mark_factory
+from gyver.attrs import mark_factory, define
 from gyver.config.config import MISSING
 from gyver.config.config import Config
 from gyver.config.utils import boolean_cast
@@ -68,9 +68,9 @@ def _loads(val: Any) -> Any:
     return json.loads(val) if isinstance(val, str) else val
 
 
+@define
 class AdapterConfigFactory:
-    def __init__(self, config: Config = _default_config) -> None:
-        self._config = config
+    config: Config = _default_config
 
     def get_strategy_class(
         self, config_class: type
@@ -140,7 +140,7 @@ class AdapterConfigFactory:
         )
         cast = _resolve_cast(resolver.cast())
         return _try_each(
-            *names, default=default, cast=cast, config=self._config
+            *names, default=default, cast=cast, config=self.config
         )
 
     def resolve_names(

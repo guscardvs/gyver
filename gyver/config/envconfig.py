@@ -1,9 +1,9 @@
 import os
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Union
+from typing import Sequence, Union
 
 from gyver import utils
+from gyver.attrs import define, info, call_init
 
 from .config import Config
 from .config import EnvMapping
@@ -11,36 +11,44 @@ from .config import default_mapping
 from .typedef import Env
 
 
-@dataclass(frozen=True)
+@define
 class DotFile:
-    filename: Union[str, Path]
-    env: Env
-    apply_to_lower: bool = False
-
-    def __gt__(self, other: "DotFile") -> bool:
-        return self.env.weight > other.env.weight
+    filename: Union[str, Path] = info(order=False)
+    env: Env = info(order=lambda env: env.weight)
+    apply_to_lower: bool = info(default=False, order=False)
 
     def is_higher(self, env: Env) -> bool:
         return self.env.weight >= env.weight
 
 
+@define
 class EnvConfig(Config):
+    mapping: EnvMapping = default_mapping
+    env_var: str = "CONFIG_ENV"
+    dotfiles: Sequence[DotFile] = ()
+
     def __init__(
         self,
         *dotfiles: DotFile,
         env_var: str = "CONFIG_ENV",
         mapping: EnvMapping = default_mapping
     ) -> None:
-        self._env_var = env_var
-        self._dotfiles = dotfiles
-        self._mapping = mapping
-        self._file_values = {}
+        call_init(
+            self,
+            env_var=env_var,
+            mapping=mapping,
+            dotfiles=dotfiles,
+        )
+
+    def __post_init__(self):
         if self.dotfile:
-            self._read_file(self.dotfile.filename)
+            EnvConfig.file_values.manual_set(
+                self, dict(self._read_file(self.dotfile.filename))
+            )
 
     @utils.lazyfield
     def env(self):
-        return self.__call__(self._env_var, Env.new)
+        return self.__call__(self.env_var, Env.new)
 
     @utils.lazyfield
     def dotfile(self):
@@ -53,7 +61,7 @@ class EnvConfig(Config):
         :return: The first dotfile that is not higher than the current environment
         """
 
-        for dot in sorted(self._dotfiles, reverse=True):
+        for dot in sorted(self.dotfiles, reverse=True):
             if not dot.is_higher(self.env):
                 break
             if dot.env != self.env and (

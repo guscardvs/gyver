@@ -1,5 +1,5 @@
 import pytest
-from attrs import asdict
+from gyver.attrs import asdict
 
 from gyver import database
 from gyver.database.drivers import resolve_driver
