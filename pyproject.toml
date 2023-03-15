@@ -20,7 +20,7 @@ tzdata = { markers = "sys_platform != \"linux\"", version = "^2022.6" }
 sqlalchemy = { version = "^2.0.4", optional = true }
 cryptography = "^38.0.4"
 redis = { version = "^4.4.0", optional = true }
-gyver-attrs = "^0.3.0"
+gyver-attrs = "^0.4.0"
 
 [tool.poetry.group.lint.dependencies]
 black = "^22.10.0"

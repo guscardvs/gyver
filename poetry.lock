@@ -1034,14 +1034,14 @@ test = ["faulthandler", "objgraph", "psutil"]
 
 [[package]]
 name = "gyver-attrs"
-version = "0.3.0"
+version = "0.4.0"
 description = ""
 category = "main"
 optional = false
 python-versions = ">=3.9,<4.0"
 files = [
-    {file = "gyver_attrs-0.3.0-py3-none-any.whl", hash = "sha256:3d4a98fc6eb6062d5d1197de2a3b1b54528aa91bae455b2887024c6d0f416647"},
-    {file = "gyver_attrs-0.3.0.tar.gz", hash = "sha256:6e24b97bdc4979be5c28fa0f9f2f52b78db987e047fb9647f4d8f5f174aa2775"},
+    {file = "gyver_attrs-0.4.0-py3-none-any.whl", hash = "sha256:2f77bdde843e5b35cbdbe0b4278d1e4cf4da2dc42f4b047081f80baa6576f5e8"},
+    {file = "gyver_attrs-0.4.0.tar.gz", hash = "sha256:d4898750ef755821a09eead0edd3cf370f233a3ff72994dbbba35fb0eff1ad50"},
 ]
 
 [package.dependencies]
@@ -2769,4 +2769,4 @@ db-sqlite = ["aiosqlite", "sqlalchemy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "49d0e55f4f9f0417206d30fc0dd8ee91d929cd06079be611eef3bf269c7dfc10"
+content-hash = "57cc4b49f66dd21efa9ab3114cefeaccb2907b9f7fcf910cf737771f655f5723"
