@@ -24,7 +24,7 @@
 ## Optional
 
 To use the database parts:
-* **Mysql/MariaDB:** AsyncMy, PyMySQL (use db-mysql or db-mariadb extras)
+* **Mysql/MariaDB:** AioMySQL, PyMySQL (use db-mysql or db-mariadb extras)
 * **Postgres:** AsyncPG, Psycopg2
 * **SQLite:** aiosqlite
 * **Redis:** redis
@@ -38,7 +38,7 @@ $ pip install gyver
 
 ## Roadmap
 
-> Migrate from pydantic to dataclass/attrs for a lighter version of the library
+> Pack database code in a package specific "gyver-database" to make the gyver core lighter
 
 ##  License
 
