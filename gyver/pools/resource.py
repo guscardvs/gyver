@@ -1,8 +1,10 @@
 from time import time
-from typing import Any, Generic
+from typing import Any
+from typing import Generic
 from typing import TypeVar
 
-from gyver.attrs import define, mutable
+from gyver.attrs import define
+from gyver.attrs import mutable
 
 from gyver.exc import InvalidParamType
 
@@ -12,7 +14,7 @@ T = TypeVar("T")
 STARTTIME_ATTR = "_gyver_starttime_"
 
 
-@mutable(pydantic=False)
+@mutable
 class ResourceProxy:
     _target: Any
     _gyver_starttime_: float

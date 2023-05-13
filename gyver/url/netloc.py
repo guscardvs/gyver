@@ -1,12 +1,13 @@
 from typing import Optional
 from urllib.parse import quote
 
-from gyver.url.encode import Encodable
-from gyver.url.utils import utf8
 from gyver.attrs import mutable
 
+from gyver.url.encode import Encodable
+from gyver.url.utils import utf8
 
-@mutable(pydantic=False, eq=False)
+
+@mutable(eq=False)
 class Netloc(Encodable):
     username: Optional[str]
     password: Optional[str]

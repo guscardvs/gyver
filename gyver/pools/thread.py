@@ -22,7 +22,7 @@ FactoryType = Callable[[], T]
 ReleaserType = Callable[[T], None]
 
 
-@mutable(pydantic=False)
+@mutable
 class ThreadPool(Generic[T]):
     resources: Queue[Resource[T]]
     factory: FactoryType[T]

@@ -5,10 +5,11 @@ from urllib.parse import parse_qs
 from urllib.parse import quote
 
 from gyver.attrs import mutable
+
 from gyver.url.encode import Encodable
 
 
-@mutable(pydantic=False, eq=False)
+@mutable(eq=False)
 class Query(Encodable):
     params: defaultdict[str, list[str]]
 

@@ -21,7 +21,7 @@ FactoryType = Callable[[], Coroutine[Any, Any, T]]
 ReleaserType = Callable[[T], Coroutine[Any, Any, None]]
 
 
-@mutable(pydantic=False)
+@mutable
 class AsyncPool(Generic[T]):
     resources: asyncio.Queue[Resource[T]]
     factory: FactoryType[T]
@@ -123,9 +123,7 @@ class AsyncPool(Generic[T]):
         count = count or self._pool_size
         count = min(count, self._pool_size)
 
-        while (
-            self.resources.qsize() < count and await self._decrease_available()
-        ):
+        while self.resources.qsize() < count and await self._decrease_available():
             resource = await self._initialize_resource()
             self.resources.put_nowait(resource)
 

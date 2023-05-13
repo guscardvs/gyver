@@ -1,18 +1,19 @@
 from collections import defaultdict
-from typing import Mapping, Union
+from typing import Mapping
 from typing import Optional
 from urllib.parse import urlparse
 from urllib.parse import urlunsplit
+
+from gyver.attrs import mutable
 
 from gyver.url.encode import Encodable
 from gyver.url.fragment import Fragment
 from gyver.url.netloc import Netloc
 from gyver.url.path import Path
 from gyver.url.query import Query
-from gyver.attrs import mutable
 
 
-@mutable(pydantic=False, eq=False)
+@mutable(eq=False)
 class URL(Encodable):
     scheme: str
     netloc: Netloc
@@ -40,9 +41,7 @@ class URL(Encodable):
 
     def encode(self, omit_empty_equal: bool = True):
         resolved_query = (
-            self.query.encode()
-            if omit_empty_equal
-            else self.query.omit_empty_equal()
+            self.query.encode() if omit_empty_equal else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (
