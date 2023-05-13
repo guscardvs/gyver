@@ -14,9 +14,9 @@ from .utils import as_date
 from .utils import as_lower
 from .utils import as_time
 from .utils import as_upper
+from .where import ApplyWhere
 from .where import FieldResolver
 from .where import Where
-from .where import ApplyWhere
 from .where import and_
 from .where import or_
 

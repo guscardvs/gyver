@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Mapping
+from typing import Mapping, Union
 from typing import Optional
 from urllib.parse import urlparse
 from urllib.parse import urlunsplit
@@ -9,9 +9,17 @@ from gyver.url.fragment import Fragment
 from gyver.url.netloc import Netloc
 from gyver.url.path import Path
 from gyver.url.query import Query
+from gyver.attrs import mutable
 
 
+@mutable(pydantic=False, eq=False)
 class URL(Encodable):
+    scheme: str
+    netloc: Netloc
+    path: Path
+    query: Query
+    fragment: Fragment
+
     def __init__(self, val: str) -> None:
         self.load(val)
 
@@ -27,7 +35,6 @@ class URL(Encodable):
         ) = parsed
         self.query = Query(query)
         self.path = Path(path)
-        self.port = parsed.port
         self.fragment = Fragment(fragment)
         self.netloc = Netloc(netloc)
 
@@ -47,9 +54,6 @@ class URL(Encodable):
             )
         )
 
-    def __repr__(self) -> str:
-        return object.__repr__(self)
-
     def add(
         self,
         queryasdict: Optional[Mapping[str, str]] = None,
@@ -58,7 +62,7 @@ class URL(Encodable):
         query: Optional[Mapping[str, str]] = None,
         fragment: Optional[str] = None,
         netloc: Optional[str] = None,
-        netloc_args: Optional[Netloc] = None,
+        netloc_obj: Optional[Netloc] = None,
     ):
         if queryasdict:
             self.query.add(queryasdict)
@@ -70,8 +74,8 @@ class URL(Encodable):
             self.fragment.set(fragment)
         if netloc:
             self.netloc = self.netloc.merge(Netloc(netloc))
-        if netloc_args:
-            self.netloc = self.netloc.merge(netloc_args)
+        if netloc_obj:
+            self.netloc = self.netloc.merge(netloc_obj)
         return self
 
     def set(
@@ -82,7 +86,7 @@ class URL(Encodable):
         query: Optional[Mapping[str, str]] = None,
         fragment: Optional[str] = None,
         netloc: Optional[str] = None,
-        netloc_args: Optional[Netloc] = None,
+        netloc_obj: Optional[Netloc] = None,
     ):
         if queryasdict:
             self.query.set(queryasdict)
@@ -94,8 +98,8 @@ class URL(Encodable):
             self.fragment.set(fragment)
         if netloc:
             self.netloc.load(netloc)
-        if netloc_args:
-            self.netloc = netloc_args
+        if netloc_obj:
+            self.netloc = netloc_obj
         return self
 
     def copy(self):
@@ -107,5 +111,5 @@ class URL(Encodable):
             list,
             ((key, list(value)) for key, value in self.query.params.items()),
         )
-        new_url.add(netloc_args=self.netloc)
+        new_url.add(netloc_obj=self.netloc)
         return new_url

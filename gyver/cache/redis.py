@@ -8,10 +8,10 @@ from typing import TypeVar
 from typing import Union
 
 import redis
-from redis import asyncio as aioredis
-
 from gyver.attrs import define
 from gyver.attrs import info
+from redis import asyncio as aioredis
+
 from gyver.config import AdapterConfigFactory
 from gyver.exc import CacheMiss
 from gyver.utils import json

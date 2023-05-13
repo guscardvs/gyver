@@ -9,11 +9,12 @@ from typing import TypeVar
 from typing import Union
 from typing import overload
 
+from gyver.attrs import define
+from gyver.attrs import info
+
 from gyver.exc import InvalidCast
 from gyver.exc import MissingName
 from gyver.utils.exc import panic
-from gyver.attrs import define, info
-
 from gyver.utils.lazy import lazyfield
 
 T = TypeVar("T")
@@ -31,9 +32,7 @@ class EnvMapping(MutableMapping[str, str]):
 
     def __setitem__(self, name: str, value: str):
         if name in self.already_read:
-            raise panic(
-                KeyError, f"{name} already read, cannot change its value"
-            )
+            raise panic(KeyError, f"{name} already read, cannot change its value")
         self.mapping[name] = value
 
     def __delitem__(self, name: str) -> None:
@@ -84,9 +83,7 @@ class Config:
         try:
             val = cast(val)
         except Exception as e:
-            raise panic(
-                InvalidCast, f"{name} received an invalid value {val}"
-            ) from e
+            raise panic(InvalidCast, f"{name} received an invalid value {val}") from e
         else:
             return val
 
@@ -103,9 +100,7 @@ class Config:
     ) -> Any:
         val = self._get_val(name, default)
         if val is MISSING:
-            raise panic(
-                MissingName, f"{name} not found and no default was given"
-            )
+            raise panic(MissingName, f"{name} not found and no default was given")
         return self._cast(name, val, cast)
 
     @overload

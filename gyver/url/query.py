@@ -4,13 +4,17 @@ from typing import Optional
 from urllib.parse import parse_qs
 from urllib.parse import quote
 
+from gyver.attrs import mutable
 from gyver.url.encode import Encodable
 
 
+@mutable(pydantic=False, eq=False)
 class Query(Encodable):
+    params: defaultdict[str, list[str]]
+
     def __init__(self, querystr: str) -> None:
-        self.params: defaultdict[str, list[str]] = defaultdict(list)
-        self.params.update(parse_qs(querystr, keep_blank_values=True))
+        self.params = defaultdict(list)
+        self.params |= parse_qs(querystr, keep_blank_values=True)
 
     def encode(self):
         return "&".join(

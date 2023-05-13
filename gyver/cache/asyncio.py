@@ -2,8 +2,11 @@ from typing import Literal
 from typing import Optional
 from typing import overload
 
+from gyver.attrs import call_init
+from gyver.attrs import define
+
 from gyver.utils import lazyfield
-from gyver.attrs import define, call_init
+
 from .config import CacheConfig
 from .interface import AsyncCacheInterface
 from .mapper import AsyncCacheMap
@@ -35,11 +38,7 @@ class AsyncCacheProvider:
     ) -> AsyncCacheInterface:
         if test:
             return MockAsyncCache()
-        return (
-            AsyncRedisWrapper(config)
-            if config is not None
-            else AsyncRedisWrapper()
-        )
+        return AsyncRedisWrapper(config) if config is not None else AsyncRedisWrapper()
 
     @lazyfield
     def interface(self):

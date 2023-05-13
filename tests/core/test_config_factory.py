@@ -3,10 +3,10 @@ from typing import Any
 
 from attrs import asdict
 from attrs import define
-
-from gyver import config
 from gyver.attrs import asdict as gasdict
 from gyver.attrs import define as gdefine
+
+from gyver import config
 from gyver.config.adapter.attrs import AttrsResolverStrategy
 from gyver.config.adapter.dataclass import DataclassResolverStrategy
 from gyver.config.adapter.factory import AdapterConfigFactory
@@ -197,7 +197,7 @@ def test_old_config_works_with_adapter_factory():
     db_url.scheme = "postgresql+asyncpg"
     db_url.add(
         path="internal_api",
-        netloc_args=Netloc("").set(
+        netloc_obj=Netloc("").set(
             host="localhost",
             username="internal-api",
             password="Pa5$worD",

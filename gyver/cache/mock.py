@@ -7,10 +7,11 @@ from datetime import datetime
 from datetime import timezone
 from queue import Queue
 
+from gyver.attrs import define
+from gyver.attrs import info
+
 from gyver.exc import CacheMiss
 from gyver.utils import json
-from gyver.attrs import define, info
-
 from gyver.utils import lazyfield
 
 from .interface import AsyncCacheInterface
@@ -21,9 +22,7 @@ T = typing.TypeVar("T")
 
 @define
 class MockAsyncCache(AsyncCacheInterface):
-    key_map: typing.MutableMapping[str, typing.Any] = info(
-        default_factory=dict
-    )
+    key_map: typing.MutableMapping[str, typing.Any] = info(default_factory=dict)
 
     @lazyfield
     def _queue(self) -> asyncio.Queue[object]:
@@ -93,9 +92,7 @@ class MockAsyncCache(AsyncCacheInterface):
                 self.key_map[map_name] = {}
             self.key_map[map_name][name] = dumps(value)
 
-    async def delete(
-        self, name: str, map_name: typing.Optional[str] = None
-    ) -> None:
+    async def delete(self, name: str, map_name: typing.Optional[str] = None) -> None:
         async with self._in_queue():
             used_map = self.key_map
             if map_name is not None:
@@ -136,9 +133,7 @@ class MockCache(CacheInterface):
         finally:
             self._queue.put(object())
 
-    def get(
-        self, name: str, cast: typing.Callable[[typing.Any], T] = json.loads
-    ) -> T:
+    def get(self, name: str, cast: typing.Callable[[typing.Any], T] = json.loads) -> T:
         with self._in_queue():
             try:
                 val = self.key_map[name]

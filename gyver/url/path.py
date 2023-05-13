@@ -7,14 +7,19 @@ from gyver.url.encode import Encodable
 from gyver.url.utils import is_valid_encoded_path
 from gyver.url.utils import utf8
 
+from gyver.attrs import mutable
+
 PERCENT_REGEX = r"\%[a-fA-F\d][a-fA-F\d]"
 
 SAFE_SEGMENT_CHARS = ":@-._~!$&'()*+,;="
 
 
+@mutable(pydantic=False, eq=False)
 class Path(Encodable):
+    segments: list[str]
+
     def __init__(self, pathstr: str) -> None:
-        self.segments: list[str] = self._load(pathstr)
+        self.segments = self._load(pathstr)
 
     def _load(self, pathstr: str):
         path_segments = pathstr.split("/")
@@ -36,12 +41,16 @@ class Path(Encodable):
         ]
 
     def encode(self):
-        return "/".join(quote(utf8(item), SAFE_SEGMENT_CHARS) for item in self.segments)
+        return "/".join(
+            quote(utf8(item), SAFE_SEGMENT_CHARS) for item in self.segments
+        )
 
     def add(self, path: Union[str, "Path"]):
         segments = []
         if isinstance(path, str):
-            segments.extend(self._process_segments([], path.lstrip("/").split("/")))
+            segments.extend(
+                self._process_segments([], path.lstrip("/").split("/"))
+            )
         else:
             segments.extend(path.segments)
         self.segments = self._process_segments(self.segments, segments)

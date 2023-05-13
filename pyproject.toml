@@ -20,7 +20,7 @@ tzdata = { markers = "sys_platform != \"linux\"", version = "^2022.6" }
 sqlalchemy = { version = "^2.0.4", optional = true }
 cryptography = "^38.0.4"
 redis = { version = "^4.4.0", optional = true }
-gyver-attrs = "^0.4.0"
+gyver-attrs = "^0.5.1"
 
 [tool.poetry.group.lint.dependencies]
 black = "^22.10.0"
@@ -36,6 +36,7 @@ pytest-asyncio = "^0.20.1"
 hypothesis = "^6.56.4"
 fakeredis = "^2.4.0"
 moto = { extras = ["sqs", "s3"], version = "^4.0.12" }
+pytest-xdist = "^3.2.1"
 
 [tool.poetry.group.types.dependencies]
 sqlalchemy2-stubs = "^0.0.2a29"
@@ -75,6 +76,21 @@ profile = 'black'
 line_length = 88
 force_single_line = true
 
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+addopts = [
+    "-n",
+    "4",
+    "--cov=gyver/",
+    "--cov-report=html",
+    "--cov-config=.coveragerc",
+    "--no-cov-on-fail",
+    "--cov-fail-under=80",
+]
+filterwarnings = [
+    "error",
+    "ignore:The --rsyncdir command line argument and rsyncdirs config variable are deprecated.:DeprecationWarning",
+]
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

@@ -3,9 +3,13 @@ from urllib.parse import quote
 from gyver.url.encode import Encodable
 from gyver.url.utils import is_valid_encoded_path
 from gyver.url.utils import utf8
+from gyver.attrs import mutable
 
 
+@mutable(pydantic=False, eq=False)
 class Fragment(Encodable):
+    fragment_str: str
+
     def __init__(self, fragment_str: str) -> None:
         self.set(fragment_str)
 

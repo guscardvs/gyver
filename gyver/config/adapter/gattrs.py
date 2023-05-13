@@ -3,9 +3,11 @@ from typing import Generator
 from typing import Sequence
 from typing import Union
 
-from gyver.attrs import define, fields
+from gyver.attrs import define
+from gyver.attrs import fields
 from gyver.attrs.field import Field
 from gyver.attrs.utils.typedef import MISSING as NOTHING
+
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.config.config import MISSING
 

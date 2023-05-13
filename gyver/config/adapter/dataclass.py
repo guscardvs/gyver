@@ -1,11 +1,13 @@
 from dataclasses import MISSING as dc_MISSING
-from dataclasses import Field, fields
+from dataclasses import Field
+from dataclasses import fields
 from typing import Any
 from typing import Generator
 from typing import Sequence
 from typing import Union
 
 from gyver.attrs import define
+
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.config.config import MISSING
 

@@ -14,7 +14,7 @@ def make_uri(config: CacheConfig) -> str:
     url = URL("")
     url.scheme = "redis"
     url.add(
-        netloc_args=Netloc("").set(
+        netloc_obj=Netloc("").set(
             config.host, config.user, config.password, config.port
         )
     )

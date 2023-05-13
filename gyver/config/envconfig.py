@@ -1,9 +1,13 @@
 import os
 from pathlib import Path
-from typing import Sequence, Union
+from typing import Sequence
+from typing import Union
+
+from gyver.attrs import call_init
+from gyver.attrs import define
+from gyver.attrs import info
 
 from gyver import utils
-from gyver.attrs import define, info, call_init
 
 from .config import Config
 from .config import EnvMapping

@@ -3,9 +3,16 @@ from urllib.parse import quote
 
 from gyver.url.encode import Encodable
 from gyver.url.utils import utf8
+from gyver.attrs import mutable
 
 
+@mutable(pydantic=False, eq=False)
 class Netloc(Encodable):
+    username: Optional[str]
+    password: Optional[str]
+    host: str
+    port: Optional[int]
+
     def __init__(self, netloc: str) -> None:
         self.username: Optional[str] = None
         self.password: Optional[str] = None

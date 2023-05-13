@@ -2,7 +2,6 @@ import typing
 
 import sqlalchemy as sa
 
-
 from .interface import BindClause
 from .interface import Comparator
 from .interface import Comparison

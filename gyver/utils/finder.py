@@ -7,6 +7,7 @@ import threading
 import typing
 
 from gyver.attrs import define
+
 from gyver.exc import InvalidPath
 from gyver.exc import MissingParams
 from gyver.utils.lazy import lazyfield
@@ -57,14 +58,10 @@ class _Finder:
 
     def __attrs_post_init__(self):
         if not self.root.exists():
-            raise InvalidPath(
-                f"root must be a valid path, received {self.root}"
-            )
+            raise InvalidPath(f"root must be a valid path, received {self.root}")
 
     def _should_look(self, path: pathlib.Path):
-        str_exclude = tuple(
-            item for item in self.exclude if isinstance(item, str)
-        )
+        str_exclude = tuple(item for item in self.exclude if isinstance(item, str))
         path_exclude = tuple(
             item for item in self.exclude if isinstance(item, pathlib.Path)
         )
@@ -168,7 +165,6 @@ class FinderBuilder:
 
         caller_path: str = frame_info.filename
         caller_absolute_path: str = os.path.abspath(caller_path)
-
         caller_root_path = next(
             iter(
                 sorted(
@@ -184,9 +180,7 @@ class FinderBuilder:
                 os.sep + caller_module_name, ""
             )
 
-            caller_root_path = caller_root_path.replace(
-                project_related_folders, ""
-            )
+            caller_root_path = caller_root_path.replace(project_related_folders, "")
 
         return self.from_path(pathlib.Path(caller_root_path))
 

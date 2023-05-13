@@ -3,11 +3,12 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
+from gyver.attrs import define
+from gyver.attrs import info
 
 from gyver.config import AdapterConfigFactory
 from gyver.config import as_config
 from gyver.utils import lazyfield
-from gyver.attrs import define, info
 
 
 @as_config

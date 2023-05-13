@@ -1,9 +1,9 @@
 from abc import ABC
 from abc import abstractmethod
 
+from gyver.attrs import define
 from sqlalchemy.sql import Select
 
-from gyver.attrs import define
 from gyver.database.typedef import ClauseType
 
 from . import comp as cp
