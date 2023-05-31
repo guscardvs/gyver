@@ -1,7 +1,7 @@
 import sys
 from itertools import chain
 
-from pyparsing import Sequence
+from typing import Sequence
 
 
 class GyverError(Exception):
