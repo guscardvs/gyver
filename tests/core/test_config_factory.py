@@ -183,7 +183,7 @@ def test_old_config_works_with_adapter_factory():
             mapping=config.EnvMapping(
                 {
                     "DB_USER": "internal-api",
-                    "DB_PASSWORD": "Pa5$worD",
+                    "DB_PASSWORD": "dummy-password",
                     "DB_NAME": "internal_api",
                     "DB_HOST": "localhost",
                     "DB_DRIVER": "postgres",
@@ -200,7 +200,7 @@ def test_old_config_works_with_adapter_factory():
         netloc_obj=Netloc("").set(
             host="localhost",
             username="internal-api",
-            password="Pa5$worD",
+            password="dummy-password",
             port=5432,
         ),
     )
