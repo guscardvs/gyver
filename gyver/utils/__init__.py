@@ -7,6 +7,7 @@ from .helpers import DeprecatedClass
 from .helpers import cache
 from .helpers import deprecated
 from .helpers import frozen
+from .helpers import merge_dicts
 from .lazy import lazyfield
 from .singleton import make_singleton
 from .strings import to_camel
@@ -21,6 +22,7 @@ __all__ = [
     "json",
     "timezone",
     "frozen",
+    "merge_dicts",
     "cache",
     "deprecated",
     "DeprecatedClass",

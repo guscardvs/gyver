@@ -1,6 +1,5 @@
 import sys
 from itertools import chain
-
 from typing import Sequence
 
 
@@ -20,7 +19,7 @@ class MissingName(GyverError, KeyError):
 
 class InvalidField(GyverError, KeyError):
     """Exception raised when field lookup
-    found nothing on mapping"""
+    returned an unexpected result on mapping"""
 
 
 class CacheMiss(GyverError, KeyError):
@@ -75,3 +74,11 @@ else:
 
     class ErrorGroup(GyverError, ExceptionGroup):
         pass
+
+
+class FailedFileOperation(GyverError):
+    """Exception raised when an error happened while interacting with a file"""
+
+
+class MergeConflict(GyverError):
+    """Exception raised when merge_dicts(strict=True) finds a conflict"""
