@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gyver"
-version = "2.1.3"
+version = "2.2.0"
 description = "Toolbox for web development"
 authors = ["Gustavo Correa <self.gustavocorrea@gmail.com>"]
 readme = "README.md"
@@ -87,6 +87,7 @@ addopts = [
     "--cov-config=.coveragerc",
     "--no-cov-on-fail",
     "--cov-fail-under=80",
+    "--nf"
 ]
 filterwarnings = [
     "error",
