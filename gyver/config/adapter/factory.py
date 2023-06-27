@@ -17,6 +17,7 @@ from pydantic import BaseModel
 
 from gyver.config.config import MISSING
 from gyver.config.config import Config
+from gyver.config.interface import ConfigLike
 from gyver.config.utils import boolean_cast
 from gyver.exc import MissingName
 from gyver.utils import finder
@@ -35,7 +36,7 @@ _default_config = Config()
 T = TypeVar("T")
 
 
-def _try_each(*names: str, default: Any, cast: Any, config: Config):
+def _try_each(*names: str, default: Any, cast: Any, config: ConfigLike):
     for name in names:
         with suppress(MissingName):
             return config(name, cast)
@@ -67,7 +68,7 @@ def _loads(val: Any) -> Any:
 
 @define
 class AdapterConfigFactory:
-    config: Config = _default_config
+    config: ConfigLike = _default_config
 
     def get_strategy_class(self, config_class: type) -> type[FieldResolverStrategy]:
         if hasattr(config_class, "__gyver_attrs__"):

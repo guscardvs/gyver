@@ -8,7 +8,6 @@ import cchardet
 from gyver.attrs import define
 from typing_extensions import Self
 
-from gyver.utils.lazy import lazyfield
 
 T = TypeVar("T")
 
@@ -81,10 +80,7 @@ class TextFile(File):
         return self.contents.readline(size).decode(self.encoding)
 
     def readlines(self, hint: int = -1) -> list[str]:
-        return [
-            line.decode(self.encoding)
-            for line in self.contents.readlines(hint)
-        ]
+        return [line.decode(self.encoding) for line in self.contents.readlines(hint)]
 
     def write(self, text: str) -> int:
         return self.contents.write(text.encode(self.encoding))

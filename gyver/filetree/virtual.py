@@ -25,10 +25,7 @@ class VirtualFileTree(AbstractFileTree[Folder]):
         return self.root.name
 
     def from_virtual(
-        self,
-        virtual_filetree: "VirtualFileTree",
-        *path: str,
-        strict: bool = True
+        self, virtual_filetree: "VirtualFileTree", *path: str, strict: bool = True
     ):
         target = self.root
         for item in path:
@@ -46,13 +43,9 @@ class VirtualFileTree(AbstractFileTree[Folder]):
                 if not strict:
                     self._try_merge(current_value, virtual_filetree.root)
                 else:
-                    raise InvalidPath(
-                        "Non-empty folder with same name already exists"
-                    )
+                    raise InvalidPath("Non-empty folder with same name already exists")
 
-        target.contents[virtual_filetree.name] = (
-            current_value or virtual_filetree.root
-        )
+        target.contents[virtual_filetree.name] = current_value or virtual_filetree.root
         return virtual_filetree.root
 
     def _try_merge(self, current_target: Folder, virtual_folder: Folder):
@@ -69,9 +62,7 @@ class VirtualFileTree(AbstractFileTree[Folder]):
                         (value.contents, virtual_contents[value.name].contents)
                     )
             current_contents.update(
-                merge_dicts(
-                    current_contents, virtual_contents, on_conflict="left"
-                )
+                merge_dicts(current_contents, virtual_contents, on_conflict="left")
             )
 
     @contextmanager

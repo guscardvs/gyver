@@ -7,9 +7,10 @@ from gyver.exc import InvalidPath
 from gyver.utils import lazyfield
 
 from .helpers import python_filename
-from .typedef import File, TextFile
+from .typedef import File
 from .typedef import Folder
 from .typedef import T
+from .typedef import TextFile
 
 FileT = TypeVar("FileT", bound=File)
 

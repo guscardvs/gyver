@@ -1,4 +1,6 @@
-from gyver.filetree import FileTree, Folder, TextFile
+from gyver.filetree import FileTree
+from gyver.filetree import Folder
+from gyver.filetree import TextFile
 
 
 def test_write_file(tmp_path):

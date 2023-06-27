@@ -1,9 +1,13 @@
-import sys
-import pytest
 
-from gyver.exc import FailedFileOperation, InvalidPath
-from gyver.filetree import Folder, VirtualFileTree, File, TextFile
+import pytest
 from gyver.attrs import asdict
+
+from gyver.exc import FailedFileOperation
+from gyver.exc import InvalidPath
+from gyver.filetree import File
+from gyver.filetree import Folder
+from gyver.filetree import TextFile
+from gyver.filetree import VirtualFileTree
 
 
 def test_create_dir():
@@ -163,11 +167,11 @@ def test_virtual_context():
                         "name": "file",
                         "contents": file.contents,
                     },
-                    "text_file":{
+                    "text_file": {
                         "name": "text_file",
                         "contents": text_file.contents,
-                        "encoding": text_file.encoding
-                    }
+                        "encoding": text_file.encoding,
+                    },
                 },
             }
         },

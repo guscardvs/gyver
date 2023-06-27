@@ -12,6 +12,8 @@ from typing import overload
 from gyver.attrs import define
 from gyver.attrs import info
 
+from gyver.config.interface import MISSING
+from gyver.config.interface import _default_cast
 from gyver.exc import InvalidCast
 from gyver.exc import MissingName
 from gyver.utils.exc import panic
@@ -48,14 +50,6 @@ class EnvMapping(MutableMapping[str, str]):
 
 
 default_mapping = EnvMapping()
-
-
-class MISSING:
-    pass
-
-
-def _default_cast(a: Any):
-    return a
 
 
 @define

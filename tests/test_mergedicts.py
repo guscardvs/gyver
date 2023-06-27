@@ -1,8 +1,9 @@
 from collections import OrderedDict
+
 import pytest
 
-from gyver.utils import merge_dicts
 from gyver.exc import MergeConflict
+from gyver.utils import merge_dicts
 
 
 def test_merge_dicts_no_conflict():

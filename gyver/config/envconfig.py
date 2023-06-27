@@ -1,5 +1,7 @@
 import os
 from pathlib import Path
+from typing import Any
+from typing import Callable
 from typing import Sequence
 from typing import Union
 
@@ -8,6 +10,7 @@ from gyver.attrs import define
 from gyver.attrs import info
 
 from gyver import utils
+from gyver.config.config import MISSING
 
 from .config import Config
 from .config import EnvMapping
@@ -25,11 +28,16 @@ class DotFile:
         return self.env.weight >= env.weight
 
 
+def default_rule(_: Env):
+    return False
+
+
 @define
 class EnvConfig(Config):
     mapping: EnvMapping = default_mapping
     env_var: str = "CONFIG_ENV"
     dotfiles: Sequence[DotFile] = ()
+    ignore_default_rule: Callable[[Env], bool] = default_rule
 
     def __init__(
         self,
@@ -52,7 +60,20 @@ class EnvConfig(Config):
 
     @utils.lazyfield
     def env(self):
-        return self.__call__(self.env_var, Env.new)
+        return Config.get(self, self.env_var, Env.new)
+
+    @utils.lazyfield
+    def ignore_default(self):
+        return self.ignore_default_rule(self.env)
+
+    def get(
+        self,
+        name: str,
+        cast: Callable[..., Any] = ...,
+        default: Union[Any, type[MISSING]] = ...,
+    ) -> Any:
+        default = MISSING if self.ignore_default else default
+        return super().get(name, cast, default)
 
     @utils.lazyfield
     def dotfile(self):
