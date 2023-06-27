@@ -25,6 +25,11 @@ class URL(Encodable):
         self.load(val)
 
     def load(self, val: str):
+        """
+        Parse the given URL string and populate the properties of the URL object.
+
+        :param val: The URL string.
+        """
         parsed = urlparse(val)
         (
             self.scheme,
@@ -40,8 +45,16 @@ class URL(Encodable):
         self.netloc = Netloc(netloc)
 
     def encode(self, omit_empty_equal: bool = True):
+        """
+        Encode the URL object as a URL string.
+
+        :param omit_empty_equal: Whether to omit empty values with an equal sign in the query string.
+        :return: The encoded URL string.
+        """
         resolved_query = (
-            self.query.encode() if omit_empty_equal else self.query.omit_empty_equal()
+            self.query.encode()
+            if omit_empty_equal
+            else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (
@@ -63,6 +76,17 @@ class URL(Encodable):
         netloc: Optional[str] = None,
         netloc_obj: Optional[Netloc] = None,
     ):
+        """
+        Add components to the URL.
+
+        :param queryasdict: Dictionary-like object representing query parameters.
+        :param path: Path string to add to the URL.
+        :param query: Dictionary-like object representing additional query parameters.
+        :param fragment: Fragment string to set for the URL.
+        :param netloc: Netloc string to set for the URL.
+        :param netloc_obj: Netloc object to merge with the existing netloc.
+        :return: The updated URL object.
+        """
         if queryasdict:
             self.query.add(queryasdict)
         if path:
@@ -87,6 +111,17 @@ class URL(Encodable):
         netloc: Optional[str] = None,
         netloc_obj: Optional[Netloc] = None,
     ):
+        """
+        Set components of the URL.
+
+        :param queryasdict: Dictionary-like object representing query parameters.
+        :param path: Path string to set for the URL.
+        :param query: Dictionary-like object representing query parameters.
+        :param fragment: Fragment string to set for the URL.
+        :param netloc: Netloc string to set for the URL.
+        :param netloc_obj: Netloc object to set as the netloc.
+        :return: The updated URL object.
+        """
         if queryasdict:
             self.query.set(queryasdict)
         if path:
@@ -102,6 +137,11 @@ class URL(Encodable):
         return self
 
     def copy(self):
+        """
+        Create a copy of the URL object.
+
+        :return: The copied URL object.
+        """
         new_url = URL("")
         new_url.scheme = self.scheme
         new_url.fragment.fragment_str = self.fragment.fragment_str

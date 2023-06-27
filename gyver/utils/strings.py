@@ -49,6 +49,19 @@ OuterCastT = TypeVar("OuterCastT", list, tuple, set)
 def make_lex_separator(
     outer_cast: type[OuterCastT], cast: type = str
 ) -> Callable[[str], OuterCastT]:
+    """
+    Create a lexer-based separator function.
+
+    :param outer_cast: The type to cast the resulting separated values into (e.g., list, tuple, set).
+    :param cast: The type to which each individual item will be cast (default: str).
+    :return: A callable that separates a string into an instance of outer_cast with casted items.
+
+    Usage example:
+    comma_separated = make_lex_separator(tuple, str)
+    result = comma_separated("a, b, c")
+    print(result)  # Output: ('a', 'b', 'c')
+    """
+
     def wrapper(value: str) -> OuterCastT:
         lex = shlex.shlex(value, posix=True)
         lex.whitespace = ","

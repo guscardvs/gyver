@@ -47,7 +47,6 @@ class lazyfield(typing.Generic[SelfT, T]):
     ) -> typing.Union[T, Self]:
         if not instance:
             return self
-        assert instance is not None
         try:
             val = typing.cast(
                 T,
