@@ -52,6 +52,9 @@ class AbstractFileTree(Protocol[T]):
         directory.contents[filename] = target
         return target
 
+    def create_text_file(self, filename: str, *path: str) -> TextFile:
+        return self.create_file(filename, *path, fileclass=TextFile)
+
     def get_file(self, filename: str, *path: str) -> File:
         if path:
             dirname, *restpath = path
