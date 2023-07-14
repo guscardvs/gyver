@@ -8,7 +8,6 @@ import cchardet
 from gyver.attrs import define
 from typing_extensions import Self
 
-
 T = TypeVar("T")
 
 

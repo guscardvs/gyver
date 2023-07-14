@@ -43,13 +43,15 @@ class EnvConfig(Config):
         self,
         *dotfiles: DotFile,
         env_var: str = "CONFIG_ENV",
-        mapping: EnvMapping = default_mapping
+        mapping: EnvMapping = default_mapping,
+        ignore_default_rule: Callable[[Env], bool] = default_rule
     ) -> None:
         call_init(
             self,
             env_var=env_var,
             mapping=mapping,
             dotfiles=dotfiles,
+            ignore_default_rule=ignore_default_rule,
         )
 
     def __post_init__(self):
@@ -73,7 +75,7 @@ class EnvConfig(Config):
         default: Union[Any, type[MISSING]] = ...,
     ) -> Any:
         default = MISSING if self.ignore_default else default
-        return super().get(name, cast, default)
+        return Config.get(self, name, cast, default)
 
     @utils.lazyfield
     def dotfile(self):

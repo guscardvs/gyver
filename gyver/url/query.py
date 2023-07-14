@@ -1,7 +1,11 @@
 from collections import defaultdict
-from typing import Mapping, Optional
-from urllib.parse import parse_qs, quote
+from typing import Mapping
+from typing import Optional
+from urllib.parse import parse_qs
+from urllib.parse import quote
+
 from gyver.attrs import mutable
+
 from gyver.url.encode import Encodable
 
 

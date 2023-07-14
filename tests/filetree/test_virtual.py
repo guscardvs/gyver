@@ -1,4 +1,3 @@
-
 import pytest
 from gyver.attrs import asdict
 
