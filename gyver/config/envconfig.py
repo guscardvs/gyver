@@ -36,6 +36,7 @@ def default_rule(_: Env):
 class EnvConfig(Config):
     mapping: EnvMapping = default_mapping
     env_var: str = "CONFIG_ENV"
+    env_cast: Callable[[str], Env] = Env
     dotfiles: Sequence[DotFile] = ()
     ignore_default_rule: Callable[[Env], bool] = default_rule
 
@@ -44,7 +45,8 @@ class EnvConfig(Config):
         *dotfiles: DotFile,
         env_var: str = "CONFIG_ENV",
         mapping: EnvMapping = default_mapping,
-        ignore_default_rule: Callable[[Env], bool] = default_rule
+        ignore_default_rule: Callable[[Env], bool] = default_rule,
+        env_cast: Callable[[str], Env] = Env
     ) -> None:
         call_init(
             self,
@@ -52,6 +54,7 @@ class EnvConfig(Config):
             mapping=mapping,
             dotfiles=dotfiles,
             ignore_default_rule=ignore_default_rule,
+            env_cast=env_cast,
         )
 
     def __post_init__(self):
