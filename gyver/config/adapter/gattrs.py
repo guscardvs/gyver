@@ -4,8 +4,10 @@ from typing import Sequence
 from typing import Union
 
 from gyver.attrs import define
+from gyver.attrs import fields
 from gyver.attrs.field import Field
 from gyver.attrs.utils.typedef import MISSING as NOTHING
+
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.config.config import MISSING
 
@@ -31,4 +33,4 @@ class GyverAttrsResolverStrategy(FieldResolverStrategy[Field]):
 
     @staticmethod
     def iterfield(config_class: type) -> Generator[Field, Any, Any]:
-        yield from config_class.__gyver_attrs__.values()  # type: ignore
+        yield from fields(config_class).values()

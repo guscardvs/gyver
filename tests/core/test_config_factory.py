@@ -3,19 +3,20 @@ from typing import Any
 
 from attrs import asdict
 from attrs import define
-
-from gyver import config
-from gyver.model import Model
 from gyver.attrs import asdict as gasdict
 from gyver.attrs import define as gdefine
+
+from gyver import config
 from gyver.config.adapter.attrs import AttrsResolverStrategy
 from gyver.config.adapter.dataclass import DataclassResolverStrategy
 from gyver.config.adapter.factory import AdapterConfigFactory
 from gyver.config.adapter.gattrs import GyverAttrsResolverStrategy
-from gyver.config.adapter.mark import as_config, mark
+from gyver.config.adapter.mark import as_config
+from gyver.config.adapter.mark import mark
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
 from gyver.database import DatabaseConfig
 from gyver.database.utils import make_uri
+from gyver.model import Model
 from gyver.url import URL
 from gyver.url import Netloc
 from gyver.utils import json
@@ -57,18 +58,10 @@ factory = AdapterConfigFactory()
 
 
 def test_adapter_factory_identifies_strategy_correctly():
-    assert (
-        factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
-    )
-    assert (
-        factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
-    )
-    assert (
-        factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
-    )
-    assert (
-        factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
-    )
+    assert factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
+    assert factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
+    assert factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
+    assert factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
     assert factory.get_strategy_class(OtherConfig) is AttrsResolverStrategy
     assert factory.get_strategy_class(Another) is GyverAttrsResolverStrategy
 
@@ -190,7 +183,7 @@ def test_old_config_works_with_adapter_factory():
             mapping=config.EnvMapping(
                 {
                     "DB_USER": "internal-api",
-                    "DB_PASSWORD": "Pa5$worD",
+                    "DB_PASSWORD": "dummy-password",
                     "DB_NAME": "internal_api",
                     "DB_HOST": "localhost",
                     "DB_DRIVER": "postgres",
@@ -204,10 +197,10 @@ def test_old_config_works_with_adapter_factory():
     db_url.scheme = "postgresql+asyncpg"
     db_url.add(
         path="internal_api",
-        netloc_args=Netloc("").set(
+        netloc_obj=Netloc("").set(
             host="localhost",
             username="internal-api",
-            password="Pa5$worD",
+            password="dummy-password",
             port=5432,
         ),
     )

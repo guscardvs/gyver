@@ -7,6 +7,7 @@ import threading
 import typing
 
 from gyver.attrs import define
+
 from gyver.exc import InvalidPath
 from gyver.exc import MissingParams
 from gyver.utils.lazy import lazyfield
@@ -164,7 +165,6 @@ class FinderBuilder:
 
         caller_path: str = frame_info.filename
         caller_absolute_path: str = os.path.abspath(caller_path)
-
         caller_root_path = next(
             iter(
                 sorted(

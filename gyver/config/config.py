@@ -9,61 +9,61 @@ from typing import TypeVar
 from typing import Union
 from typing import overload
 
+from gyver.attrs import define
+from gyver.attrs import info
+
+from gyver.config.interface import MISSING
+from gyver.config.interface import _default_cast
 from gyver.exc import InvalidCast
 from gyver.exc import MissingName
 from gyver.utils.exc import panic
+from gyver.utils.lazy import lazyfield
 
 T = TypeVar("T")
 
 
+@define
 class EnvMapping(MutableMapping[str, str]):
-    def __init__(self, mapping: MutableMapping[str, str] = environ) -> None:
-        self._mapping = mapping
-        self._already_read = set[str]()
+    mapping: MutableMapping[str, str] = environ
+    already_read: set[str] = info(default_factory=set)
 
     def __getitem__(self, name: str):
-        val = self._mapping[name]
-        self._already_read.add(name)
+        val = self.mapping[name]
+        self.already_read.add(name)
         return val
 
     def __setitem__(self, name: str, value: str):
-        if name in self._already_read:
+        if name in self.already_read:
             raise panic(KeyError, f"{name} already read, cannot change its value")
-        self._mapping[name] = value
+        self.mapping[name] = value
 
     def __delitem__(self, name: str) -> None:
-        if name in self._already_read:
+        if name in self.already_read:
             raise panic(KeyError, f"{name} already read, cannot delete")
-        del self._mapping[name]
+        del self.mapping[name]
 
     def __iter__(self) -> Iterator[str]:
-        yield from self._mapping
+        yield from self.mapping
 
     def __len__(self) -> int:
-        return len(self._mapping)
+        return len(self.mapping)
 
 
 default_mapping = EnvMapping()
 
 
-class MISSING:
-    pass
-
-
-def _default_cast(a: Any):
-    return a
-
-
+@define
 class Config:
-    def __init__(
-        self,
-        env_file: Union[str, Path, None] = None,
-        mapping: EnvMapping = default_mapping,
-    ) -> None:
-        self._mapping = mapping
-        self._file_values = {}
-        if env_file and os.path.isfile(env_file):
-            self._read_file(env_file)
+    env_file: Union[str, Path, None] = None
+    mapping: EnvMapping = default_mapping
+
+    def __post_init__(self):
+        if self.env_file and os.path.isfile(self.env_file):
+            self.file_values.update(dict(self._read_file(self.env_file)))
+
+    @lazyfield
+    def file_values(self):
+        return {}
 
     def _read_file(self, env_file: Union[str, Path]):
         with open(env_file) as buf:
@@ -71,7 +71,7 @@ class Config:
                 if line.startswith("#"):
                     continue
                 name, value = line.split("=", 1)
-                self._file_values[name.strip()] = value.strip()
+                yield name.strip(), value.strip()
 
     def _cast(self, name: str, val: Any, cast: Callable) -> Any:
         try:
@@ -84,7 +84,7 @@ class Config:
     def _get_val(
         self, name: str, default: Union[Any, type[MISSING]] = MISSING
     ) -> Union[Any, type[MISSING]]:
-        return self._mapping.get(name, self._file_values.get(name, default))
+        return self.mapping.get(name, self.file_values.get(name, default))
 
     def get(
         self,

@@ -2,8 +2,9 @@ import contextlib
 import typing
 
 import sqlalchemy as sa
-
+from gyver.attrs import call_init
 from gyver.attrs import define
+
 from gyver.database.typedef import ClauseType
 
 from . import _helpers
@@ -83,7 +84,8 @@ class Where(interface.BindClause, typing.Generic[T]):
         comp: interface.Comparator[T] = cp.equals,
         resolver_class: type[Resolver[T]] = Resolver,
     ) -> None:
-        self.__gattrs_init__(  # type: ignore
+        call_init(
+            self,
             field,
             resolver_class(expected),
             comp,
@@ -162,3 +164,13 @@ class RawQuery(interface.BindClause):
     def bind(self, mapper: interface.Mapper) -> interface.Comparison:
         del mapper
         return self._cmp
+
+
+class ApplyWhere(interface.ApplyClause):
+    type_ = ClauseType.APPLY
+
+    def __init__(self, mapper: interface.Mapper, *where: interface.BindClause) -> None:
+        self.where = and_(*where).bind(mapper)
+
+    def apply(self, query: interface.ExecutableT) -> interface.ExecutableT:
+        return query.where(self.where)

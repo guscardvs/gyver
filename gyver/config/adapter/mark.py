@@ -2,7 +2,6 @@ from typing import Any
 from typing import TypeVar
 
 import typing_extensions
-
 from gyver.attrs import define
 from gyver.attrs.field import FieldInfo
 from gyver.attrs.field import info

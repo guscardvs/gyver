@@ -12,9 +12,8 @@ if TYPE_CHECKING:
     from dataclasses import Field
 
     from attrs import Attribute
-    from pydantic.fields import ModelField
-
     from gyver.attrs.field import Field as GField
+    from pydantic.fields import ModelField
 
 T = TypeVar("T", "ModelField", "Attribute", "Field", "GField")
 

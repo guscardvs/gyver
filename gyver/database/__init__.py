@@ -2,7 +2,9 @@ from . import query
 from .adapter import DatabaseAdapter
 from .config import DatabaseConfig
 from .context import AsyncSaContext
+from .context import AsyncSessionContext
 from .context import SaContext
+from .context import SessionContext
 from .drivers import Dialect
 from .entity import AbstractEntity
 from .entity import Entity
@@ -19,6 +21,8 @@ __all__ = [
     "DatabaseAdapter",
     "SaContext",
     "AsyncSaContext",
+    "SessionContext",
+    "AsyncSessionContext",
     "Entity",
     "AbstractEntity",
     "make_table",

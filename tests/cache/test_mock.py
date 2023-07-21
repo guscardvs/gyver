@@ -8,6 +8,7 @@ from gyver.cache.mapper import AsyncCacheMap
 from gyver.cache.mapper import CacheMap
 from gyver.cache.mock import MockAsyncCache
 from gyver.cache.mock import MockCache
+from gyver.cache.mock import _KeyMapType
 from gyver.exc import CacheMiss
 from gyver.utils import json
 
@@ -25,7 +26,7 @@ def test_mock_cache_sets_correctly_values():
 
 def test_mock_cache_gets_correctly_values():
     dt = datetime.now(timezone.utc) + timedelta(days=1)
-    mapping = {"name": ('{"user_id": 2}', dt)}
+    mapping: _KeyMapType = {"name": ('{"user_id": 2}', dt)}
     cache = MockCache(mapping)
 
     assert cache.get("name") == {"user_id": 2}
@@ -33,7 +34,7 @@ def test_mock_cache_gets_correctly_values():
 
 def test_mock_cache_get_raises_error_on_expiration_correctly():
     dt = datetime.now(timezone.utc) - timedelta(days=1)
-    mapping = {"name": (json.dumps({"user_id": 2}), dt)}
+    mapping: _KeyMapType = {"name": (json.dumps({"user_id": 2}), dt)}
     cache = MockCache(mapping)
 
     with pytest.raises(CacheMiss):
@@ -41,7 +42,7 @@ def test_mock_cache_get_raises_error_on_expiration_correctly():
 
 
 def test_mock_cache_works_correctly_with_mapper():
-    mapping = {"name": {"val1": "1"}}
+    mapping: _KeyMapType = {"name": {"val1": "1"}}
     mapper = CacheMap(MockCache(mapping), "name")
 
     assert mapper.get("val1") == 1

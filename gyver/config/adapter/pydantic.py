@@ -3,10 +3,10 @@ from typing import Generator
 from typing import Sequence
 from typing import Union
 
+from gyver.attrs import define
 from pydantic import BaseModel
 from pydantic.fields import ModelField
 
-from gyver.attrs import define
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.config.config import MISSING
 
@@ -37,4 +37,4 @@ class PydanticResolverStrategy(FieldResolverStrategy[ModelField]):
     def iterfield(
         config_class: type[BaseModel],
     ) -> Generator[ModelField, Any, Any]:
-        yield from config_class.__fields__.values()  # type: ignore
+        yield from config_class.__fields__.values()

@@ -79,7 +79,7 @@ print(url.encode()) # "https://www.example.com/new_path?key=value&new_key=new_va
 url = URL("https://www.example.com/path?key=value#fragment")
 
 # Add a new netloc
-url.add(netloc_args=Netloc(username="user", host="host", port=8080))
+url.add(netloc_obj=Netloc(username="user", host="host", port=8080))
 
 # Change the fragment
 url.set(fragment='another')

@@ -29,9 +29,9 @@ def to_camel(snake_string: str) -> str:
     ).removesuffix("_")
 
 
-def upper_camel(snake_string: str):
+def to_pascal(snake_string: str):
     """
-    The upper_camel function converts a snake_case string to an upperCamelCase string.
+    The to_pascal function converts a snake_case string to an PascalCase string.
 
     :param snake_string: str: Pass in the string that we want to convert
     :return: A string that is the snake_string converted to camel
@@ -39,6 +39,21 @@ def upper_camel(snake_string: str):
     """
     val = to_camel(snake_string)
     return val and val[0].upper() + val[1:]
+
+
+# Compat
+upper_camel = to_pascal
+
+
+def to_lower_kebab(camel_string: str) -> str:
+    """
+    The to_lower_kebab function converts camelCase strings to kebab-case.
+
+    :param camel_string: str: Pass the camelCase string to be converted
+    :return: A string in kebab-case
+    """
+    snake_string = to_snake(camel_string)
+    return snake_string.replace("_", "-")
 
 
 T = TypeVar("T")
@@ -49,6 +64,19 @@ OuterCastT = TypeVar("OuterCastT", list, tuple, set)
 def make_lex_separator(
     outer_cast: type[OuterCastT], cast: type = str
 ) -> Callable[[str], OuterCastT]:
+    """
+    Create a lexer-based separator function.
+
+    :param outer_cast: The type to cast the resulting separated values into (e.g., list, tuple, set).
+    :param cast: The type to which each individual item will be cast (default: str).
+    :return: A callable that separates a string into an instance of outer_cast with casted items.
+
+    Usage example:
+    comma_separated = make_lex_separator(tuple, str)
+    result = comma_separated("a, b, c")
+    print(result)  # Output: ('a', 'b', 'c')
+    """
+
     def wrapper(value: str) -> OuterCastT:
         lex = shlex.shlex(value, posix=True)
         lex.whitespace = ","

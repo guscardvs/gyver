@@ -1,4 +1,4 @@
-from attr import define
+from gyver.attrs import define
 
 from gyver.database.typedef import Driver
 

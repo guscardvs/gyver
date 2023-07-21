@@ -7,6 +7,7 @@ from gyver.database import default_metadata
 from gyver.database.query import comp
 from gyver.database.query.where import CACHE_MAXLEN
 from gyver.database.query.where import AlwaysTrue
+from gyver.database.query.where import ApplyWhere
 from gyver.database.query.where import FieldResolver
 from gyver.database.query.where import RawQuery
 from gyver.database.query.where import Resolver
@@ -178,3 +179,11 @@ def test_raw_query_returns_same_value_received():
     q = mapper.c.id > 5
 
     assert RawQuery(q).bind(mapper) is q
+
+
+def test_apply_where_returns_the_expected_result():
+    initial = sa.select(mapper)
+
+    assert build_query(
+        ApplyWhere(mapper, Where("id", 5, comp.greater)).apply(initial)
+    ) == build_query(initial.where(mapper.c.id > 5))

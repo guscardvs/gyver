@@ -4,7 +4,6 @@ from .core import AsyncAtomicContext
 from .core import AtomicContext
 from .resolver import atomic
 
-
 __all__ = [
     "atomic",
     "BoundContext",

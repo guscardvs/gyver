@@ -6,6 +6,8 @@ from .config import Config
 from .config import EnvMapping
 from .envconfig import DotFile
 from .envconfig import EnvConfig
+from .interface import ConfigLike
+from .lazy import LazyConfig
 from .typedef import Env
 from .utils import boolean_cast
 
@@ -20,4 +22,6 @@ __all__ = [
     "EnvConfig",
     "Env",
     "DotFile",
+    "ConfigLike",
+    "LazyConfig",
 ]

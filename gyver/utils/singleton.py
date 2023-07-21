@@ -1,8 +1,11 @@
 import typing
 
+from .helpers import deprecated
+
 T = typing.TypeVar("T")
 
 
+@deprecated
 def make_singleton(cls: type[T]) -> type[T]:
     """
     The make_singleton function is a decorator that wraps the given class with

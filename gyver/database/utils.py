@@ -29,7 +29,7 @@ def make_uri(config: DatabaseConfig, sync: bool = False) -> str:
         if not only host else 'dialect_name(+driver)?://host'
     """
 
-    url = URL("").set(netloc=config.host)
+    url = URL("").set(netloc_obj=Netloc("").set(host=config.host))
     url.scheme = f"{drivers.build_dialect_scheme(config.dialect, sync)}"
 
     if config.dialect.only_host:
@@ -37,7 +37,7 @@ def make_uri(config: DatabaseConfig, sync: bool = False) -> str:
 
     return url.add(
         path=config.name,
-        netloc_args=Netloc("").set(
+        netloc_obj=Netloc("").set(
             username=config.user,
             password=config.password,
             port=config.effective_port,

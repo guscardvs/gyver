@@ -148,3 +148,13 @@ def test_envconfig_ignores_dotfiles_without_valid_files():
     )
 
     assert env_config.dotfile is None
+
+
+def test_envconfig_logic_works_correctly():
+    mapping = config.EnvMapping({"CONFIG_ENV": "test"})
+    curdir = Path(__file__).parent
+    env_config = config.EnvConfig(
+        config.DotFile(curdir / "test.env", config.Env.TEST), mapping=mapping
+    )
+
+    assert env_config("ENV_VAR") == "Hello World"

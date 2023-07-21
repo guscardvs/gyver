@@ -1,11 +1,10 @@
 import typing
 
 import sqlalchemy as sa
-from sqlalchemy.ext.asyncio import create_async_engine
-
 from gyver.attrs import define
 from gyver.attrs import info
-from gyver.attrs import mark_factory
+from sqlalchemy.ext.asyncio import create_async_engine
+
 from gyver.config import AdapterConfigFactory
 from gyver.context import atomic
 from gyver.database.context.asyncio import AsyncSessionAdapter
@@ -24,7 +23,7 @@ db_config_loader = AdapterConfigFactory().maker(DatabaseConfig, "db")
 @define
 class DatabaseAdapter:
     config: DatabaseConfig = info(default=db_config_loader)
-    db_kwargs: dict[str, typing.Any] = info(default=mark_factory(dict))
+    db_kwargs: dict[str, typing.Any] = info(default_factory=dict)
 
     def __post_init__(self) -> None:
         if self.config.driver is not Driver.SQLITE:

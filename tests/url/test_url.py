@@ -32,7 +32,7 @@ def test_url():
     # Test adding netloc with username and password
     url = URL("https://www.example.com/path")
     url.add(
-        netloc_args=Netloc.from_args(
+        netloc_obj=Netloc.from_args(
             host="www.example2.com",
             username="username",
             password="password",
@@ -43,7 +43,7 @@ def test_url():
 
     # Test adding netloc with port
     url = URL("https://www.example.com/path")
-    url.add(netloc_args=Netloc.from_args(host="www.example2.com", port=8080))
+    url.add(netloc_obj=Netloc.from_args(host="www.example2.com", port=8080))
     assert url.netloc == "www.example2.com:8080"
     assert url == "https://www.example2.com:8080/path"
 
@@ -52,7 +52,7 @@ def test_url():
         path="subpath",
         query={"key2": "value2", "key3": "value3"},
         fragment="section1",
-        netloc_args=Netloc.from_args(
+        netloc_obj=Netloc.from_args(
             host="www.example2.com",
             username="username",
             password="password",

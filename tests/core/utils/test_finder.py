@@ -1,8 +1,8 @@
 import pathlib
 
 import pytest
-from gyver.exc import InvalidPath
 
+from gyver.exc import InvalidPath
 from gyver.utils import finder_builder
 
 from .mock_module import base
@@ -23,9 +23,7 @@ def test_finder_by_instance_finds_only_instances_of_given_class():
 
 
 def test_finder_by_class_finds_only_subclasses_of_given_class():
-    class_finder = (
-        finder_builder.child_of(base.Base).from_path(ROOT).build(MOD_PATH)
-    )
+    class_finder = finder_builder.child_of(base.Base).from_path(ROOT).build(MOD_PATH)
     class_finder.find()
     result = class_finder.output
 

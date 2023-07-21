@@ -1,7 +1,7 @@
 import enum
 import typing
-from dataclasses import dataclass
 
+from gyver.attrs import define
 from sqlalchemy.sql import ColumnElement
 from sqlalchemy.sql import Select
 
@@ -11,10 +11,8 @@ class OrderDirection(enum.Enum):
     DESC = "desc"
 
 
-@dataclass(frozen=True)
+@define
 class OrderBy:
-    __slots__ = ("field", "direction")
-
     field: typing.Optional[str]
     direction: OrderDirection
 

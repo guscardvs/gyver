@@ -10,10 +10,10 @@ class EnvTuple(NamedTuple):
 
 
 class Env(EnvTuple, Enum):
-    LOCAL = "local", 1
-    TEST = "test", 2
-    DEV = "dev", 3
-    PRD = "prd", 4
+    LOCAL = EnvTuple("local", 1)
+    TEST = EnvTuple("test", 2)
+    DEV = EnvTuple("dev", 3)
+    PRD = EnvTuple("prd", 4)
 
     @property
     def value(self) -> EnvTuple:
