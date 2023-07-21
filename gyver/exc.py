@@ -72,7 +72,7 @@ if sys.version_info < (3, 11):
 
 else:
 
-    class ErrorGroup(GyverError, ExceptionGroup):
+    class ErrorGroup(GyverError, ExceptionGroup): # noqa: F821
         pass
 
 
