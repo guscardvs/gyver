@@ -12,28 +12,30 @@ from .mocks import build_query
 
 def test_comparison_matches_expected():  # sourcery skip: none-compare
 
-    assert query.comp.always_true(Person.name, object()) == sa.true()
+    assert build_query(
+        query.comp.always_true(Person.name, object())
+    ) == build_query(sa.true())
     assert build_query(query.comp.equals(Person.name, "test")) == build_query(
         Person.name == "test"
     )
-    assert build_query(query.comp.not_equals(Person.name, "test")) == build_query(
-        Person.name != "test"
-    )
+    assert build_query(
+        query.comp.not_equals(Person.name, "test")
+    ) == build_query(Person.name != "test")
     assert build_query(query.comp.greater(Person.age, 46)) == build_query(
         Person.age > 46
     )
-    assert build_query(query.comp.greater_equals(Person.age, 46)) == build_query(
-        Person.age >= 46
-    )
+    assert build_query(
+        query.comp.greater_equals(Person.age, 46)
+    ) == build_query(Person.age >= 46)
     assert build_query(query.comp.lesser(Person.age, 46)) == build_query(
         Person.age < 46
     )
-    assert build_query(query.comp.lesser_equals(Person.age, 46)) == build_query(
-        Person.age <= 46
-    )
-    assert build_query(query.comp.between(Person.age, (45, 52))) == build_query(
-        Person.age.between(45, 52)
-    )
+    assert build_query(
+        query.comp.lesser_equals(Person.age, 46)
+    ) == build_query(Person.age <= 46)
+    assert build_query(
+        query.comp.between(Person.age, (45, 52))
+    ) == build_query(Person.age.between(45, 52))
     assert build_query(query.comp.range(Person.age, (45, 52))) == build_query(
         sa.and_(Person.age >= 45, Person.age < 52)
     )

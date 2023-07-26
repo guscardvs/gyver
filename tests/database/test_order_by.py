@@ -15,8 +15,12 @@ def test_should_apply_returns_expected_value():
 def test_find_column_returns_expected_col_from_query():
     q = sa.select(Another)
 
-    assert query.OrderBy.asc("name")._find_column(q) == Another.name
-    assert query.OrderBy.desc("id")._find_column(q) == Another.id_
+    assert query.OrderBy.asc("name")._find_column(q) is next(
+        iter(Another.name.base_columns)
+    )
+    assert query.OrderBy.desc("id")._find_column(q) is next(
+        iter(Another.id_.base_columns)
+    )
 
 
 def test_find_column_raises_value_error_if_col_not_in_query():

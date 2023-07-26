@@ -40,9 +40,6 @@ fakeredis = "^2.4.0"
 moto = { extras = ["sqs", "s3"], version = "^4.0.12" }
 pytest-xdist = "^3.2.1"
 
-[tool.poetry.group.types.dependencies]
-sqlalchemy2-stubs = "^0.0.2a29"
-
 
 [tool.poetry.group.asgi.dependencies]
 starlette = "^0.21.0"
@@ -88,7 +85,7 @@ addopts = [
     "--cov-config=.coveragerc",
     "--no-cov-on-fail",
     "--cov-fail-under=80",
-    "--nf"
+    "--nf",
 ]
 filterwarnings = [
     "error",
