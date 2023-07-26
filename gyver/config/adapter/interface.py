@@ -6,7 +6,7 @@ from typing import Sequence
 from typing import TypeVar
 from typing import Union
 
-from gyver.config.config import MISSING
+from config import MISSING
 
 if TYPE_CHECKING:
     from dataclasses import Field
@@ -69,7 +69,7 @@ class FieldResolverStrategy(Protocol[T]):
         Get the default value of the field.
 
         :return: The default value of the field,
-        or the special value `MISSING` (from the `gyver.config.config` module)
+        or the special value `MISSING` (from the `config` module)
         if no default is defined.
         """
         ...

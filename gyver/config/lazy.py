@@ -13,9 +13,9 @@ from gyver.attrs import define
 
 from gyver.utils.lazy import lazyfield
 
-from .interface import MISSING
-from .interface import ConfigLike
-from .interface import _default_cast
+from config.interface import MISSING
+from config.interface import ConfigLike
+from config.interface import _default_cast
 
 ConfigT = TypeVar("ConfigT", bound=ConfigLike)
 

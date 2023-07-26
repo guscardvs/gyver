@@ -10,8 +10,8 @@ from attrs import fields
 from gyver.attrs import define
 
 from gyver.config.adapter.interface import FieldResolverStrategy
-from gyver.config.config import MISSING
-from gyver.exc import InvalidCast
+from config import MISSING
+from config.exceptions import InvalidCast
 from gyver.utils import panic
 
 

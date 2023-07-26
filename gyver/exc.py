@@ -1,6 +1,9 @@
 import sys
 from itertools import chain
 from typing import Sequence
+from config import exceptions
+
+from pydantic import ConfigError
 
 
 class GyverError(Exception):
@@ -10,6 +13,8 @@ class GyverError(Exception):
 class InvalidCast(GyverError):
     """Exception raised for config when
     cast callable raises an error"""
+
+
 
 
 class MissingName(GyverError, KeyError):
@@ -57,7 +62,9 @@ if sys.version_info < (3, 11):
     class ErrorGroup(GyverError):
         exceptions: tuple[Exception, ...]
 
-        def __init__(self, message: str, exceptions: Sequence[Exception]) -> None:
+        def __init__(
+            self, message: str, exceptions: Sequence[Exception]
+        ) -> None:
             self.message = message
             self.exceptions = tuple(exceptions)
             args = list(chain(item.args for item in exceptions))
@@ -72,7 +79,7 @@ if sys.version_info < (3, 11):
 
 else:
 
-    class ErrorGroup(GyverError, ExceptionGroup): # noqa: F821
+    class ErrorGroup(GyverError, ExceptionGroup):  # noqa: F821
         pass
 
 

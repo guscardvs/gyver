@@ -8,7 +8,7 @@ from pydantic import BaseModel
 from pydantic.fields import ModelField
 
 from gyver.config.adapter.interface import FieldResolverStrategy
-from gyver.config.config import MISSING
+from config import MISSING
 
 
 @define

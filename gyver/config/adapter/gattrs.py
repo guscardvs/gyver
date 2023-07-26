@@ -9,7 +9,7 @@ from gyver.attrs.field import Field
 from gyver.attrs.utils.typedef import MISSING as NOTHING
 
 from gyver.config.adapter.interface import FieldResolverStrategy
-from gyver.config.config import MISSING
+from config import MISSING
 
 
 @define
