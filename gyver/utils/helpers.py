@@ -12,15 +12,6 @@ from typing_extensions import ParamSpec
 
 from gyver.exc import MergeConflict
 
-from .exc import panic
-
-
-def _not_implemented(msg: str):
-    def inner(*_, **__kwds__):
-        raise panic(NotImplementedError, msg)
-
-    return inner
-
 
 P = ParamSpec("P")
 T = TypeVar("T")
@@ -104,7 +95,11 @@ def merge_dicts(
             elif isinstance(value, (list, set, tuple)) and merge_sequences:
                 left_val = left_curr[key]
                 if isinstance(left_val, (list, set, tuple)):
-                    type_ = type(value) if on_conflict == "right" else type(left_val)
+                    type_ = (
+                        type(value)
+                        if on_conflict == "right"
+                        else type(left_val)
+                    )
                     output_curr[key] = type_(chain(left_val, value))
             elif isinstance(value, dict):
                 if isinstance(left_curr[key], dict):

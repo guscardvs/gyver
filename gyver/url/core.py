@@ -44,15 +44,17 @@ class URL(Encodable):
         self.fragment = Fragment(fragment)
         self.netloc = Netloc(netloc)
 
-    def encode(self, omit_empty_equal: bool = True):
+    def encode(self, append_empty_equal: bool = True):
         """
         Encode the URL object as a URL string.
 
-        :param omit_empty_equal: Whether to omit empty values with an equal sign in the query string.
+        :param append_empty_equal: Whether to append empty values with an equal sign in the query string.
         :return: The encoded URL string.
         """
         resolved_query = (
-            self.query.encode() if omit_empty_equal else self.query.omit_empty_equal()
+            self.query.encode()
+            if append_empty_equal
+            else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (
@@ -73,6 +75,7 @@ class URL(Encodable):
         fragment: Optional[str] = None,
         netloc: Optional[str] = None,
         netloc_obj: Optional[Netloc] = None,
+        scheme: Optional[str] = None,
     ):
         """
         Add components to the URL.
@@ -97,6 +100,8 @@ class URL(Encodable):
             self.netloc = self.netloc.merge(Netloc(netloc))
         if netloc_obj:
             self.netloc = self.netloc.merge(netloc_obj)
+        if scheme:
+            self.scheme = scheme
         return self
 
     def set(
@@ -108,6 +113,7 @@ class URL(Encodable):
         fragment: Optional[str] = None,
         netloc: Optional[str] = None,
         netloc_obj: Optional[Netloc] = None,
+        scheme: Optional[str] = None,
     ):
         """
         Set components of the URL.
@@ -132,6 +138,8 @@ class URL(Encodable):
             self.netloc.load(netloc)
         if netloc_obj:
             self.netloc = netloc_obj
+        if scheme:
+            self.scheme = scheme
         return self
 
     def copy(self):
@@ -150,3 +158,20 @@ class URL(Encodable):
         )
         new_url.add(netloc_obj=self.netloc)
         return new_url
+
+    @classmethod
+    def from_netloc(
+        cls,
+        netloc: Optional[Netloc] = None,
+        *,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+        host: Optional[str] = None,
+        port: Optional[int] = None,
+    ):
+        url = cls("")
+        newnetloc = Netloc.from_args(host or "", username, password, port)
+        if netloc:
+            newnetloc = netloc.merge(newnetloc)
+        url.add(netloc_obj=newnetloc)
+        return url

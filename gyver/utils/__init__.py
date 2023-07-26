@@ -9,7 +9,6 @@ from .helpers import deprecated
 from .helpers import frozen
 from .helpers import merge_dicts
 from .lazy import lazyfield
-from .singleton import make_singleton
 from .strings import to_camel
 from .strings import to_snake
 from .strings import upper_camel
@@ -28,6 +27,5 @@ __all__ = [
     "DeprecatedClass",
     "FinderBuilder",
     "finder_builder",
-    "make_singleton",
     "panic",
 ]
