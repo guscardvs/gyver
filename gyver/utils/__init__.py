@@ -8,13 +8,16 @@ from .helpers import cache
 from .helpers import deprecated
 from .helpers import frozen
 from .helpers import merge_dicts
-from .lazy import lazyfield
+from .lazy import lazyfield, asynclazyfield, setlazy, dellazy
 from .strings import to_camel
 from .strings import to_snake
 from .strings import upper_camel
 
 __all__ = [
     "lazyfield",
+    "asynclazyfield",
+    "dellazy",
+    "setlazy",
     "to_camel",
     "to_snake",
     "upper_camel",

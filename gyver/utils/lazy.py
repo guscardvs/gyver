@@ -1,11 +1,17 @@
+import functools
 import typing
 
 from typing_extensions import Self
+from typing import Any
+
+from gyver.exc import InvalidField
 
 T = typing.TypeVar("T")
 SelfT = typing.TypeVar("SelfT")
 
 _obj_setattr = object.__setattr__
+_obj_delattr = object.__delattr__
+_obj_getattr = object.__getattribute__
 
 
 class lazyfield(typing.Generic[SelfT, T]):
@@ -37,7 +43,9 @@ class lazyfield(typing.Generic[SelfT, T]):
         ...
 
     @typing.overload
-    def __get__(self, instance: typing.Literal[None], owner: type[SelfT]) -> Self:
+    def __get__(
+        self, instance: typing.Literal[None], owner: type[SelfT]
+    ) -> Self:
         ...
 
     def __get__(
@@ -50,7 +58,7 @@ class lazyfield(typing.Generic[SelfT, T]):
         try:
             val = typing.cast(
                 T,
-                object.__getattribute__(
+                _obj_getattr(
                     instance,
                     self.private_name,
                 ),
@@ -76,7 +84,94 @@ class lazyfield(typing.Generic[SelfT, T]):
         self.cleanup(instance)
 
     def cleanup(self, instance: SelfT):
-        object.__delattr__(instance, self.private_name)
+        _obj_delattr(instance, self.private_name)
 
     def manual_set(self, instance: SelfT, value: T):
         _obj_setattr(instance, self.private_name, value)
+
+
+class asynclazyfield(typing.Generic[SelfT, T]):
+    def __init__(
+        self,
+        func: typing.Callable[
+            [SelfT], typing.Coroutine[typing.Any, typing.Any, T]
+        ],
+    ) -> None:
+        """
+        func : callable
+            The function that will be decorated. This function should take
+            a single argument, which is the instance of the class it is a
+            method of.
+        """
+        self._func = func
+
+    def __set_name__(self, owner: type[SelfT], name: str):
+        self.public_name = name
+        self.private_name = f"_lazyfield_{name}"
+
+    async def __call__(self, instance: SelfT) -> T:
+        try:
+            val = typing.cast(
+                T,
+                _obj_getattr(
+                    instance,
+                    self.private_name,
+                ),
+            )
+        except AttributeError:
+            val = await self._try_set(instance)
+        return val
+
+    async def _try_set(self, instance: SelfT) -> T:
+        try:
+            result = await self._func(instance)
+        except Exception as e:
+            raise e from None
+        else:
+            _obj_setattr(instance, self.private_name, result)
+            return result
+
+    @typing.overload
+    def __get__(
+        self, instance: SelfT, owner
+    ) -> typing.Callable[[], typing.Coroutine[Any, Any, T]]:
+        ...
+
+    @typing.overload
+    def __get__(self, instance: typing.Literal[None], owner) -> Self:
+        ...
+
+    def __get__(
+        self, instance: typing.Optional[SelfT], owner=None
+    ) -> typing.Union[
+        typing.Callable[[], typing.Coroutine[Any, Any, T]], Self
+    ]:
+        if not instance:
+            return self
+        return functools.partial(self.__call__, instance=instance)
+
+
+@functools.lru_cache(32)
+def _getlazy(
+    instance: Any, attribute: str
+) -> typing.Union[lazyfield, asynclazyfield]:
+    lazy = getattr(type(instance), attribute, None)
+    if not isinstance(lazy, (lazyfield, asynclazyfield)):
+        raise InvalidField(
+            f"Field {attribute} expected to be lazy but received {type(lazy)}"
+        )
+    return lazy
+
+
+def setlazy(
+    instance: Any, attribute: str, value: Any, bypass_setattr: bool = False
+):
+    lazy = _getlazy(instance, attribute)
+    setter = _obj_setattr if bypass_setattr else setattr
+    setter(instance, lazy.private_name, value)
+
+
+def dellazy(instance: Any, attribute: str, bypass_delattr: bool = False):
+    lazy = _getlazy(instance, attribute)
+    deleter = _obj_delattr if bypass_delattr else delattr
+    deleter(instance, lazy.private_name)
