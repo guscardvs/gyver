@@ -105,9 +105,7 @@ def test_resolve():
 def test_bind_with_always_true_comp():
     mapper = MagicMock()
     where = Where("id", 5, comp.always_true)
-    assert build_query(where.bind(mapper)) == build_query(
-        AlwaysTrue().bind(mapper)
-    )
+    assert build_query(where.bind(mapper)) == build_query(AlwaysTrue().bind(mapper))
 
 
 def test_bind_with_non_hashable_mapper():
@@ -166,14 +164,14 @@ def test_join_bind_runs_equally_without_args():
 
 def test_join_bind_returns_expected_value():
     assert build_query(
-        and_(
-            Where("id", 5, comp.greater), Where("id", 10, comp.lesser_equals)
-        ).bind(mapper)
+        and_(Where("id", 5, comp.greater), Where("id", 10, comp.lesser_equals)).bind(
+            mapper
+        )
     ) == build_query(sa.and_(mapper.c.id > 5, mapper.c.id <= 10))
     assert build_query(
-        or_(
-            Where("id", 5, comp.greater), Where("id", 10, comp.lesser_equals)
-        ).bind(mapper)
+        or_(Where("id", 5, comp.greater), Where("id", 10, comp.lesser_equals)).bind(
+            mapper
+        )
     ) == build_query(sa.or_(mapper.c.id > 5, mapper.c.id <= 10))
 
 

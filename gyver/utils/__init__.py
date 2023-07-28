@@ -8,7 +8,10 @@ from .helpers import cache
 from .helpers import deprecated
 from .helpers import frozen
 from .helpers import merge_dicts
-from .lazy import lazyfield, asynclazyfield, setlazy, dellazy
+from .lazy import asynclazyfield
+from .lazy import dellazy
+from .lazy import lazyfield
+from .lazy import setlazy
 from .strings import to_camel
 from .strings import to_snake
 from .strings import upper_camel

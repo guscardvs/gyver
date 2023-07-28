@@ -6,10 +6,10 @@ from typing import Generator
 from typing import Sequence
 from typing import Union
 
+from config import MISSING
 from gyver.attrs import define
 
 from gyver.config.adapter.interface import FieldResolverStrategy
-from config import MISSING
 
 
 @define

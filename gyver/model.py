@@ -3,6 +3,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from gyver import utils
+from gyver.utils.lazy import lazy
 
 
 class Model(BaseModel):
@@ -16,14 +17,17 @@ class Model(BaseModel):
         orm_mode = True
         alias_generator = utils.to_camel
         allow_population_by_field_name = True
-        keep_untouched = (utils.lazyfield,)
+        keep_untouched = (lazy,)
 
     # Overloading to allow lazyfields to work correctly
     def __setattr__(self, name: str, value: Any):
-        if isinstance(getattr(type(self), name, None), utils.lazyfield):
+        if isinstance(
+            getattr(type(self), name, None),
+            (lazy),
+        ):
             object.__setattr__(self, name, value)
-            return
-        return super().__setattr__(name, value)
+        else:
+            return super().__setattr__(name, value)
 
 
 class MutableModel(Model):

@@ -1,9 +1,6 @@
 import sys
 from itertools import chain
 from typing import Sequence
-from config import exceptions
-
-from pydantic import ConfigError
 
 
 class GyverError(Exception):
@@ -60,9 +57,7 @@ if sys.version_info < (3, 11):
     class ErrorGroup(GyverError):
         exceptions: tuple[Exception, ...]
 
-        def __init__(
-            self, message: str, exceptions: Sequence[Exception]
-        ) -> None:
+        def __init__(self, message: str, exceptions: Sequence[Exception]) -> None:
             self.message = message
             self.exceptions = tuple(exceptions)
             args = list(chain(item.args for item in exceptions))

@@ -9,13 +9,12 @@ from typing import TypeVar
 from typing import Union
 from typing import overload
 
-from gyver.attrs import define
-
-from gyver.utils.lazy import lazyfield
-
 from config.interface import MISSING
 from config.interface import ConfigLike
 from config.interface import _default_cast
+from gyver.attrs import define
+
+from gyver.utils.lazy import lazyfield
 
 ConfigT = TypeVar("ConfigT", bound=ConfigLike)
 

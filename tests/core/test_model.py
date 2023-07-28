@@ -1,7 +1,9 @@
 import pytest
 
 from gyver.model import Model
+from gyver.utils import asynclazyfield
 from gyver.utils import lazyfield
+from gyver.utils import setlazy
 
 
 def test_model_configs_are_expected():
@@ -20,3 +22,25 @@ def test_model_configs_are_expected():
 
     with pytest.raises(TypeError):
         person.name = "other-name"
+
+
+async def test_model_works_correctly_with_lazyfield():
+    class TestModel(Model):
+        @lazyfield
+        def test(self):
+            return "hello"
+
+        @asynclazyfield
+        async def atest(self):
+            return "world"
+
+    model = TestModel()
+
+    assert model.test == "hello"
+    assert await model.atest() == "world"
+
+    model.test = "world"
+    setlazy(model, "atest", "hello", bypass_setattr=True)
+
+    assert model.test == "world"
+    assert await model.atest() == "hello"

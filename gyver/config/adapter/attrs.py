@@ -7,11 +7,11 @@ from attr._make import Factory
 from attrs import NOTHING
 from attrs import Attribute
 from attrs import fields
+from config import MISSING
+from config.exceptions import InvalidCast
 from gyver.attrs import define
 
 from gyver.config.adapter.interface import FieldResolverStrategy
-from config import MISSING
-from config.exceptions import InvalidCast
 from gyver.utils import panic
 
 

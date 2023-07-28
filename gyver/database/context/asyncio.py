@@ -10,9 +10,7 @@ AsyncSaContext = context.AsyncContext[sa_asyncio.AsyncConnection]
 AsyncSessionContext = context.AsyncContext[sa_asyncio.AsyncSession]
 
 
-class AsyncConnectionAdapter(
-    context.AtomicAsyncAdapter[sa_asyncio.AsyncConnection]
-):
+class AsyncConnectionAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncConnection]):
     @typing.overload
     def __init__(
         self,
@@ -67,15 +65,11 @@ class AsyncConnectionAdapter(
             await client.begin()
 
     async def commit(self, client: sa_asyncio.AsyncConnection) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             await trx.commit()
 
     async def rollback(self, client: sa_asyncio.AsyncConnection) -> None:
-        if trx := (
-            client.get_nested_transaction() or client.get_transaction()
-        ):
+        if trx := (client.get_nested_transaction() or client.get_transaction()):
             await trx.rollback()
 
     async def in_atomic(self, client: sa_asyncio.AsyncConnection) -> bool:

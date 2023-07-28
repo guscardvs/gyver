@@ -52,9 +52,7 @@ class URL(Encodable):
         :return: The encoded URL string.
         """
         resolved_query = (
-            self.query.encode()
-            if append_empty_equal
-            else self.query.omit_empty_equal()
+            self.query.encode() if append_empty_equal else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (

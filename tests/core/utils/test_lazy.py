@@ -1,15 +1,16 @@
-import asyncio
 from dataclasses import FrozenInstanceError
 from dataclasses import dataclass
-from typing import Any, Callable, Coroutine
+from typing import Any
+from typing import Callable
+from typing import Coroutine
 from typing import Generic
 from typing import TypeVar
 from unittest.mock import Mock
 
 import pytest
+from gyver.attrs import mutable
 
 from gyver import utils
-from gyver.attrs import mutable
 
 T = TypeVar("T")
 
@@ -30,9 +31,7 @@ class FrozenFake(Fake[T]):
 
 
 class AsyncFake(Generic[T]):
-    def __init__(
-        self, slow_func: Callable[[], Coroutine[Any, Any, T]]
-    ) -> None:
+    def __init__(self, slow_func: Callable[[], Coroutine[Any, Any, T]]) -> None:
         self._slow_func = slow_func
 
     @utils.asynclazyfield
