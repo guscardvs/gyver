@@ -4,7 +4,7 @@ import threading
 import typing
 
 from gyver.utils import lazyfield
-from gyver.utils.lazy import asynclazyfield, dellazy, is_initialized
+from gyver.utils.lazy import asynclazyfield, dellazy
 
 from . import interfaces
 from .typedef import T
