@@ -3,17 +3,22 @@
 {
   # https://devenv.sh/basics/
   env.GREET = "devenv";
+  env.LD_LIBRARY_PATH = with pkgs; "${stdenv.cc.cc.lib}/lib";
+
 
   # https://devenv.sh/packages/
-  packages = [ pkgs.git ];
+  packages = with pkgs; [ glib glibc gcc git python39 poetry ];
 
+  languages.python = {
+    enable = true;
+    package = pkgs.python39;
+    poetry = {
+      enable = true;
+      activate.enable = true;
+      install = { enable = true; allExtras = true; };
+    };
+  };
   # https://devenv.sh/scripts/
-  scripts.hello.exec = "echo hello from $GREET";
-
-  enterShell = ''
-    hello
-    git --version
-  '';
 
   # https://devenv.sh/languages/
   # languages.nix.enable = true;
