@@ -4,7 +4,7 @@ import threading
 import typing
 
 from gyver.utils import lazyfield
-from gyver.utils.lazy import dellazy
+from gyver.utils.lazy import asynclazyfield, dellazy, is_initialized
 
 from . import interfaces
 from .typedef import T
@@ -112,9 +112,6 @@ class AsyncContext(typing.Generic[T]):
         self._stack = (
             0  # Keeps track of how many frames are using this context
         )
-        self._client: typing.Optional[
-            T
-        ] = None  # The current resource being used
         self._lock = asyncio.Lock()  # A lock to ensure thread safety
 
     @property
@@ -137,14 +134,13 @@ class AsyncContext(typing.Generic[T]):
         """
         return self._stack > 0
 
+    @asynclazyfield
     async def client(self) -> T:
         """
         Returns the current resource being used by the context.
         Acquires a new resource if the current one is closed or doesn't exist.
         """
-        if self._client is None or await self._adapter.is_closed(self._client):
-            self._client = await self._adapter.new()
-        return self._client
+        return await self._adapter.new()
 
     async def acquire(self):
         """
@@ -161,13 +157,9 @@ class AsyncContext(typing.Generic[T]):
         and decreases the stack count.
         """
         async with self._lock:
-            if self._client is None:
-                raise RuntimeError(
-                    "Release should not be called before client initialization"
-                )
             if self._stack == 1:
-                await self.adapter.release(self._client)
-                self._client = None
+                await self.adapter.release(await self.client())
+                dellazy(self, "client")
             self._stack -= 1
 
     @contextlib.asynccontextmanager

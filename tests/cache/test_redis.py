@@ -28,13 +28,15 @@ def _make_cache_instance():
     return new_cls(_make_cache_config())
 
 
-def _make_async_cache():
+async def _make_async_cache():
     new_cls = type(
         "FakeAsyncRedisWrapper",
         (AsyncRedisWrapper,),
         {"_instance": lazyfield(lambda _: aioredis.FakeRedis())},
     )
-    return new_cls(_make_cache_config())
+    instance = new_cls(_make_cache_config())
+    await instance._instance.flushdb()
+    return instance
 
 
 def test_redis_wrapper_works_correctly():
@@ -89,7 +91,7 @@ async def test_async_cache_works_correctly():
     expected = {"users": [1, 2, 3]}
     dt = datetime.now(timezone.utc) + timedelta(days=1)
 
-    cache = _make_async_cache()
+    cache = await _make_async_cache()
     await cache.set("name", expected, dt)
 
     assert await cache.get("name") == expected
@@ -97,14 +99,15 @@ async def test_async_cache_works_correctly():
 
 async def test_async_cache_raises_cache_miss_correctly():
 
-    cache = _make_async_cache()
+    cache = await _make_async_cache()
 
     with pytest.raises(CacheMiss):
-        await cache.get("name")
+        result = await cache.get("name")
+        print(result)
 
 
 async def test_async_cache_works_properly_with_mapper():
-    mapper = AsyncCacheMap(_make_async_cache(), "name")
+    mapper = AsyncCacheMap(await _make_async_cache(), "name")
     await mapper.set("val1", 1)
 
     assert await mapper.get("val1") == 1
@@ -118,7 +121,7 @@ async def test_async_cache_works_properly_with_mapper():
 
 
 async def test_async_cache_deletes_correctly():
-    cache = _make_async_cache()
+    cache = await _make_async_cache()
     mapper = AsyncCacheMap(cache, "name")
     await mapper.set("val1", 1)
     await cache.delete("val1", "name")

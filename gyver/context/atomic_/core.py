@@ -59,18 +59,15 @@ class AsyncAtomicContext(AsyncContext[T], Generic[T]):
 
     async def release(self, commit: bool = True):
         async with self._lock:
-            if self._client is None:
-                raise RuntimeError(
-                    "Release should not be called before client initialization"
-                )
+            client = await self.client()
             if self._stack == 1:
-                if await self.adapter.in_atomic(self._client):
+                if await self.adapter.in_atomic(client):
                     if commit:
-                        await self.adapter.commit(self._client)
+                        await self.adapter.commit(client)
                     else:
-                        await self.adapter.rollback(self._client)
-                await self.adapter.release(self._client)
-                self._client = None
+                        await self.adapter.rollback(client)
+                await self.adapter.release(client)
+                dellazy(self, "client")
             self._stack -= 1
 
     async def __aexit__(self, *exc):

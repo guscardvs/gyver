@@ -17,10 +17,22 @@ T = TypeVar("T")
 
 
 def cache(f: Callable[P, T]) -> Callable[P, T]:
+    """
+    Cache the result of a function.
+
+    :param f: The function to be cached.
+    :return: The cached version of the function.
+    """
     return cast(Callable[P, T], functools.cache(f))
 
 
 def deprecated(func: Callable[P, T]) -> Callable[P, T]:
+    """
+    Mark a function as deprecated and issue a warning when it's used.
+
+    :param func: The function to be marked as deprecated.
+    :return: A wrapped version of the function that issues a warning on use.
+    """
     @functools.wraps(func)
     def inner(*args: P.args, **kwargs: P.kwargs) -> T:
         if not hasattr(func, "__warn_deprecated__"):
@@ -39,6 +51,11 @@ frozen = deprecated(define)
 
 
 class DeprecatedClass:
+    """
+    A class to mark as deprecated.
+
+    This class issues a deprecation warning when instantiated.
+    """
     __warn_deprecated__ = False
 
     def __init__(self) -> None:

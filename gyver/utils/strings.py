@@ -3,6 +3,8 @@ import shlex
 from typing import Callable
 from typing import TypeVar
 
+from gyver.utils.helpers import deprecated
+
 _to_camel_regexp = re.compile("_([a-zA-Z])")
 _to_snake_regexp = re.compile("([a-z])([A-Z])")
 
@@ -42,7 +44,9 @@ def to_pascal(snake_string: str):
 
 
 # Compat
-upper_camel = to_pascal
+@deprecated
+def upper_camel(snake_string: str):
+    return to_pascal(snake_string)
 
 
 def to_lower_kebab(camel_string: str) -> str:

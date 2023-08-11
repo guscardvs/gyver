@@ -42,14 +42,17 @@ class lazyfield(lazy, typing.Generic[SelfT, T]):
 
     def __init__(self, func: typing.Callable[[SelfT], T]) -> None:
         """
-        func : callable
-            The function that will be decorated. This function should take
-            a single argument, which is the instance of the class it is a
-            method of.
+        Initialize the lazy field descriptor.
+        :param func: The function that will be decorated.
         """
         self._func = func
 
     def __set_name__(self, owner: type[SelfT], name: str):
+        """
+        Set the public and private names for the lazy field descriptor.
+        :param owner: The class that owns the descriptor.
+        :param name: The name of the attribute.
+        """
         self.public_name = name
         self.private_name = self._make_private(name)
 
@@ -85,13 +88,13 @@ class lazyfield(lazy, typing.Generic[SelfT, T]):
 
     def _try_set(self, instance: SelfT) -> T:
         try:
-            val = self._func(instance)
+            result = self._func(instance)
         except Exception as e:
             # remove exception context to create easier traceback
             raise e from None
         else:
-            force_set(instance, self.public_name, val)
-            return val
+            force_set(instance, self.public_name, result)
+            return result
 
     def __set__(self, instance: SelfT, value: T):
         setlazy(instance, self.public_name, value)
@@ -101,6 +104,19 @@ class lazyfield(lazy, typing.Generic[SelfT, T]):
 
 
 class asynclazyfield(lazy, typing.Generic[SelfT, T]):
+    """
+    A descriptor class for asynchronously lazy-loading attributes on a class.
+
+    When the decorated method is accessed on an instance, it will check if the
+    instance has an attribute with the same name as the method but with an
+    underscore prefix. If the attribute does not exist, it will call the decorated
+    asynchronous method on the instance and set the result as the attribute's value.
+    Subsequent accesses will return the cached value, avoiding unnecessary
+    recalculation or computation.
+
+    :param func: The asynchronous function that will be decorated.
+    """
+
     def __init__(
         self,
         func: typing.Callable[
@@ -108,18 +124,26 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
         ],
     ) -> None:
         """
-        func : callable
-            The function that will be decorated. This function should take
-            a single argument, which is the instance of the class it is a
-            method of.
+        Initialize the asynclazyfield descriptor.
+        :param func: The asynchronous function that will be decorated.
         """
         self._func = func
 
     def __set_name__(self, owner: type[SelfT], name: str):
+        """
+        Set the public and private names for the asynclazyfield descriptor.
+        :param owner: The class that owns the descriptor.
+        :param name: The name of the attribute.
+        """
         self.public_name = name
         self.private_name = self._make_private(name)
 
     async def __call__(self, instance: SelfT) -> T:
+        """
+        Call the asynchronous method to load the attribute's value.
+        :param instance: The instance of the class.
+        :return: The loaded value of the attribute.
+        """
         try:
             val = typing.cast(
                 T,
@@ -133,22 +157,40 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
         return val
 
     async def _try_set(self, instance: SelfT) -> T:
+        """
+        Attempt to set the value of the attribute using the asynchronous method.
+        :param instance: The instance of the class.
+        :return: The loaded value of the attribute.
+        :raises Exception: If the asynchronous method raises an exception.
+        """
         try:
             result = await self._func(instance)
         except Exception as e:
             raise e from None
         else:
-            _obj_setattr(instance, self.private_name, result)
+            force_set(instance, self.public_name, result)
             return result
 
     @typing.overload
     def __get__(
         self, instance: SelfT, owner
     ) -> typing.Callable[[], typing.Coroutine[Any, Any, T]]:
+        """
+        Get the wrapped asynchronous method.
+        :param instance: The instance of the class.
+        :param owner: The class that owns the descriptor.
+        :return: The asynchronous method.
+        """
         ...
 
     @typing.overload
     def __get__(self, instance: typing.Literal[None], owner) -> Self:
+        """
+        Get the descriptor itself.
+        :param instance: None (descriptor access).
+        :param owner: The class that owns the descriptor.
+        :return: The descriptor itself.
+        """
         ...
 
     def __get__(
@@ -156,6 +198,12 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
     ) -> typing.Union[
         typing.Callable[[], typing.Coroutine[Any, Any, T]], Self
     ]:
+        """
+        Get the wrapped asynchronous method or the descriptor itself.
+        :param instance: The instance of the class.
+        :param owner: The class that owns the descriptor.
+        :return: The asynchronous method or the descriptor itself.
+        """
         if not instance:
             return self
         return functools.partial(self.__call__, instance=instance)
@@ -214,3 +262,11 @@ def dellazy(instance: Any, attribute: str, bypass_delattr: bool = False):
 
 def force_del(instance: Any, attribute: str):
     dellazy(instance, attribute, bypass_delattr=True)
+
+
+SENTINEL = object()
+
+
+def is_initialized(instance: Any, attribute: str) -> bool:
+    lazyf = _getlazy(instance, attribute)
+    return getattr(instance, lazyf.private_name, SENTINEL) is not SENTINEL

@@ -4,60 +4,56 @@ from typing import Sequence
 
 
 class GyverError(Exception):
-    """Base exception for all gyver exceptions"""
+    """Base exception for all exceptions raised by the Gyver library."""
 
 
 class InvalidCast(GyverError):
-    """Exception raised for config when
-    cast callable raises an error"""
+    """Raised when an error occurs during a casting operation in configuration."""
 
 
 class MissingName(GyverError, KeyError):
-    """Exception raised for config when
-    name is not found in given environ"""
+    """Raised when a required name is missing in the provided environment configuration."""
 
 
 class InvalidField(GyverError, KeyError):
-    """Exception raised when field lookup
-    returned an unexpected result on mapping"""
+    """Raised when an unexpected result is encountered during a field lookup on a mapping."""
 
 
 class CacheMiss(GyverError, KeyError):
-    """Exception raised when cache lookup
-    returns None or raises error"""
-
-
-class QueueNotFound(InvalidField):
-    """Exception raised when queue name provider
-    does not exist on given credentials"""
+    """Raised when a cache lookup returns None or raises an error."""
 
 
 class MissingParams(GyverError, NotImplementedError):
-    """Exception raised when no params where passed in a
-    *args function
-    """
+    """Raised when a function expecting *args parameters receives none."""
 
 
 class InvalidPath(GyverError, ValueError):
-    """Equivalent to FileNotFound but also for directories"""
+    """Raised when an invalid file or directory path is encountered."""
 
 
 class InvalidParamType(GyverError, TypeError):
-    """Exception raised when parameter received
-    is not of the type excpected"""
+    """Raised when a parameter's type is not as expected."""
 
 
 class InvalidParamValue(GyverError, ValueError):
-    """Exception raised when parameter received
-    has an unexpected value"""
+    """Raised when a parameter's value is unexpected."""
 
 
 if sys.version_info < (3, 11):
 
     class ErrorGroup(GyverError):
+        """
+        Exception that groups multiple sub-exceptions.
+
+        This exception is used to encapsulate and present multiple related exceptions as a group.
+        It provides a way to handle multiple errors together in a unified manner.
+        """
+
         exceptions: tuple[Exception, ...]
 
-        def __init__(self, message: str, exceptions: Sequence[Exception]) -> None:
+        def __init__(
+            self, message: str, exceptions: Sequence[Exception]
+        ) -> None:
             self.message = message
             self.exceptions = tuple(exceptions)
             args = list(chain(item.args for item in exceptions))
@@ -73,12 +69,19 @@ if sys.version_info < (3, 11):
 else:
 
     class ErrorGroup(GyverError, ExceptionGroup):  # noqa: F821
+        """
+        Exception that groups multiple sub-exceptions.
+
+        This exception is used to encapsulate and present multiple related exceptions as a group.
+        It provides a way to handle multiple errors together in a unified manner.
+        """
+
         pass
 
 
 class FailedFileOperation(GyverError):
-    """Exception raised when an error happened while interacting with a file"""
+    """Raised when an error occurs during an interaction with a file."""
 
 
 class MergeConflict(GyverError):
-    """Exception raised when merge_dicts(strict=True) finds a conflict"""
+    """Raised when a merge conflict is detected, e.g., during the merge_dicts operation."""

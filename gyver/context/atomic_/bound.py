@@ -5,6 +5,7 @@ from gyver.context.context import Context
 from gyver.context.interfaces.adapter import AtomicAdapter
 from gyver.context.interfaces.adapter import AtomicAsyncAdapter
 from gyver.context.typedef import T
+from gyver.utils.lazy import is_initialized
 
 
 class BoundContext(Context[T], Generic[T]):
@@ -48,22 +49,19 @@ class AsyncBoundContext(AsyncContext[T], Generic[T]):
     async def acquire(self):
         async with self._lock:
             client = await self._context.acquire()
-            if self.stack == 0:
+            if self._stack == 0:
                 await self.adapter.begin(client)
             self._stack += 1
             return client
 
     async def release(self, commit: bool = True):
         async with self._lock:
-            if self._context._client is None:
-                raise RuntimeError(
-                    "Release should not be called before client initialization"
-                )
+            client = await self._context.client()
             if self._stack == 1:
                 if commit:
-                    await self.adapter.commit(self._context._client)
+                    await self.adapter.commit(client)
                 else:
-                    await self.adapter.rollback(self._context._client)
+                    await self.adapter.rollback(client)
             self._stack -= 1
         await self._context.release()
 

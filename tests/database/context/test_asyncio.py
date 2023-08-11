@@ -36,6 +36,7 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context():
         assert response
         (first,) = response
         assert first == 1
+    assert conn.closed
 
 
 async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context_transaction():  # noqa
