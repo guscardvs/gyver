@@ -7,7 +7,7 @@
 
 
   # https://devenv.sh/packages/
-  packages = with pkgs; [ glib glibc gcc git python39 poetry ];
+  packages = with pkgs; [ glib glibc gcc git python39 poetry commitizen ];
 
   languages.python = {
     enable = true;

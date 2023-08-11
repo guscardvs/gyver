@@ -906,18 +906,18 @@ testing = ["pre-commit"]
 
 [[package]]
 name = "fakeredis"
-version = "2.12.1"
-description = "Fake implementation of redis API for testing purposes."
+version = "2.17.0"
+description = "Python implementation of redis API, can be used for testing purposes."
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "fakeredis-2.12.1-py3-none-any.whl", hash = "sha256:8b9d839e3f62138d967e4c13067772c133c9c312bca4dcfb00580d40a7ef4e3a"},
-    {file = "fakeredis-2.12.1.tar.gz", hash = "sha256:7c5afa8911a597db30fd9c6b8431817f7a305fe8fd90b1f22d3cec98ec44c4f3"},
+    {file = "fakeredis-2.17.0-py3-none-any.whl", hash = "sha256:a99ef6e5642c31e91d36be78809fec3743e2bf7aaa682685b0d65a849fecd148"},
+    {file = "fakeredis-2.17.0.tar.gz", hash = "sha256:e304bc7addb2f862c3550cb7db58548418a0fadd4cd78a4de66464c84fbc2195"},
 ]
 
 [package.dependencies]
 redis = ">=4"
-sortedcontainers = ">=2.4,<3.0"
+sortedcontainers = ">=2,<3"
 
 [package.extras]
 json = ["jsonpath-ng (>=1.5,<2.0)"]
@@ -2770,4 +2770,4 @@ db-sqlite = ["aiosqlite", "sqlalchemy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "d4852daf4b5a8248915d81d30f0a1fac4d6426ccf864a89d512820a72ef0b54d"
+content-hash = "dd6b23cfe7575ecd37b5d67c1a4571a11e34c359abf98fbf2f78856f35b63ff8"
