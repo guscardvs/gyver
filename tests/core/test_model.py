@@ -4,6 +4,7 @@ from gyver.model import Model
 from gyver.utils import asynclazyfield
 from gyver.utils import lazyfield
 from gyver.utils import setlazy
+from gyver.utils.lazy import force_set
 
 
 def test_model_configs_are_expected():
@@ -39,7 +40,7 @@ async def test_model_works_correctly_with_lazyfield():
     assert model.test == "hello"
     assert await model.atest() == "world"
 
-    model.test = "world"
+    force_set(model, "test", "world")
     setlazy(model, "atest", "hello", bypass_setattr=True)
 
     assert model.test == "world"

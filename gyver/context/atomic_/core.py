@@ -6,6 +6,7 @@ from gyver.context.interfaces.adapter import AtomicAdapter
 from gyver.context.interfaces.adapter import AtomicAsyncAdapter
 from gyver.context.typedef import T
 from gyver.utils import lazyfield
+from gyver.utils.lazy import dellazy
 
 
 class AtomicContext(Context[T], Generic[T]):
@@ -21,7 +22,7 @@ class AtomicContext(Context[T], Generic[T]):
     def acquire(self):
         with self._lock:
             if self.adapter.is_closed(self.client):
-                AtomicContext.client.cleanup(self)
+                dellazy(self, "client")
             self._stack += 1
             self.adapter.begin(self.client)
         return self.client
@@ -35,7 +36,7 @@ class AtomicContext(Context[T], Generic[T]):
                     else:
                         self.adapter.rollback(self.client)
                 self.adapter.release(self.client)
-                Context.client.cleanup(self)
+                dellazy(self, "client")
             self._stack -= 1
 
     def __exit__(self, *exc):

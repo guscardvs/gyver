@@ -4,6 +4,7 @@ import threading
 import typing
 
 from gyver.utils import lazyfield
+from gyver.utils.lazy import dellazy
 
 from . import interfaces
 from .typedef import T
@@ -16,7 +17,9 @@ class Context(typing.Generic[T]):
         :param adapter: An adapter that will be used to acquire and release resources.
         """
         self._adapter = adapter
-        self._stack = 0  # Keeps track of how many frames are using this context
+        self._stack = (
+            0  # Keeps track of how many frames are using this context
+        )
         self._lock = threading.Lock()  # A lock to ensure thread safety
 
     @lazyfield
@@ -53,7 +56,7 @@ class Context(typing.Generic[T]):
         """
         with self._lock:
             if self.adapter.is_closed(self.client):
-                Context.client.cleanup(self)
+                dellazy(self, "client")
             self._stack += 1
             return self.client
 
@@ -65,7 +68,7 @@ class Context(typing.Generic[T]):
         with self._lock:
             if self._stack == 1:
                 self.adapter.release(self.client)
-                Context.client.cleanup(self)
+                dellazy(self, "client")
             self._stack -= 1
 
     @contextlib.contextmanager
@@ -106,8 +109,12 @@ class AsyncContext(typing.Generic[T]):
         and release resources.
         """
         self._adapter = adapter
-        self._stack = 0  # Keeps track of how many frames are using this context
-        self._client: typing.Optional[T] = None  # The current resource being used
+        self._stack = (
+            0  # Keeps track of how many frames are using this context
+        )
+        self._client: typing.Optional[
+            T
+        ] = None  # The current resource being used
         self._lock = asyncio.Lock()  # A lock to ensure thread safety
 
     @property

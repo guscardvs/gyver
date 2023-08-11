@@ -58,7 +58,9 @@ class lazyfield(lazy, typing.Generic[SelfT, T]):
         ...
 
     @typing.overload
-    def __get__(self, instance: typing.Literal[None], owner: type[SelfT]) -> Self:
+    def __get__(
+        self, instance: typing.Literal[None], owner: type[SelfT]
+    ) -> Self:
         ...
 
     def __get__(
@@ -66,6 +68,7 @@ class lazyfield(lazy, typing.Generic[SelfT, T]):
         instance: typing.Optional[SelfT],
         owner: typing.Optional[type[SelfT]] = None,
     ) -> typing.Union[T, Self]:
+        del owner
         if not instance:
             return self
         try:
@@ -87,26 +90,22 @@ class lazyfield(lazy, typing.Generic[SelfT, T]):
             # remove exception context to create easier traceback
             raise e from None
         else:
-            _obj_setattr(instance, self.private_name, val)
+            force_set(instance, self.public_name, val)
             return val
 
     def __set__(self, instance: SelfT, value: T):
-        self.manual_set(instance, value)
+        setlazy(instance, self.public_name, value)
 
     def __delete__(self, instance: SelfT):
-        self.cleanup(instance)
-
-    def cleanup(self, instance: SelfT):
-        _obj_delattr(instance, self.private_name)
-
-    def manual_set(self, instance: SelfT, value: T):
-        _obj_setattr(instance, self.private_name, value)
+        dellazy(instance, self.public_name)
 
 
 class asynclazyfield(lazy, typing.Generic[SelfT, T]):
     def __init__(
         self,
-        func: typing.Callable[[SelfT], typing.Coroutine[typing.Any, typing.Any, T]],
+        func: typing.Callable[
+            [SelfT], typing.Coroutine[typing.Any, typing.Any, T]
+        ],
     ) -> None:
         """
         func : callable
@@ -154,13 +153,14 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
 
     def __get__(
         self, instance: typing.Optional[SelfT], owner=None
-    ) -> typing.Union[typing.Callable[[], typing.Coroutine[Any, Any, T]], Self]:
+    ) -> typing.Union[
+        typing.Callable[[], typing.Coroutine[Any, Any, T]], Self
+    ]:
         if not instance:
             return self
         return functools.partial(self.__call__, instance=instance)
 
 
-@functools.lru_cache(32)
 def _getlazy(instance: Any, attribute: str) -> lazy:
     """Get the lazy descriptor associated with the specified attribute on an instance.
 
@@ -177,7 +177,9 @@ def _getlazy(instance: Any, attribute: str) -> lazy:
     return lazyf
 
 
-def setlazy(instance: Any, attribute: str, value: Any, bypass_setattr: bool = False):
+def setlazy(
+    instance: Any, attribute: str, value: Any, bypass_setattr: bool = False
+):
     """Set the value of a lazy-loaded property on an instance.
 
     :param instance: The instance to set the property on.
@@ -192,6 +194,10 @@ def setlazy(instance: Any, attribute: str, value: Any, bypass_setattr: bool = Fa
     setter(instance, lazy.private_name, value)
 
 
+def force_set(instance: Any, attribute: str, value: Any):
+    setlazy(instance, attribute, value, bypass_setattr=True)
+
+
 def dellazy(instance: Any, attribute: str, bypass_delattr: bool = False):
     """Delete the value of a lazy-loaded property on an instance.
 
@@ -204,3 +210,7 @@ def dellazy(instance: Any, attribute: str, bypass_delattr: bool = False):
     lazy = _getlazy(instance, attribute)
     deleter = _obj_delattr if bypass_delattr else delattr
     deleter(instance, lazy.private_name)
+
+
+def force_del(instance: Any, attribute: str):
+    dellazy(instance, attribute, bypass_delattr=True)

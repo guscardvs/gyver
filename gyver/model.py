@@ -23,7 +23,7 @@ class Model(BaseModel):
     def __setattr__(self, name: str, value: Any):
         if isinstance(
             getattr(type(self), name, None),
-            (lazy),
+            lazy,
         ):
             object.__setattr__(self, name, value)
         else:
