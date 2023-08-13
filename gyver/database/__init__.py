@@ -6,6 +6,7 @@ from .context import AsyncSessionContext
 from .context import SaContext
 from .context import SessionContext
 from .drivers import Dialect
+from .drivers.dialect import DialectInfo
 from .entity import AbstractEntity
 from .entity import Entity
 from .entity import make_table
@@ -15,6 +16,7 @@ from .utils import make_uri
 
 __all__ = [
     "Dialect",
+    "DialectInfo",
     "DatabaseConfig",
     "Driver",
     "make_uri",

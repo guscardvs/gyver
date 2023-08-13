@@ -1,15 +1,29 @@
 site_name: Gyver
+watch:
+  - docs
+  - mkdocs.yml
+  - gyver
 nav:
   - Introduction: index.md
   - Model: usage/model.md
   - Utils: usage/utils.md
   - Config: usage/config.md
+  - Context:
+      - Working with Contexts: usage/context/index.md
+      - Adapter Interface: usage/context/adapter.md
+      - Atomicity: usage/context/atomic.md
   - Database:
       - Working With Database: usage/database/index.md
-      - Providers: usage/database/providers.md
+      - Adapters: usage/database/adapter.md
       - SQLAlchemy Defaults: usage/database/sqlalchemy.md
       - SQLAlchemy Queries Helper: usage/database/query.md
   - URL: usage/url.md
+  - Reference: 
+      - Context: reference/context.md
+      - Model: reference/model.md
+      - Utils: reference/utils.md
+      - Config: reference/config.md
+      - Database: reference/database.md
 theme:
   features:
     - navigation.instant
@@ -17,6 +31,7 @@ theme:
     - navigation.tabs.sticky
     - navigation.path
   name: material
+  language: en
   palette:
     # Palette toggle for automatic mode
     - media: "(prefers-color-scheme)"
@@ -40,9 +55,26 @@ theme:
 
 plugins:
   - termynal
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          import:
+          - url: https://docs.python-requests.org/en/master/objects.inv
+            domains: [std, py]
+          options:
+            preload_modules:
+              - config
+            show_source: false
+
 markdown_extensions:
+  - admonition  
   - pymdownx.highlight:
       anchor_linenums: true
+  - termynal:
+      prompt_literal_start:
+        - "$"
+        - ">"
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences

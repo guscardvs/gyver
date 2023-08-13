@@ -11,19 +11,22 @@ def panic(exc: type[T], message: str, *args) -> T:
     specified exception class with the modified error message and any additional
     arguments provided.
 
-    :param exc: The exception class to instantiate.
-    :param message: The error message for the exception.
-    :param args: Additional arguments to pass to the exception constructor.
-    :return: An instance of the specified exception class.
+    Args:
+        exc (type[T]): The exception class to instantiate.
+        message (str): The error message for the exception.
+        *args (Any): Additional arguments to pass to the exception constructor.
 
-    Example:
-    >>> class CustomError(Exception):
-    ...     pass
-    ...
-    >>> error = panic(CustomError, "Something went wrong", "additional_info")
-    >>> isinstance(error, CustomError)
-    True
-    >>> str(error)
-    'Something went wrong! additional_info'
+    Returns:
+        T: An instance of the specified exception class.
+
+    Examples:
+        >>> class CustomError(Exception):
+        ...     pass
+        ...
+        >>> error = panic(CustomError, "Something went wrong", "additional_info")
+        >>> isinstance(error, CustomError)
+        True
+        >>> str(error)
+        'Something went wrong! additional_info'
     """
     return exc(message.removesuffix("!") + "!", *args)

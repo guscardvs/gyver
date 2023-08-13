@@ -19,9 +19,14 @@ T = TypeVar("T")
 def cache(f: Callable[P, T]) -> Callable[P, T]:
     """
     Cache the result of a function.
+    It uses `functools.cache` and just
+    adds proper type hints to it.
 
-    :param f: The function to be cached.
-    :return: The cached version of the function.
+    Args:
+        f (Callable[P, T]): The function to be cached.
+
+    Returns:
+        Callable[P, T]: The cached version of the function.
     """
     return cast(Callable[P, T], functools.cache(f))
 
@@ -30,9 +35,13 @@ def deprecated(func: Callable[P, T]) -> Callable[P, T]:
     """
     Mark a function as deprecated and issue a warning when it's used.
 
-    :param func: The function to be marked as deprecated.
-    :return: A wrapped version of the function that issues a warning on use.
+    Args:
+        func (Callable[P, T]): The function to be marked as deprecated.
+
+    Returns:
+        Callable[P, T]: A wrapped version of the function that issues a warning on use.
     """
+
     @functools.wraps(func)
     def inner(*args: P.args, **kwargs: P.kwargs) -> T:
         if not hasattr(func, "__warn_deprecated__"):
@@ -56,6 +65,7 @@ class DeprecatedClass:
 
     This class issues a deprecation warning when instantiated.
     """
+
     __warn_deprecated__ = False
 
     def __init__(self) -> None:
@@ -77,25 +87,25 @@ def merge_dicts(
     """
     Merge two dictionaries with customizable conflict resolution strategy.
 
-    :param left: The left dictionary to merge.
-    :type left: dict
-    :param right: The right dictionary to merge.
-    :type right: dict
-    :param on_conflict: The conflict resolution strategy to use.
-        - 'strict': Raise a MergeConflict exception if conflicts occur.
-        - 'left': Prioritize the values from the left dictionary in case of conflicts.
-        - 'right': Prioritize the values from the right dictionary in case of conflicts.
+    Args:
+        left (dict): The left dictionary to merge.
+        right (dict): The right dictionary to merge.
+        on_conflict (Literal["strict", "left", "right"]): The conflict resolution strategy to use.
+            
+            - 'strict': Raise a MergeConflict exception if conflicts occur.
+            - 'left': Prioritize the values from the left dictionary in case of conflicts.
+            - 'right': Prioritize the values from the right dictionary in case of conflicts.
+        merge_sequences (bool, optional): Indicates whether to merge sequences (lists, sets, tuples) or skip them.
+            
+            - If True, sequences will be merged based on the conflict resolution strategy.
+            - If False, sequences will be skipped, and the value from the chosen (defaults to left on strict)
+            dictionary will be used. Default is True.
 
-    :type on_conflict: Literal["strict", "left", "right"]
-    :param merge_sequences: Indicates whether to merge sequences (lists, sets, tuples) or skip them.
-        If True, sequences will be merged based on the conflict resolution strategy.
-        If False, sequences will be skipped, and the value from the chosen (defaults to left on strict)
-            dictionary will be used.
-    :type merge_sequences: bool, optional
-    :return: The merged dictionary.
-    :rtype: dict
+    Returns:
+        dict: The merged dictionary.
 
-    :raises MergeConflict: If conflicts occur and the conflict resolution strategy is set to 'strict'.
+    Raises:
+        MergeConflict: If conflicts occur and the conflict resolution strategy is set to 'strict'.
     """
 
     output = {key: value for key, value in left.items() if key not in right}
@@ -111,7 +121,11 @@ def merge_dicts(
             elif isinstance(value, (list, set, tuple)) and merge_sequences:
                 left_val = left_curr[key]
                 if isinstance(left_val, (list, set, tuple)):
-                    type_ = type(value) if on_conflict == "right" else type(left_val)
+                    type_ = (
+                        type(value)
+                        if on_conflict == "right"
+                        else type(left_val)
+                    )
                     output_curr[key] = type_(chain(left_val, value))
             elif isinstance(value, dict):
                 if isinstance(left_curr[key], dict):

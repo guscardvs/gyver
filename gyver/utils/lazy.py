@@ -22,10 +22,14 @@ class lazy:
 
     @staticmethod
     def _make_private(public_name: str) -> str:
-        """Generate the name of the private attribute based on the provided public name.
-        :param public_name: The public name of the lazy-loaded property.
-        :return: The generated private attribute name.
         """
+        Generates the name of the private attribute based on the provided public name.
+
+        Args:
+            public_name (str): The public name of the lazy-loaded property.
+
+        Returns:
+            str: The generated private attribute name."""
         return f"_lazyfield_{public_name}"
 
 
@@ -42,17 +46,19 @@ class lazyfield(lazy, typing.Generic[SelfT, T]):
 
     def __init__(self, func: typing.Callable[[SelfT], T]) -> None:
         """
-        Initialize the lazy field descriptor.
-        :param func: The function that will be decorated.
-        """
+        Initializes the lazy field descriptor.
+
+        Args:
+            func (callable): The function that will be decorated."""
         self._func = func
 
     def __set_name__(self, owner: type[SelfT], name: str):
         """
-        Set the public and private names for the lazy field descriptor.
-        :param owner: The class that owns the descriptor.
-        :param name: The name of the attribute.
-        """
+        Sets the public and private names for the lazy field descriptor.
+
+        Args:
+            owner (type): The class that owns the descriptor.
+            name (str): The name of the attribute."""
         self.public_name = name
         self.private_name = self._make_private(name)
 
@@ -113,8 +119,6 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
     asynchronous method on the instance and set the result as the attribute's value.
     Subsequent accesses will return the cached value, avoiding unnecessary
     recalculation or computation.
-
-    :param func: The asynchronous function that will be decorated.
     """
 
     def __init__(
@@ -124,16 +128,19 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
         ],
     ) -> None:
         """
-        Initialize the asynclazyfield descriptor.
-        :param func: The asynchronous function that will be decorated.
-        """
+        Initializes the asynclazyfield descriptor.
+
+        Args:
+            func (callable): The asynchronous function that will be decorated."""
         self._func = func
 
     def __set_name__(self, owner: type[SelfT], name: str):
         """
         Set the public and private names for the asynclazyfield descriptor.
-        :param owner: The class that owns the descriptor.
-        :param name: The name of the attribute.
+
+        Args:
+            owner (type): The class that owns the descriptor.
+            name (str): The name of the attribute.
         """
         self.public_name = name
         self.private_name = self._make_private(name)
@@ -141,8 +148,12 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
     async def __call__(self, instance: SelfT) -> T:
         """
         Call the asynchronous method to load the attribute's value.
-        :param instance: The instance of the class.
-        :return: The loaded value of the attribute.
+
+        Args:
+            instance (SelfT): The instance of the class.
+
+        Returns:
+            T: The loaded value of the attribute.
         """
         try:
             val = typing.cast(
@@ -159,9 +170,15 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
     async def _try_set(self, instance: SelfT) -> T:
         """
         Attempt to set the value of the attribute using the asynchronous method.
-        :param instance: The instance of the class.
-        :return: The loaded value of the attribute.
-        :raises Exception: If the asynchronous method raises an exception.
+
+        Args:
+            instance (SelfT): The instance of the class.
+
+        Returns:
+            T: The loaded value of the attribute.
+
+        Raises:
+            Exception: If the asynchronous method raises an exception.
         """
         try:
             result = await self._func(instance)
@@ -175,22 +192,10 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
     def __get__(
         self, instance: SelfT, owner
     ) -> typing.Callable[[], typing.Coroutine[Any, Any, T]]:
-        """
-        Get the wrapped asynchronous method.
-        :param instance: The instance of the class.
-        :param owner: The class that owns the descriptor.
-        :return: The asynchronous method.
-        """
         ...
 
     @typing.overload
     def __get__(self, instance: typing.Literal[None], owner) -> Self:
-        """
-        Get the descriptor itself.
-        :param instance: None (descriptor access).
-        :param owner: The class that owns the descriptor.
-        :return: The descriptor itself.
-        """
         ...
 
     def __get__(
@@ -200,9 +205,16 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
     ]:
         """
         Get the wrapped asynchronous method or the descriptor itself.
-        :param instance: The instance of the class.
-        :param owner: The class that owns the descriptor.
-        :return: The asynchronous method or the descriptor itself.
+
+        Args:
+            instance (typing.Optional[SelfT]): The instance of the class.
+            owner (type[SelfT]): The class that owns the descriptor.
+
+        Returns:
+            Union[
+                typing.Callable[[], typing.Coroutine[Any, Any, T]],
+                Self
+            ]: The asynchronous method or the descriptor itself.
         """
         if not instance:
             return self
@@ -210,12 +222,18 @@ class asynclazyfield(lazy, typing.Generic[SelfT, T]):
 
 
 def _getlazy(instance: Any, attribute: str) -> lazy:
-    """Get the lazy descriptor associated with the specified attribute on an instance.
+    """
+    Get the lazy descriptor associated with the specified attribute on an instance.
 
-    :param instance: The instance to retrieve the descriptor from.
-    :param attribute: The name of the lazy-loaded property.
-    :return: The lazy descriptor associated with the attribute.
-    :raises InvalidField: If the attribute is not a lazy descriptor.
+    Args:
+        instance (Any): The instance to retrieve the descriptor from.
+        attribute (str): The name of the lazy-loaded property.
+
+    Returns:
+        lazy: The lazy descriptor associated with the attribute.
+
+    Raises:
+        InvalidField: If the attribute is not a lazy descriptor.
     """
     lazyf = getattr(type(instance), attribute, None)
     if not isinstance(lazyf, lazy):
@@ -228,14 +246,18 @@ def _getlazy(instance: Any, attribute: str) -> lazy:
 def setlazy(
     instance: Any, attribute: str, value: Any, bypass_setattr: bool = False
 ):
-    """Set the value of a lazy-loaded property on an instance.
+    """
+    Set the value of a lazy-loaded property on an instance.
 
-    :param instance: The instance to set the property on.
-    :param attribute: The name of the lazy-loaded property.
-    :param value: The value to set for the property.
-    :param bypass_setattr: If True, directly set the attribute using `object.__setattr__`
-                           to bypass immutability issues. (default: False)
-    :raises InvalidField: If the attribute is not a lazy descriptor.
+    Args:
+        instance (Any): The instance to set the property on.
+        attribute (str): The name of the lazy-loaded property.
+        value (Any): The value to set for the property.
+        bypass_setattr (bool): If True, directly set the attribute using `object.__setattr__`
+                               to bypass immutability issues. (default: False)
+
+    Raises:
+        InvalidField: If the attribute is not a lazy descriptor.
     """
     lazy = _getlazy(instance, attribute)
     setter = _obj_setattr if bypass_setattr else setattr
@@ -243,17 +265,29 @@ def setlazy(
 
 
 def force_set(instance: Any, attribute: str, value: Any):
+    """
+    Forcefully set the value of a lazy-loaded property on an instance.
+
+    Args:
+        instance (Any): The instance to set the property on.
+        attribute (str): The name of the lazy-loaded property.
+        value (Any): The value to set for the property.
+    """
     setlazy(instance, attribute, value, bypass_setattr=True)
 
 
 def dellazy(instance: Any, attribute: str, bypass_delattr: bool = False):
-    """Delete the value of a lazy-loaded property on an instance.
+    """
+    Delete the value of a lazy-loaded property on an instance.
 
-    :param instance: The instance to delete the property from.
-    :param attribute: The name of the lazy-loaded property.
-    :param bypass_delattr: If True, directly delete the attribute using `object.__delattr__`
-                           to bypass immutability issues. (default: False)
-    :raises InvalidField: If the attribute is not a lazy descriptor.
+    Args:
+        instance (Any): The instance to delete the property from.
+        attribute (str): The name of the lazy-loaded property.
+        bypass_delattr (bool): If True, directly delete the attribute using `object.__delattr__`
+                               to bypass immutability issues. (default: False)
+
+    Raises:
+        InvalidField: If the attribute is not a lazy descriptor.
     """
     lazy = _getlazy(instance, attribute)
     deleter = _obj_delattr if bypass_delattr else delattr
@@ -261,6 +295,13 @@ def dellazy(instance: Any, attribute: str, bypass_delattr: bool = False):
 
 
 def force_del(instance: Any, attribute: str):
+    """
+    Forcefully delete the value of a lazy-loaded property on an instance.
+
+    Args:
+        instance (Any): The instance to set the property on.
+        attribute (str): The name of the lazy-loaded property.
+    """
     dellazy(instance, attribute, bypass_delattr=True)
 
 

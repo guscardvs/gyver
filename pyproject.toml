@@ -22,7 +22,7 @@ cryptography = "^41.0.0"
 redis = { version = "^4.5.5", optional = true }
 gyver-attrs = "^0.5.2"
 faust-cchardet = "^2.1.18"
-env-star = "^2.1.0"
+env-star = "^2.2.0"
 
 [tool.poetry.group.lint.dependencies]
 black = "^22.10.0"
@@ -53,8 +53,9 @@ boto3-stubs = { extras = ["s3", "sqs"], version = "^1.26.13" }
 
 
 [tool.poetry.group.docs.dependencies]
-mkdocs-material = "^9.0.6"
-termynal = "^0.2.1"
+termynal = "^0.10.0"
+mkdocstrings = {extras = ["python"], version = "^0.22.0"}
+mkdocs-material = "^9.1.21"
 
 
 [tool.poetry.group.opts.dependencies]

@@ -5,6 +5,14 @@ from .interface import Dialect
 
 
 def resolve_driver(driver: Driver) -> Dialect:
+    """Resolve a driver to its associated DialectInfo.
+
+    Args:
+        driver (Driver): The database driver.
+
+    Returns:
+        Dialect: The DialectInfo associated with the provided driver.
+    """
     _table: dict[Driver, Dialect] = {
         Driver.MYSQL: DialectInfo(
             default_port=3306,
@@ -43,6 +51,15 @@ def resolve_driver(driver: Driver) -> Dialect:
 
 
 def build_dialect_scheme(dialect: Dialect, sync: bool = False):
+    """Build a dialect scheme string based on the Dialect.
+
+    Args:
+        dialect (Dialect): The Dialect object.
+        sync (bool, optional): Whether to build a sync scheme. Defaults to False.
+
+    Returns:
+        str: The dialect scheme string.
+    """
     return "+".join(
         item
         for item in (

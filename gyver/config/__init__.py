@@ -6,7 +6,7 @@ from config.envconfig import DotFile
 from config.envconfig import EnvConfig
 from config.interface import ConfigLike
 from config.utils import boolean_cast
-from config.utils import comma_separated
+from gyver.utils.strings import comma_separated
 from config.utils import joined_cast
 from config.utils import valid_path
 from config.utils import with_rule
@@ -14,7 +14,6 @@ from config.utils import with_rule
 from .adapter import AdapterConfigFactory
 from .adapter.mark import as_config
 from .adapter.mark import mark
-from .lazy import LazyConfig
 
 __all__ = [
     "boolean_cast",
@@ -32,5 +31,4 @@ __all__ = [
     "Env",
     "DotFile",
     "ConfigLike",
-    "LazyConfig",
 ]
