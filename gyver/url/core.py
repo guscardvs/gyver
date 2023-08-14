@@ -1,6 +1,7 @@
 from collections import defaultdict
 from typing import Mapping
 from typing import Optional
+from typing_extensions import Self
 from urllib.parse import urlparse
 from urllib.parse import urlunsplit
 
@@ -15,6 +16,16 @@ from gyver.url.query import Query
 
 @mutable(eq=False)
 class URL(Encodable):
+    """Class representing a URL object.
+
+    Attributes:
+        scheme (str): The URL scheme.
+        netloc (Netloc): The URL netloc.
+        path (Path): The URL path.
+        query (Query): The URL query parameters.
+        fragment (Fragment): The URL fragment.
+    """
+
     scheme: str
     netloc: Netloc
     path: Path
@@ -22,13 +33,18 @@ class URL(Encodable):
     fragment: Fragment
 
     def __init__(self, val: str) -> None:
+        """Initialize a URL object.
+
+        Args:
+            val (str): The URL string.
+        """
         self.load(val)
 
     def load(self, val: str):
-        """
-        Parse the given URL string and populate the properties of the URL object.
+        """Parse the given URL string and populate the properties of the URL object.
 
-        :param val: The URL string.
+        Args:
+            val (str): The URL string.
         """
         parsed = urlparse(val)
         (
@@ -44,15 +60,19 @@ class URL(Encodable):
         self.fragment = Fragment(fragment)
         self.netloc = Netloc(netloc)
 
-    def encode(self, append_empty_equal: bool = True):
-        """
-        Encode the URL object as a URL string.
+    def encode(self, append_empty_equal: bool = True) -> str:
+        """Encode the URL object as a URL string.
 
-        :param append_empty_equal: Whether to append empty values with an equal sign in the query string.
-        :return: The encoded URL string.
+        Args:
+            append_empty_equal (bool, optional): Whether to append empty values with an equal sign in the query string.
+
+        Returns:
+            str: The encoded URL string.
         """
         resolved_query = (
-            self.query.encode() if append_empty_equal else self.query.omit_empty_equal()
+            self.query.encode()
+            if append_empty_equal
+            else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (
@@ -74,17 +94,20 @@ class URL(Encodable):
         netloc: Optional[str] = None,
         netloc_obj: Optional[Netloc] = None,
         scheme: Optional[str] = None,
-    ):
-        """
-        Add components to the URL.
+    ) -> Self:
+        """Add components to the URL.
 
-        :param queryasdict: Dictionary-like object representing query parameters.
-        :param path: Path string to add to the URL.
-        :param query: Dictionary-like object representing additional query parameters.
-        :param fragment: Fragment string to set for the URL.
-        :param netloc: Netloc string to set for the URL.
-        :param netloc_obj: Netloc object to merge with the existing netloc.
-        :return: The updated URL object.
+        Args:
+            queryasdict (Optional[Mapping[str, str]], optional): Dictionary-like object representing query parameters.
+            path (Optional[str], optional): Path string to add to the URL.
+            query (Optional[Mapping[str, str]], optional): Dictionary-like object representing additional query parameters.
+            fragment (Optional[str], optional): Fragment string to set for the URL.
+            netloc (Optional[str], optional): Netloc string to set for the URL.
+            netloc_obj (Optional[Netloc], optional): Netloc object to merge with the existing netloc.
+            scheme (Optional[str], optional): Scheme to set for the URL.
+
+        Returns:
+            URL: The updated URL object.
         """
         if queryasdict:
             self.query.add(queryasdict)
@@ -112,17 +135,20 @@ class URL(Encodable):
         netloc: Optional[str] = None,
         netloc_obj: Optional[Netloc] = None,
         scheme: Optional[str] = None,
-    ):
-        """
-        Set components of the URL.
+    ) -> Self:
+        """Set components of the URL.
 
-        :param queryasdict: Dictionary-like object representing query parameters.
-        :param path: Path string to set for the URL.
-        :param query: Dictionary-like object representing query parameters.
-        :param fragment: Fragment string to set for the URL.
-        :param netloc: Netloc string to set for the URL.
-        :param netloc_obj: Netloc object to set as the netloc.
-        :return: The updated URL object.
+        Args:
+            queryasdict (Optional[Mapping[str, str]], optional): Dictionary-like object representing query parameters.
+            path (Optional[str], optional): Path string to set for the URL.
+            query (Optional[Mapping[str, str]], optional): Dictionary-like object representing query parameters.
+            fragment (Optional[str], optional): Fragment string to set for the URL.
+            netloc (Optional[str], optional): Netloc string to set for the URL.
+            netloc_obj (Optional[Netloc], optional): Netloc object to set as the netloc.
+            scheme (Optional[str], optional): Scheme to set for the URL.
+
+        Returns:
+            URL: The updated URL object.
         """
         if queryasdict:
             self.query.set(queryasdict)
@@ -140,11 +166,11 @@ class URL(Encodable):
             self.scheme = scheme
         return self
 
-    def copy(self):
-        """
-        Create a copy of the URL object.
+    def copy(self) -> Self:
+        """Create a copy of the URL object.
 
-        :return: The copied URL object.
+        Returns:
+            URL: The copied URL object.
         """
         new_url = URL("")
         new_url.scheme = self.scheme
@@ -166,7 +192,19 @@ class URL(Encodable):
         password: Optional[str] = None,
         host: Optional[str] = None,
         port: Optional[int] = None,
-    ):
+    ) -> Self:
+        """Create a URL object from a netloc.
+
+        Args:
+            netloc (Optional[Netloc], optional): Netloc object to set for the URL.
+            username (Optional[str], optional): Username for the netloc.
+            password (Optional[str], optional): Password for the netloc.
+            host (Optional[str], optional): Host for the netloc.
+            port (Optional[int], optional): Port for the netloc.
+
+        Returns:
+            URL: The URL object created from the netloc.
+        """
         url = cls("")
         newnetloc = Netloc.from_args(host or "", username, password, port)
         if netloc:

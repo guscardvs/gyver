@@ -36,7 +36,7 @@ Gyver provides a robust configuration class and adapter system that offers exten
 from gyver.config import AdapterConfigFactory, DialectInfo
 from gyver.database.config import DatabaseConfig
 
-# In this case, the expected environment variables will be:
+# In this case, the expected environment variables will include:
 # DB_DRIVER (options: 'mysql', 'postgres', 'sqlite', 'mariadb', 'custom')
 # DB_HOST (database host without the schema)
 # DB_PORT (port as an integer) (Optional)
@@ -48,9 +48,9 @@ from gyver.database.config import DatabaseConfig
 # DB_MAX_OVERFLOW (max overflow as an integer) (Optional)
 config = AdapterConfigFactory().load(DatabaseConfig, __prefix__="db")
 
-# If you want to override the dialect implementation:
-# 1. First, verify if SQLAlchemy supports the desired dialect.
-# 2. Create a class representing the dialect adhering to the Dialect protocol or create an instance of DialectInfo with the values.
+# To override the dialect implementation:
+# 1. Verify if SQLAlchemy supports the desired dialect.
+# 2. Create a class representing the dialect adhering to the Dialect protocol or create an instance of DialectInfo with the desired values.
 # 3. Pass an instance of the dialect to the config.
 
 class AioPGDialect:
@@ -61,7 +61,7 @@ class AioPGDialect:
     sync_driver = "psycopg2"
     only_host = False
 
-# or
+# Alternatively, create an instance of DialectInfo
 aio_pg_dialect = DialectInfo(
     default_port=5432,
     driver=Driver.POSTGRES,
@@ -71,8 +71,78 @@ aio_pg_dialect = DialectInfo(
     only_host=False,
 )
 
-
 config.override_dialect(AioPGDialect())
 ```
 
-## TODO
+## The Adapter
+
+Gyver provides an adapter for integration with SQLAlchemy, featuring a flexible interface already integrated with [gyver.context][].
+
+!!! warning
+    The Session context handler for both sync and asyncio interfaces internally employs an SQLAlchemy Connection, limiting session accessibility outside the context.
+
+### Sync Interface
+
+When working with a synchronous interface, you can utilize the adapter to perform various tasks.
+
+Example:
+```python
+from gyver.database import DatabaseAdapter
+
+# Create a new adapter instance
+adapter = DatabaseAdapter()
+
+
+# With the adapter at hand, you can create various 
+# contexts for both the core and the
+# ORM API of SQLAlchemy.
+# adapter.context() returns a context handler 
+# for the core API, utilizing 
+# a sqlalchemy.engine.Connection as the resource.
+
+adapter.context()
+
+# adapter.session() returns a context handler 
+# for the ORM API, utilizing a 
+# sqlalchemy.orm.Session as the resource.
+
+adapter.session()
+
+# Should you need to directly use the 
+# SQLAlchemy engine, access it 
+# through adapter.engine.
+adapter.engine
+```
+
+### The Asyncio Interface
+
+When working with an asyncio driver, you can still use the same adapter with asyncio methods.
+
+```python
+from gyver.database import DatabaseAdapter
+
+# Create a new adapter instance
+adapter = DatabaseAdapter()
+
+# With the adapter at hand, you can create 
+# various contexts for both the
+# core and the ORM API of SQLAlchemy.
+# adapter.async_context() returns a 
+# context handler for the core API, utilizing a 
+# sqlalchemy.ext.asyncio.AsyncConnection as the resource.
+
+adapter.async_context()
+
+# adapter.async_session() returns a 
+# context handler for the ORM API, utilizing a
+# sqlalchemy.ext.asyncio.AsyncSession as the resource.
+adapter.async_session()
+
+# Should you need to directly use the 
+# SQLAlchemy engine, access it through 
+# adapter.async_engine.
+adapter.async_engine
+```
+
+!!! warning
+    By default, all database helper classes are frozen. To modify the configuration, create a new adapter instance.

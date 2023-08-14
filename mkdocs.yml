@@ -24,6 +24,7 @@ nav:
       - Utils: reference/utils.md
       - Config: reference/config.md
       - Database: reference/database.md
+      - URL: reference/url.md
 theme:
   features:
     - navigation.instant

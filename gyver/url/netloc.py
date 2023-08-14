@@ -1,4 +1,5 @@
 from typing import Optional
+from typing_extensions import Self
 from urllib.parse import quote
 
 from gyver.attrs import mutable
@@ -9,31 +10,13 @@ from gyver.url.utils import utf8
 
 @mutable(eq=False)
 class Netloc(Encodable):
-    """
-    Represents the network location portion of a URL.
+    """Represents the network location portion of a URL.
 
-    :param netloc: The network location string to initialize the `Netloc` object.
-    :type netloc: str
-
-    :ivar username: The username for authentication.
-    :vartype username: Optional[str]
-    :ivar password: The password for authentication.
-    :vartype password: Optional[str]
-    :ivar host: The host name or IP address.
-    :vartype host: str
-    :ivar port: The port number.
-    :vartype port: Optional[int]
-
-    Examples:
-        >>> netloc = Netloc("user:pass@example.com:8080")
-        >>> netloc.username
-        'user'
-        >>> netloc.password
-        'pass'
-        >>> netloc.host
-        'example.com'
-        >>> netloc.port
-        8080
+    Attributes:
+        username (Optional[str]): The username for authentication.
+        password (Optional[str]): The password for authentication.
+        host (str): The host name or IP address.
+        port (Optional[int]): The port number.
     """
 
     username: Optional[str]
@@ -42,6 +25,12 @@ class Netloc(Encodable):
     port: Optional[int]
 
     def __init__(self, netloc: str) -> None:
+        """
+        Initialize the Netloc object.
+
+        Args:
+            netloc (str): The network location string.
+        """
         self.username: Optional[str] = None
         self.password: Optional[str] = None
         self.load(netloc)
@@ -50,22 +39,8 @@ class Netloc(Encodable):
         """
         Load the network location from the given netloc string.
 
-        :param netloc: The network location string.
-        :type netloc: str
-
-        :return: None
-
-        Examples:
-            >>> netloc = Netloc("")
-            >>> netloc.load("user:pass@example.com:8080")
-            >>> netloc.username
-            'user'
-            >>> netloc.password
-            'pass'
-            >>> netloc.host
-            'example.com'
-            >>> netloc.port
-            8080
+        Args:
+            netloc (str): The network location string.
         """
         userinfo, _, host = netloc.partition("@")
         port = None
@@ -81,12 +56,12 @@ class Netloc(Encodable):
         port = int(port) if port else None
         self.port = port
 
-    def encode(self):
+    def encode(self) -> str:
         """
         Encode the network location into a string.
 
-        :return: The encoded network location string.
-        :rtype: str
+        Returns:
+            str: The encoded network location string.
         """
         netloc = ""
         if self.username:
@@ -103,10 +78,8 @@ class Netloc(Encodable):
         """
         Parse the given netloc string and populate the properties of the Netloc object.
 
-        :param netloc: The netloc string to parse.
-        :type netloc: str
-
-        :return: None
+        Args:
+            netloc (str): The netloc string to parse.
         """
         if "@" in netloc:
             userinfo, host = netloc.split("@", 1)
@@ -128,21 +101,15 @@ class Netloc(Encodable):
         username: Optional[str] = None,
         password: Optional[str] = None,
         port: Optional[int] = None,
-    ):
+    ) -> Self:
         """
         Set the network location properties.
 
-        :param host: The host name or IP address.
-        :type host: Optional[str]
-        :param username: The username for authentication.
-        :type username: Optional[str]
-        :param password: The password for authentication.
-        :type password: Optional[str]
-        :param port: The port number.
-        :type port: Optional[int]
-
-        :return: The updated `Netloc` object.
-        :rtype: Netloc
+        Args:
+            host (Optional[str], optional): The host name or IP address.
+            username (Optional[str], optional): The username for authentication.
+            password (Optional[str], optional): The password for authentication.
+            port (Optional[int], optional): The port number.
         """
         self.host = host or self.host
         self.username = username or self.username
@@ -154,11 +121,11 @@ class Netloc(Encodable):
         """
         Merge the properties of the given `Netloc` object with the current object.
 
-        :param netloc: The `Netloc` object to merge.
-        :type netloc: Netloc
+        Args:
+            netloc (Netloc): The `Netloc` object to merge.
 
-        :return: The merged `Netloc` object.
-        :rtype: Netloc
+        Returns:
+            Netloc: The merged `Netloc` object.
         """
         host = netloc.host or self.host
         username = netloc.username or self.username
@@ -173,21 +140,18 @@ class Netloc(Encodable):
         username: Optional[str] = None,
         password: Optional[str] = None,
         port: Optional[int] = None,
-    ):
+    ) -> Self:
         """
         Create a new `Netloc` object from individual arguments.
 
-        :param host: The host name or IP address.
-        :type host: str
-        :param username: The username for authentication.
-        :type username: Optional[str]
-        :param password: The password for authentication.
-        :type password: Optional[str]
-        :param port: The port number.
-        :type port: Optional[int]
+        Args:
+            host (str): The host name or IP address.
+            username (Optional[str], optional): The username for authentication.
+            password (Optional[str], optional): The password for authentication.
+            port (Optional[int], optional): The port number.
 
-        :return: The created `Netloc` object.
-        :rtype: Netloc
+        Returns:
+            Netloc: The created `Netloc` object.
         """
         netloc = cls("")
         return netloc.set(host, username, password, port)
