@@ -6,7 +6,7 @@
 
 [**Source Code**](https://github.com/guscardvs/gyver)
 
-This documentation refers to version **2.5.1**
+This documentation refers to version **2.5.2**
 
 ## Authors
 
