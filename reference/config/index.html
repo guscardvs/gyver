@@ -931,6 +931,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.load" class="md-nav__link">
+    load()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#gyver.config.adapter.factory.AdapterConfigFactory.maker" class="md-nav__link">
     maker()
   </a>
@@ -1288,6 +1295,13 @@
           <li class="md-nav__item">
   <a href="#gyver.config.adapter.factory.AdapterConfigFactory.get_strategy_class" class="md-nav__link">
     get_strategy_class()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.load" class="md-nav__link">
+    load()
   </a>
   
 </li>
@@ -3161,6 +3175,134 @@
           <td>
             <div class="doc-md-description">
               <p>type[FieldResolverStrategy]: The strategy class for resolving fields.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="gyver.config.adapter.factory.AdapterConfigFactory.load" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load</span><span class="p">(</span><span class="n">model_cls</span><span class="p">,</span> <span class="n">__prefix__</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">__sep__</span><span class="o">=</span><span class="s1">&#39;__&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">presets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Load a configuration instance based on a model class.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>model_cls</code></td>
+          <td>
+                <code>type[<span title="gyver.config.adapter.factory.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The model class representing the configuration.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>__prefix__</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optional prefix for configuration fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>__set__(str)</code></td>
+          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optional prefix to separate fields of nested models. Default is "__"</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>presets</code></td>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[<span title="typing.Mapping">Mapping</span>[str, <span title="typing.Any">Any</span>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optional preset values for fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>**defaults</code></td>
+          <td>
+                <code><span title="typing.Any">Any</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Default values for fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>{}</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>T</code></td>          <td>
+                <code><span title="gyver.config.adapter.factory.T">T</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The loaded configuration instance.</p>
             </div>
           </td>
         </tr>
