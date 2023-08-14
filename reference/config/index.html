@@ -1,0 +1,4065 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../utils/">
+      
+      
+        <link rel="next" href="../database/">
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
+    
+    
+      
+        <title>Config - Gyver</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.eebd395e.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../termynal.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gyver.config" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Gyver" class="md-header__button md-logo" aria-label="Gyver" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Gyver
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Config
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_3" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m14.3 16-.7-2h-3.2l-.7 2H7.8L11 7h2l3.2 9h-1.9M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69m-9.15 3.96h2.3L12 9l-1.15 3.65Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_3">
+            
+              <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../.." class="md-tabs__link">
+      Introduction
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../usage/model/" class="md-tabs__link">
+      Model
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../usage/utils/" class="md-tabs__link">
+      Utils
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../usage/config/" class="md-tabs__link">
+      Config
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../usage/context/" class="md-tabs__link">
+        Context
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../usage/database/" class="md-tabs__link">
+        Database
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../usage/url/" class="md-tabs__link">
+      URL
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../context/" class="md-tabs__link md-tabs__link--active">
+        Reference
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Gyver" class="md-nav__button md-logo" aria-label="Gyver" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Gyver
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/model/" class="md-nav__link">
+        Model
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/utils/" class="md-nav__link">
+        Utils
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/config/" class="md-nav__link">
+        Config
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          Context
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          Context
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/context/" class="md-nav__link">
+        Working with Contexts
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/context/adapter/" class="md-nav__link">
+        Adapter Interface
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/context/atomic/" class="md-nav__link">
+        Atomicity
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          Database
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          Database
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/database/" class="md-nav__link">
+        Working With Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/database/adapter/" class="md-nav__link">
+        Adapters
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/database/sqlalchemy/" class="md-nav__link">
+        SQLAlchemy Defaults
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/database/query/" class="md-nav__link">
+        SQLAlchemy Queries Helper
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/url/" class="md-nav__link">
+        URL
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          Reference
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          Reference
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../context/" class="md-nav__link">
+        Context
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../model/" class="md-nav__link">
+        Model
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        Utils
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Config
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Config
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config" class="md-nav__link">
+    gyver.config
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.MISSING" class="md-nav__link">
+    MISSING
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.Config" class="md-nav__link">
+    Config
+  </a>
+  
+    <nav class="md-nav" aria-label="Config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.config.Config.__call__" class="md-nav__link">
+    __call__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.Config.__post_init__" class="md-nav__link">
+    __post_init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.Config.file_values" class="md-nav__link">
+    file_values()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.Config.get" class="md-nav__link">
+    get()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.EnvMapping" class="md-nav__link">
+    EnvMapping
+  </a>
+  
+    <nav class="md-nav" aria-label="EnvMapping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__delitem__" class="md-nav__link">
+    __delitem__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__getitem__" class="md-nav__link">
+    __getitem__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__iter__" class="md-nav__link">
+    __iter__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__len__" class="md-nav__link">
+    __len__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__setitem__" class="md-nav__link">
+    __setitem__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.Env" class="md-nav__link">
+    Env
+  </a>
+  
+    <nav class="md-nav" aria-label="Env">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.enums.Env.val" class="md-nav__link">
+    val
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.enums.Env.value" class="md-nav__link">
+    value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.enums.Env.weight" class="md-nav__link">
+    weight
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.enums.Env.new" class="md-nav__link">
+    new()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.DotFile" class="md-nav__link">
+    DotFile
+  </a>
+  
+    <nav class="md-nav" aria-label="DotFile">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.DotFile.is_higher" class="md-nav__link">
+    is_higher()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.EnvConfig" class="md-nav__link">
+    EnvConfig
+  </a>
+  
+    <nav class="md-nav" aria-label="EnvConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.dotfile" class="md-nav__link">
+    dotfile()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.env" class="md-nav__link">
+    env()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.get" class="md-nav__link">
+    get()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.ignore_default" class="md-nav__link">
+    ignore_default()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.ConfigLike" class="md-nav__link">
+    ConfigLike
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.AdapterConfigFactory" class="md-nav__link">
+    AdapterConfigFactory
+  </a>
+  
+    <nav class="md-nav" aria-label="AdapterConfigFactory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.get_strategy_class" class="md-nav__link">
+    get_strategy_class()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.load" class="md-nav__link">
+    load()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.maker" class="md-nav__link">
+    maker()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.resolve_confignames" class="md-nav__link">
+    resolve_confignames()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.boolean_cast" class="md-nav__link">
+    boolean_cast()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.joined_cast" class="md-nav__link">
+    joined_cast()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.valid_path" class="md-nav__link">
+    valid_path()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.with_rule" class="md-nav__link">
+    with_rule()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.as_config" class="md-nav__link">
+    as_config()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.mark" class="md-nav__link">
+    mark()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../database/" class="md-nav__link">
+        Database
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../url/" class="md-nav__link">
+        URL
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config" class="md-nav__link">
+    gyver.config
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.MISSING" class="md-nav__link">
+    MISSING
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.Config" class="md-nav__link">
+    Config
+  </a>
+  
+    <nav class="md-nav" aria-label="Config">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.config.Config.__call__" class="md-nav__link">
+    __call__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.Config.__post_init__" class="md-nav__link">
+    __post_init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.Config.file_values" class="md-nav__link">
+    file_values()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.Config.get" class="md-nav__link">
+    get()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.EnvMapping" class="md-nav__link">
+    EnvMapping
+  </a>
+  
+    <nav class="md-nav" aria-label="EnvMapping">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__delitem__" class="md-nav__link">
+    __delitem__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__getitem__" class="md-nav__link">
+    __getitem__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__iter__" class="md-nav__link">
+    __iter__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__len__" class="md-nav__link">
+    __len__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.config.EnvMapping.__setitem__" class="md-nav__link">
+    __setitem__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.Env" class="md-nav__link">
+    Env
+  </a>
+  
+    <nav class="md-nav" aria-label="Env">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.enums.Env.val" class="md-nav__link">
+    val
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.enums.Env.value" class="md-nav__link">
+    value
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.enums.Env.weight" class="md-nav__link">
+    weight
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.enums.Env.new" class="md-nav__link">
+    new()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.DotFile" class="md-nav__link">
+    DotFile
+  </a>
+  
+    <nav class="md-nav" aria-label="DotFile">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.DotFile.is_higher" class="md-nav__link">
+    is_higher()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.EnvConfig" class="md-nav__link">
+    EnvConfig
+  </a>
+  
+    <nav class="md-nav" aria-label="EnvConfig">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.dotfile" class="md-nav__link">
+    dotfile()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.env" class="md-nav__link">
+    env()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.get" class="md-nav__link">
+    get()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#config.envconfig.EnvConfig.ignore_default" class="md-nav__link">
+    ignore_default()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.ConfigLike" class="md-nav__link">
+    ConfigLike
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.AdapterConfigFactory" class="md-nav__link">
+    AdapterConfigFactory
+  </a>
+  
+    <nav class="md-nav" aria-label="AdapterConfigFactory">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.get_strategy_class" class="md-nav__link">
+    get_strategy_class()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.load" class="md-nav__link">
+    load()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.maker" class="md-nav__link">
+    maker()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gyver.config.adapter.factory.AdapterConfigFactory.resolve_confignames" class="md-nav__link">
+    resolve_confignames()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.boolean_cast" class="md-nav__link">
+    boolean_cast()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.joined_cast" class="md-nav__link">
+    joined_cast()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.valid_path" class="md-nav__link">
+    valid_path()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.with_rule" class="md-nav__link">
+    with_rule()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.as_config" class="md-nav__link">
+    as_config()
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gyver.config.mark" class="md-nav__link">
+    mark()
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Config</h1>
+
+<div class="doc doc-object doc-module">
+
+
+<a id="gyver.config"></a>
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="gyver.config.MISSING" class="doc doc-heading">
+          <code>MISSING</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+
+
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="gyver.config.Config" class="doc doc-heading">
+          <code>Config</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Configuration settings for working with environment variables.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.Config.__call__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__call__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="n">_default_cast</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">MISSING</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the value of the specified environment variable, optionally casting it using the callable syntax.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the environment variable.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>cast</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[<span title="typing.Callable">Callable</span>[[<span title="typing.Any">Any</span>], <span title="config.config.T">T</span>], type[<span title="config.config.T">T</span>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The casting function or type. Defaults to _default_cast.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="config.interface._default_cast">_default_cast</span></code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>default</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[<span title="config.config.T">T</span>, type[<a class="autorefs autorefs-internal" title="config.interface.MISSING" href="#gyver.config.MISSING">MISSING</a>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The default value to return if the variable is not found. Defaults to MISSING.</p>
+            </div>
+          </td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.interface.MISSING" href="#gyver.config.MISSING">MISSING</a></code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>T</code></td>          <td>
+                <code><span title="config.config.T">T</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value of the environment variable, casted if necessary.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="config.exceptions.MissingName">MissingName</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the environment variable is not found and no default value is provided.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+                <code><span title="config.exceptions.InvalidCast">InvalidCast</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If casting the value is unsuccessful.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.Config.__post_init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">__post_init__</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Initialize the Config instance after construction.</p>
+<p>Reads values from the environment file and updates the internal mapping if necessary.</p>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.Config.file_values" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">file_values</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Lazy field for storing values read from the environment file.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>dict</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Dictionary containing values read from the environment file.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.Config.get" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cast</span><span class="o">=</span><span class="n">_default_cast</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">MISSING</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the value of the specified environment variable, optionally casting it.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the environment variable.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>cast</code></td>
+          <td>
+                <code><span title="typing.Callable">Callable</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The casting function. Defaults to _default_cast.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="config.interface._default_cast">_default_cast</span></code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>default</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[<span title="typing.Any">Any</span>, type[<a class="autorefs autorefs-internal" title="config.interface.MISSING" href="#gyver.config.MISSING">MISSING</a>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The default value to return if the variable is not found. Defaults to MISSING.</p>
+            </div>
+          </td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.interface.MISSING" href="#gyver.config.MISSING">MISSING</a></code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>Any</code></td>          <td>
+                <code><span title="typing.Any">Any</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value of the environment variable, casted if necessary.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="config.exceptions.MissingName">MissingName</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the environment variable is not found and no default value is provided.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+                <code><span title="config.exceptions.InvalidCast">InvalidCast</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If casting the value is unsuccessful.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="gyver.config.EnvMapping" class="doc doc-heading">
+          <code>EnvMapping</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="typing.MutableMapping">MutableMapping</span>[str, str]</code></p>
+
+  
+      <p>A mutable mapping representing the environment variables.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.EnvMapping.__delitem__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__delitem__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Delete the specified environment variable.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the environment variable.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>KeyError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the environment variable has already been read.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.EnvMapping.__getitem__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__getitem__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the value of the specified environment variable.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the environment variable.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>str</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value of the environment variable.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>KeyError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the environment variable is not found.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.EnvMapping.__iter__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__iter__</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Iterate through the environment variable names.</p>
+
+
+
+  <p><strong>Yields:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>str</code></td>          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The names of environment variables.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.EnvMapping.__len__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__len__</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the number of environment variables.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>int</code></td>          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The number of environment variables.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.config.EnvMapping.__setitem__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__setitem__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Set the value of the specified environment variable.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the environment variable.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>value</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The new value for the environment variable.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>KeyError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the environment variable has already been read.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="gyver.config.Env" class="doc doc-heading">
+          <code>Env</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="config.enums.EnvTuple">EnvTuple</span></code>, <code><span title="enum.Enum">Enum</span></code></p>
+
+  
+      <p>An enumeration representing different environment values with associated weights.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>LOCAL</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The local environment.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>TEST</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The test environment.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>DEV</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The development environment.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>QA</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The quality assurance environment.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>PRD</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The production environment.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="config.enums.Env.val" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">val</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the environment value.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>str</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The environment value.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="config.enums.Env.value" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">value</span><span class="p">:</span> <span class="n">EnvTuple</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the value associated with the environment.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>EnvTuple</code></td>          <td>
+                <code><span title="config.enums.EnvTuple">EnvTuple</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The value associated with the environment.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h3 id="config.enums.Env.weight" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">weight</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the weight associated with the environment.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>int</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The weight associated with the environment.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.enums.Env.new" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">new</span><span class="p">(</span><span class="n">val</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Create a new instance of the Env enum based on the given environment value.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>val</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The environment value to create an instance for.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>Env</code></td>          <td>
+                <code><span title="typing_extensions.Self">Self</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>An instance of the Env enum based on the given value.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>ValueError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the provided value is not a valid environment value.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="gyver.config.DotFile" class="doc doc-heading">
+          <code>DotFile</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Represents a configuration dotfile associated with a specific environment.</p>
+
+
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>filename</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[str, <span title="pathlib.Path">Path</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The filename or path of the dotfile.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>env</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The environment associated with the dotfile.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_to_lower</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Indicates whether the dotfile should be applied to lower-priority environments.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.envconfig.DotFile.is_higher" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">is_higher</span><span class="p">(</span><span class="n">env</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Check if the dotfile's environment is higher or equal to the given environment.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>env</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The environment to compare against.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>bool</code></td>          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>True if the dotfile's environment is higher or equal to the given environment, False otherwise.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="gyver.config.EnvConfig" class="doc doc-heading">
+          <code>EnvConfig</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="config.config.Config" href="#gyver.config.Config">Config</a></code></p>
+
+  
+      <p>Extended configuration class that supports environment-specific configurations.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.envconfig.EnvConfig.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">dotfiles</span><span class="p">,</span> <span class="n">env_var</span><span class="o">=</span><span class="s1">&#39;CONFIG_ENV&#39;</span><span class="p">,</span> <span class="n">mapping</span><span class="o">=</span><span class="n">default_mapping</span><span class="p">,</span> <span class="n">ignore_default_rule</span><span class="o">=</span><span class="n">default_rule</span><span class="p">,</span> <span class="n">env_cast</span><span class="o">=</span><span class="n">Env</span><span class="o">.</span><span class="n">new</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Initialize the EnvConfig instance.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>*dotfiles</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.envconfig.DotFile" href="#gyver.config.DotFile">DotFile</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>One or more DotFile instances representing configuration dotfiles.</p>
+            </div>
+          </td>
+          <td>
+                <code>()</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>env_var</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the environment variable to determine the current environment.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;CONFIG_ENV&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>mapping</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.config.EnvMapping" href="#gyver.config.EnvMapping">EnvMapping</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>An environment mapping to use for configuration values.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="config.config.default_mapping">default_mapping</span></code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>ignore_default_rule</code></td>
+          <td>
+                <code><span title="typing.Callable">Callable</span>[[<a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a>], bool]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A callable to determine whether to ignore default values.</p>
+            </div>
+          </td>
+          <td>
+                <code><span title="config.envconfig.default_rule">default_rule</span></code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>env_cast</code></td>
+          <td>
+                <code><span title="typing.Callable">Callable</span>[[str], <a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A callable to cast the environment name to an Env enum value.</p>
+            </div>
+          </td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="config.enums.Env" href="#gyver.config.Env">Env</a>.<a class="autorefs autorefs-internal" title="config.enums.Env.new" href="#config.enums.Env.new">new</a></code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.envconfig.EnvConfig.dotfile" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">dotfile</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the applicable dotfile for the current environment.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>DotFile</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The applicable dotfile, or None if no matching dotfile is found.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.envconfig.EnvConfig.env" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">env</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the current environment from the configuration.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>Env</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The current environment.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.envconfig.EnvConfig.get" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">cast</span><span class="o">=...</span><span class="p">,</span> <span class="n">default</span><span class="o">=...</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get a configuration value, with the option to cast and provide a default value.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the configuration value.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>cast</code></td>
+          <td>
+                <code><span title="typing.Callable">Callable</span>[..., <span title="typing.Any">Any</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A callable to cast the value.</p>
+            </div>
+          </td>
+          <td>
+                <code>...</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>default</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[<span title="typing.Any">Any</span>, type[<a class="autorefs autorefs-internal" title="config.interface.MISSING" href="#gyver.config.MISSING">MISSING</a>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The default value if the configuration is not found.</p>
+            </div>
+          </td>
+          <td>
+                <code>...</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>Any</code></td>          <td>
+                <code><span title="typing.Any">Any</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The configuration value.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="config.envconfig.EnvConfig.ignore_default" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">ignore_default</span><span class="p">()</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Determine whether to ignore default values based on the current environment.</p>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>bool</code></td>          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>True if default values should be ignored, False otherwise.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="gyver.config.ConfigLike" class="doc doc-heading">
+          <code>ConfigLike</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+          <p class="doc doc-class-bases">
+            Bases: <code><span title="typing.Protocol">Protocol</span></code></p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="gyver.config.AdapterConfigFactory" class="doc doc-heading">
+          <code>AdapterConfigFactory</code>
+
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Factory for creating configuration instances based on model classes.</p>
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="gyver.config.adapter.factory.AdapterConfigFactory.get_strategy_class" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_strategy_class</span><span class="p">(</span><span class="n">config_class</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the appropriate strategy class for resolving fields in the configuration class.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>config_class</code></td>
+          <td>
+                <code>type</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The configuration class to resolve.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>type[<span title="gyver.config.adapter.interface.FieldResolverStrategy">FieldResolverStrategy</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>type[FieldResolverStrategy]: The strategy class for resolving fields.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="gyver.config.adapter.factory.AdapterConfigFactory.load" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load</span><span class="p">(</span><span class="n">model_cls</span><span class="p">,</span> <span class="n">__prefix__</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">presets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Load a configuration instance based on a model class.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>model_cls</code></td>
+          <td>
+                <code>type[<span title="gyver.config.adapter.factory.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The model class representing the configuration.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>__prefix__</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optional prefix for configuration fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>presets</code></td>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[<span title="typing.Mapping">Mapping</span>[str, <span title="typing.Any">Any</span>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optional preset values for fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>**defaults</code></td>
+          <td>
+                <code><span title="typing.Any">Any</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Default values for fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>{}</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>T</code></td>          <td>
+                <code><span title="gyver.config.adapter.factory.T">T</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The loaded configuration instance.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="gyver.config.adapter.factory.AdapterConfigFactory.maker" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">maker</span><span class="p">(</span><span class="n">model_cls</span><span class="p">,</span> <span class="n">__prefix__</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">presets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">defaults</span><span class="p">)</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Create a factory function for loading configuration instances.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>model_cls</code></td>
+          <td>
+                <code>type[<span title="gyver.config.adapter.factory.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The model class representing the configuration.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>__prefix__</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optional prefix for configuration fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>presets</code></td>
+          <td>
+                <code><span title="typing.Optional">Optional</span>[<span title="typing.Mapping">Mapping</span>[str, <span title="typing.Any">Any</span>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Optional preset values for fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>**defaults</code></td>
+          <td>
+                <code><span title="typing.Any">Any</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Default values for fields.</p>
+            </div>
+          </td>
+          <td>
+                <code>{}</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.Callable">Callable</span>[[], <span title="gyver.config.adapter.factory.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Callable[[], T]: The factory function for loading configuration instances.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="gyver.config.adapter.factory.AdapterConfigFactory.resolve_confignames" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">resolve_confignames</span><span class="p">(</span><span class="n">root</span><span class="p">)</span></code>
+  
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-classmethod"><code>classmethod</code></small>
+  </span>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Resolve the environment variable names required by marked config classes.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>root</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The root directory of the project.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>dict[type, tuple[<span title="typing.Sequence">Sequence</span>[str], ...]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>dict[type, tuple[Sequence[str], ...]]: A dictionary of config classes and their associated environment variable names.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="gyver.config.boolean_cast" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">boolean_cast</span><span class="p">(</span><span class="n">string</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Converts a string to its boolean equivalent.</p>
+<p>1 and true (case-insensitive) are considered True, everything else is False.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>string</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The string to check if it represents a boolean value.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>MaybeResult[P, bool]: A maybe result helper. If called normally, it returns an Optional[bool].</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If called with <code>.strict(string)</code>, it raises an error if <code>boolean_cast</code> returns None.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If called with <code>.optional(string)</code>, it returns Optional[bool], suppressing exceptions caused by None values.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="gyver.config.joined_cast" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">joined_cast</span><span class="p">(</span><span class="n">cast</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Creates a joined casting function for chaining casting operations.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>cast</code></td>
+          <td>
+                <code><span title="typing.Callable">Callable</span>[[str], <span title="config.utils.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The casting function to apply.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="config.utils._JoinedCast">_JoinedCast</span>[str, <span title="config.utils.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>_JoinedCast[str, T]: A <code>_JoinedCast</code> object that allows chaining casting operations.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="gyver.config.valid_path" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">valid_path</span><span class="p">(</span><span class="n">val</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Converts a string to a Path object and checks if the path exists.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>val</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The string representing a file path.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>FileNotFoundError</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the path does not exist.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>Path</code></td>          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A Path object representing the file path.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="gyver.config.with_rule" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">with_rule</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Applies a rule check on a value, raising an <code>InvalidEnv</code> exception if the rule is not satisfied.</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>rule</code></td>
+          <td>
+                <code><span title="typing.Callable">Callable</span>[[<span title="typing.Any">Any</span>], bool]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The rule function to apply.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Raises:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="config.exceptions.InvalidEnv">InvalidEnv</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If the rule condition is not met.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Callable[[T], T]: A caster function that applies the rule check.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="gyver.config.as_config" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">as_config</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Transform a class into a config class.</p>
+<p>This function applies the @define decorator from gyver.attrs and also marks
+the class as a config_class</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>cls</code></td>
+          <td>
+                <code>type[<span title="gyver.config.adapter.mark.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The class to be transformed into a config class.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>type[<span title="gyver.config.adapter.mark.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>type[T]: The transformed class, marked as a config class.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="gyver.config.mark" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">mark</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Mark a given class as a config class.
+If the attribute <strong>config_class</strong> already exists,
+but is not the SENTINEL, it raises a TypeError indicating that
+the attribute has an unexpected value.
+It is used by the <a class="autorefs autorefs-internal" href="#gyver.config.AdapterConfigFactory">resolve_confignames</a> to
+differentiate config classes</p>
+
+
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>cls</code></td>
+          <td>
+                <code>type[<span title="gyver.config.adapter.mark.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The class to be marked as a config class.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>type[<span title="gyver.config.adapter.mark.T">T</span>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>type[T]: The class, marked as a config class.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.path"], "search": "../../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+        
+          <script src="../../termynal.js"></script>
+        
+      
+    
+  </body>
+</html>
