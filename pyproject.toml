@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gyver"
-version = "2.5.1"
+version = "2.5.2"
 description = "Toolbox for web development"
 authors = ["Gustavo Correa <self.gustavocorrea@gmail.com>"]
 readme = "README.md"
