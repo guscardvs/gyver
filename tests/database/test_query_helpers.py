@@ -10,12 +10,12 @@ from .mocks import mock_table
 
 
 def test_retrieve_attr_returns_valid_attr():
-    assert Another.name == retrieve_attr(Another, "name")
-    assert Another.id_ == retrieve_attr(Another, "id")
+    assert Another.name is retrieve_attr(Another, "name")
+    assert Another.id_ is retrieve_attr(Another, "id")
 
 
 def test_retrieve_attr_retrieves_attribute_from_table():
-    assert mock_table.c.id == retrieve_attr(mock_table, "id")
+    assert mock_table.c.id is retrieve_attr(mock_table, "id")
 
 
 def test_retrive_attr_raises_field_not_found_if_field_is_invalid():
@@ -27,11 +27,11 @@ def test_retrive_attr_raises_field_not_found_if_field_is_invalid():
 
 
 def test_retrieve_attr_returns_any_layer_of_attr_from_relation():
-    assert PersonAddress.id_ == retrieve_attr(RelatedPerson, "address.id")
+    assert PersonAddress.id_ is retrieve_attr(RelatedPerson, "address.id")
     assert (
         Another.name
-        == retrieve_attr(RelatedPerson, "address.another.name")
-        == retrieve_attr(PersonAddress, "another.name")
+        is retrieve_attr(RelatedPerson, "address.another.name")
+        is retrieve_attr(PersonAddress, "another.name")
     )
 
 

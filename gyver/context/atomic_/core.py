@@ -6,6 +6,7 @@ from gyver.context.interfaces.adapter import AtomicAdapter
 from gyver.context.interfaces.adapter import AtomicAsyncAdapter
 from gyver.context.typedef import T
 from gyver.utils import lazyfield
+from gyver.utils.lazy import dellazy
 
 
 class AtomicContext(Context[T], Generic[T]):
@@ -21,7 +22,7 @@ class AtomicContext(Context[T], Generic[T]):
     def acquire(self):
         with self._lock:
             if self.adapter.is_closed(self.client):
-                AtomicContext.client.cleanup(self)
+                dellazy(self, "client")
             self._stack += 1
             self.adapter.begin(self.client)
         return self.client
@@ -35,7 +36,7 @@ class AtomicContext(Context[T], Generic[T]):
                     else:
                         self.adapter.rollback(self.client)
                 self.adapter.release(self.client)
-                Context.client.cleanup(self)
+                dellazy(self, "client")
             self._stack -= 1
 
     def __exit__(self, *exc):
@@ -58,18 +59,15 @@ class AsyncAtomicContext(AsyncContext[T], Generic[T]):
 
     async def release(self, commit: bool = True):
         async with self._lock:
-            if self._client is None:
-                raise RuntimeError(
-                    "Release should not be called before client initialization"
-                )
+            client = await self.client()
             if self._stack == 1:
-                if await self.adapter.in_atomic(self._client):
+                if await self.adapter.in_atomic(client):
                     if commit:
-                        await self.adapter.commit(self._client)
+                        await self.adapter.commit(client)
                     else:
-                        await self.adapter.rollback(self._client)
-                await self.adapter.release(self._client)
-                self._client = None
+                        await self.adapter.rollback(client)
+                await self.adapter.release(client)
+                dellazy(self, "client")
             self._stack -= 1
 
     async def __aexit__(self, *exc):

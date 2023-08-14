@@ -43,6 +43,7 @@ class AsyncConnectionAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncConnecti
 
     @lazyfield
     def _engine(self):
+        assert self._uri
         return sa_asyncio.create_async_engine(self._uri)
 
     def _create_connection(self):
@@ -91,20 +92,20 @@ class AsyncSessionAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncSession]):
 
     async def release(self, client: sa_asyncio.AsyncSession) -> None:
         await client.close()
-        await self._internal_adapter.release(client.bind)
+        await self._internal_adapter.release(client.bind)  # type: ignore
 
     async def is_closed(self, client: sa_asyncio.AsyncSession) -> bool:
         # sqlalchemy session is never truly closed
-        return await self._internal_adapter.is_closed(client.bind)
+        return await self._internal_adapter.is_closed(client.bind)  # type: ignore
 
     async def begin(self, client: sa_asyncio.AsyncSession) -> None:
-        await self._internal_adapter.begin(client.bind)
+        await self._internal_adapter.begin(client.bind)  # type: ignore
 
     async def commit(self, client: sa_asyncio.AsyncSession) -> None:
-        await self._internal_adapter.commit(client.bind)
+        await self._internal_adapter.commit(client.bind)  # type: ignore
 
     async def rollback(self, client: sa_asyncio.AsyncSession) -> None:
-        await self._internal_adapter.rollback(client.bind)
+        await self._internal_adapter.rollback(client.bind)  # type: ignore
 
     async def in_atomic(self, client: sa_asyncio.AsyncSession) -> bool:
         return client.in_transaction()

@@ -41,8 +41,6 @@ async def test_asynccontext_double_release():
     await context.release()
     assert context.stack == 0
     assert client.closed
-    with pytest.raises(RuntimeError):
-        await context.release()
 
 
 async def test_asynccontext_multitask():

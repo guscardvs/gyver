@@ -1,13 +1,13 @@
 # SQLAlchemy Queries helper
 
-Gyver provides query helpers to help with the following problems:
+Gyver provides query helpers to address the following challenges:
 
-* you don't want your orm classes running all around your code
-* you need a generic repository function to run selects, updates and deletes
+- When you want to avoid scattering your ORM classes throughout your code.
+- When you need a generic repository function for running queries.
 
 ## Example
 
-Let's take as an example an generic function to run select on N fields on the following Person entity.
+Let's consider a generic function for running a SELECT query on specific fields of the Person entity.
 
 ```python
 from gyver.database import Entity
@@ -28,48 +28,42 @@ class Person(Entity):
     address = make_relation(Address, use_list=True)
 ```
 
-Without gyver helpers the function would be something like:
+Without Gyver's helpers, the function might look like this:
 
 ```python
 
 def list_people(context: SaContext, **comparison):
-    # Note that it only supports equality comparison
-    # and it doesn't support logical operations between comparisons
-    # as well as any other problems
     q = sa.select(Person).where(
         *(
             getattr(Person, field, getattr(Address, field)) == value 
             for field, value in comparison.items()
         )
     )
-    with context.begin() as connection:
+    with context as connection:
         result = connection.execute(q)
 
-# And then
-
+# Then, call the function
 list_people(context, name='anyname', zipcode="012345678")
-
 ```
 
-With gyver you can do:
+With Gyver, you can achieve a more powerful approach:
 
 ```python
 from gyver.database import query
 
 def list_people(context: SaContext, where: query.BindClause):
     q = sa.select(Person).where(where.bind(Person))
-    with context.begin() as connection:
+    with context as connection:
         result = connection.execute(q)
 
 list_people(
     context, 
     query.and_(
-        # here it access directly the name attribute on the person
+        # Access the 'name' attribute directly on the person
         query.Where('name', 'anyname'), 
-        # here it access the zipcode attribute on address and you have no chance
-        # of conflict between names from Person and Address
+        # Access the 'zipcode' attribute on address; no conflict between Person and Address names
         query.Where('address.zipcode', "012345678"),
-        # you can also do different comparisons than equals
+        # You can use comparisons other than equals
         query.Where('address.number', 3, query.comp.greater)
     )
 )
@@ -84,9 +78,7 @@ Query helpers from gyver adhere to the Clause interface, either from:
 
 ### BindClause
 
-BindClauses are clauses with the `.bind(mapper) -> query.Comparison` method, that expect a entity class, a table instance
-or a ColumnCollection from sqlalchemy.
-The comparison interface is for a sqlalchemy orm comparison or a boolean column
+BindClauses are clauses that include the `.bind(mapper) -> query.Comparison` method. They expect an entity class, a table instance, or a ColumnCollection from SQLAlchemy. The comparison interface is designed for a SQLAlchemy ORM comparison or a boolean column.
 
 The BindClauses are:
 
@@ -98,8 +90,7 @@ The BindClauses are:
 
 ### Apply Clause
 
-ApplyClauses are clauses with the `.apply(query: sa.sql.Select) -> sa.sqlSelect` method, 
-that expect a `Select` query instance and returns another.
+ApplyClauses are clauses that utilize the `.apply(query: sa.sql.Select) -> sa.sqlSelect` method. They expect a `Select` query instance and return another `Select` query instance.
 
 The ApplyClauses are:
 
@@ -108,16 +99,15 @@ The ApplyClauses are:
   
 ## Where
 
-The `Where` class represents one comparison between a table and an expected value.
-Its parameters are:
+The `Where` class represents a comparison between a table and an expected value. It has the following parameters:
 
 * `field: str`: the field on the entity
 * `expected: T`: the expected value
-* `comp: query.Comparator[T]`: a callable that can process the comparison between the field and the expected.
+* `comp: query.Comparator[T]`: A callable that processes the comparison between the field and the expected value.
 
 ### Comparators
 
-The `Comparator[T]` protocol is as follows:
+The Comparator[T] protocol is defined as follows:
 ```python
 
 class Comparator(Protocol[T]):
@@ -134,8 +124,8 @@ class MyComparator:
     def __init__(self, parser):
         self.parser = parser
 
-    # here MyComparator can only handle float values
-    # this will be annotated on the Where class
+    # MyComparator should only handle float values
+    # This is annotated on the Where class
     def __call__(field: ColumnElement | sa.Column, target: float) -> Any:
         return self.parser(field) == target
 ```
@@ -226,14 +216,18 @@ query.or_(
 
 ## Paginate
 
-Paginate has a simple apply interface to paginate queries.
-It has two implementations
+Paginate implements the `ApplyClause` interface and provides a straightforward interface for paginating queries. It offers two implementations:
 
-* LimitOffsetPaginate: will do 
+### LimitOffsetPaginate
+This implementation performs the following operations:
+
     ```python
     q.limit(self.limit).offset(self.offset)
     ```
-* `make_field_paginate(field: str, jump_comparison: Comparator = query.comp.greater) -> FieldPaginate`: will do
+
+### FieldPaginate
+This implementation utilizes a specified field and comparison to perform pagination:
+
     ```python
     q.where(query.Where(self.field, self.offset, self.jump_comparison)).limit(self.limit)
     ```
@@ -243,19 +237,17 @@ Both implementations have the same interface as Paginate.
 ### Usage
 
 ```python
-    q = sa.select(Person)
-    q = query.LimitOffsetPaginate(limit=10, offset=3).apply(q)
+q = sa.select(Person)
+q = query.LimitOffsetPaginate(limit=10, offset=3).apply(q)
 
-    # or
-    FieldPaginate = make_field_paginate('id', query.comp.greater_equals)
-    q = FieldPaginate(limit=10, offset=3).apply(q)
-``` 
+# or
 
-Paginate also have `IdPaginate` which is the result of `make_field_paginate('id')`
+q = FieldPaginate(limit=10, offset=3).apply(q)
+```
 
 ## OrderBy
 
-Order by has a simple apply interface to order a query
+Order by has a simple `ApplyClause` interface to order a query
 
 ```python
     q = sa.select(Person)

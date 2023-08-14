@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gyver"
-version = "2.4.0"
+version = "2.5.2"
 description = "Toolbox for web development"
 authors = ["Gustavo Correa <self.gustavocorrea@gmail.com>"]
 readme = "README.md"
@@ -22,6 +22,7 @@ cryptography = "^41.0.0"
 redis = { version = "^4.5.5", optional = true }
 gyver-attrs = "^0.5.2"
 faust-cchardet = "^2.1.18"
+env-star = "^2.2.0"
 
 [tool.poetry.group.lint.dependencies]
 black = "^22.10.0"
@@ -35,12 +36,9 @@ pytest-cov = "^4.0.0"
 coverage = "^6.5.0"
 pytest-asyncio = "^0.20.1"
 hypothesis = "^6.56.4"
-fakeredis = "^2.4.0"
+fakeredis = "^2.17.0"
 moto = { extras = ["sqs", "s3"], version = "^4.0.12" }
 pytest-xdist = "^3.2.1"
-
-[tool.poetry.group.types.dependencies]
-sqlalchemy2-stubs = "^0.0.2a29"
 
 
 [tool.poetry.group.asgi.dependencies]
@@ -55,8 +53,9 @@ boto3-stubs = { extras = ["s3", "sqs"], version = "^1.26.13" }
 
 
 [tool.poetry.group.docs.dependencies]
-mkdocs-material = "^9.0.6"
-termynal = "^0.2.1"
+termynal = "^0.10.0"
+mkdocstrings = {extras = ["python"], version = "^0.22.0"}
+mkdocs-material = "^9.1.21"
 
 
 [tool.poetry.group.opts.dependencies]
@@ -87,7 +86,8 @@ addopts = [
     "--cov-config=.coveragerc",
     "--no-cov-on-fail",
     "--cov-fail-under=80",
-    "--nf"
+    "--nf",
+    "--maxfail=1"
 ]
 filterwarnings = [
     "error",

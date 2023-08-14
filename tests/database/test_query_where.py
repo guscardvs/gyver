@@ -38,7 +38,7 @@ def test_get_with_existing_key():
     value = MagicMock()
     cache._cached[key] = value
 
-    assert cache.get(key) == value
+    assert cache.get(key) is value
 
 
 def test_get_with_non_existing_key():
@@ -53,8 +53,8 @@ def test_set():
     key = "test"
     value = MagicMock()
 
-    assert cache.set(key, value) == value
-    assert cache._cached[key] == value
+    assert cache.set(key, value) is value
+    assert cache._cached[key] is value
 
 
 def test_set_with_cache_overflow():
@@ -99,13 +99,13 @@ def test_bool_with_non_none():
 
 def test_resolve():
     resolver = FieldResolver("id")
-    assert resolver.resolve(mapper) == mapper.c.id
+    assert resolver.resolve(mapper) is mapper.c.id
 
 
 def test_bind_with_always_true_comp():
     mapper = MagicMock()
     where = Where("id", 5, comp.always_true)
-    assert where.bind(mapper) == AlwaysTrue().bind(mapper)
+    assert build_query(where.bind(mapper)) == build_query(AlwaysTrue().bind(mapper))
 
 
 def test_bind_with_non_hashable_mapper():

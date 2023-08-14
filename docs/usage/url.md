@@ -39,18 +39,18 @@ This method returns the resolved string representation of the URL. By default, i
 
 * **`add(...)`**
 
-This method allows you to add new elements to the URL. You can add new values to the query, path, fragment or netloc by passing the corresponding arguments.
+This method allows you to add new elements to the URL. You can add new values to the query, path, fragment, scheme or netloc by passing the corresponding arguments.
 
 
 * **set(...)**
 
-This method allows you to set elements of the URL. You can set new values to the query, path, fragment or netloc by passing the corresponding arguments.
+This method allows you to set elements of the URL. You can set new values to the query, path, fragment, scheme or netloc by passing the corresponding arguments.
 
 
-## Sub-classes
+## Element classes
 
 
-The URL class uses the following sub-classes to handle the different parts of the URL:
+The URL class uses the following element classes to handle the different parts of the URL:
 
 * **`Query`**: handles the query string of the URL.
 * **`Path`**: handles the path of the URL.
@@ -79,11 +79,18 @@ print(url.encode()) # "https://www.example.com/new_path?key=value&new_key=new_va
 url = URL("https://www.example.com/path?key=value#fragment")
 
 # Add a new netloc
-url.add(netloc_obj=Netloc(username="user", host="host", port=8080))
+url.add(
+    netloc_obj=Netloc(
+        username="user",
+        host="host", 
+        port=5432,
+    ), 
+    scheme="postgresql"
+)
 
 # Change the fragment
 url.set(fragment='another')
 
 # Get the resolved string representation
-print(url.encode()) # "https://user@host:8080/path?key=value#another"
+print(url.encode()) # "postgresql://user@host:5432/path?key=value#another"
 ```

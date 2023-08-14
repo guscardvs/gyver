@@ -3,54 +3,73 @@ import shlex
 from typing import Callable
 from typing import TypeVar
 
+from gyver.utils.helpers import deprecated
+
 _to_camel_regexp = re.compile("_([a-zA-Z])")
 _to_snake_regexp = re.compile("([a-z])([A-Z])")
 
 
 def to_snake(camel_string: str) -> str:
     """
-    The to_snake function converts camelCase strings to snake_case.
+    Convert a camelCase string to snake_case.
 
-    :param camel_string: str: Pass the camelcase string to be converted
-    :return: A string in snake_case
+    Args:
+        camel_string (str): The camelCase string to be converted.
+
+    Returns:
+        str: The converted string in snake_case.
     """
     return _to_snake_regexp.sub(r"\1_\2", camel_string).lower()
 
 
 def to_camel(snake_string: str) -> str:
     """
-    The to_camel function converts a snake_string to camelCase.
+    Convert a snake_case string to camelCase.
 
-    :param snake_string: str: Pass the string that is to be converted
-    :return: A string that is converted from snake_case to camelcase
+    Args:
+        snake_string (str): The snake_case string to be converted.
+
+    Returns:
+        str: The converted string in camelCase.
     """
     return _to_camel_regexp.sub(
         lambda match: match[1].upper(), snake_string
     ).removesuffix("_")
 
 
-def to_pascal(snake_string: str):
+def to_pascal(snake_string: str) -> str:
     """
-    The to_pascal function converts a snake_case string to an PascalCase string.
+    Convert a snake_case string to PascalCase.
 
-    :param snake_string: str: Pass in the string that we want to convert
-    :return: A string that is the snake_string converted to camel
-    case and with the first letter capitalized
+    Args:
+        snake_string (str): The snake_case string to be converted.
+
+    Returns:
+        str: The converted string in PascalCase.
     """
     val = to_camel(snake_string)
     return val and val[0].upper() + val[1:]
 
 
 # Compat
-upper_camel = to_pascal
+@deprecated
+def upper_camel(snake_string: str):
+    """
+    Deprecated:
+        Use [to_pascal][gyver.utils.strings.to_pascal] instead.
+    """
+    return to_pascal(snake_string)
 
 
 def to_lower_kebab(camel_string: str) -> str:
     """
-    The to_lower_kebab function converts camelCase strings to kebab-case.
+    Convert camelCase strings to kebab-case.
 
-    :param camel_string: str: Pass the camelCase string to be converted
-    :return: A string in kebab-case
+    Args:
+        camel_string (str): The camelCase string to be converted.
+
+    Returns:
+        str: The converted string in kebab-case.
     """
     snake_string = to_snake(camel_string)
     return snake_string.replace("_", "-")
@@ -67,14 +86,19 @@ def make_lex_separator(
     """
     Create a lexer-based separator function.
 
-    :param outer_cast: The type to cast the resulting separated values into (e.g., list, tuple, set).
-    :param cast: The type to which each individual item will be cast (default: str).
-    :return: A callable that separates a string into an instance of outer_cast with casted items.
+    Args:
+        outer_cast (type): The type to cast the resulting separated values into.
+        cast (type): The type to which each individual item will be cast (default: str).
 
-    Usage example:
-    comma_separated = make_lex_separator(tuple, str)
-    result = comma_separated("a, b, c")
-    print(result)  # Output: ('a', 'b', 'c')
+    Returns:
+        Callable[[str], OuterCastT]: A callable that separates a string into an instance of outer_cast with casted items.
+
+    Examples:
+    
+        >>> comma_separated = make_lex_separator(tuple, str)
+        >>> result = comma_separated("a, b, c")
+        >>> print(result)
+        ('a', 'b', 'c')
     """
 
     def wrapper(value: str) -> OuterCastT:

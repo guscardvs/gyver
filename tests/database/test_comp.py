@@ -12,7 +12,9 @@ from .mocks import build_query
 
 def test_comparison_matches_expected():  # sourcery skip: none-compare
 
-    assert query.comp.always_true(Person.name, object()) == sa.true()
+    assert build_query(query.comp.always_true(Person.name, object())) == build_query(
+        sa.true()
+    )
     assert build_query(query.comp.equals(Person.name, "test")) == build_query(
         Person.name == "test"
     )

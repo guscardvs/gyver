@@ -21,7 +21,7 @@ Mapper = typing.Union[sa.Table, type[AbstractEntity]]
 
 
 class Comparator(typing.Protocol[T]):
-    def __call__(self, field: FieldType, target: T) -> typing.Any:
+    def __call__(self, field: FieldType, target: T) -> Comparison:
         ...
 
 

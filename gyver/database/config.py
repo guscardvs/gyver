@@ -2,6 +2,7 @@ from gyver import utils
 from gyver.config import as_config
 from gyver.exc import InvalidField
 from gyver.utils.exc import panic
+from gyver.utils.lazy import setlazy
 
 from . import drivers
 from .typedef import Driver
@@ -39,5 +40,5 @@ class DatabaseConfig:
         return False
 
     def override_dialect(self, dialect: drivers.Dialect) -> None:
-        DatabaseConfig.dialect.manual_set(self, dialect)
-        DatabaseConfig.dialect_overriden.manual_set(self, True)
+        setlazy(self, "dialect", dialect, bypass_setattr=True)
+        setlazy(self, "dialect_overriden", True, bypass_setattr=True)

@@ -2,6 +2,7 @@ import re
 from typing import Union
 from urllib.parse import quote
 from urllib.parse import unquote
+from typing_extensions import Self
 
 from gyver.attrs import mutable
 
@@ -16,22 +17,29 @@ SAFE_SEGMENT_CHARS = ":@-._~!$&'()*+,;="
 
 @mutable(eq=False)
 class Path(Encodable):
+    """Represents a path in a URL.
+
+    Attributes:
+        segments (list[str]): List of path segments.
+    """
     segments: list[str]
 
     def __init__(self, pathstr: str) -> None:
-        """
-        Initialize a Path object.
+        """Initialize a Path object.
 
-        :param pathstr: The string representation of the path.
+        Args:
+            pathstr (str): The string representation of the path.
         """
         self.segments = self._load(pathstr)
 
-    def _load(self, pathstr: str):
-        """
-        Load the path segments from the path string.
+    def _load(self, pathstr: str) -> list[str]:
+        """Load the path segments from the path string.
 
-        :param pathstr: The string representation of the path.
-        :return: The list of path segments.
+        Args:
+            pathstr (str): The string representation of the path.
+
+        Returns:
+            list[str]: List of path segments.
         """
         path_segments = pathstr.split("/")
         return self._process_segments([], path_segments)
@@ -40,13 +48,15 @@ class Path(Encodable):
         self,
         source: list[str],
         to_append: list[str],
-    ):
-        """
-        Process the path segments.
+    ) -> list[str]:
+        """Process the path segments.
 
-        :param source: The source list of segments.
-        :param to_append: The list of segments to append.
-        :return: The processed list of segments.
+        Args:
+            source (list[str]): The source list of segments.
+            to_append (list[str]): The list of segments to append.
+
+        Returns:
+            list[str]: The processed list of segments.
         """
         segments = list(source)
         for seg in to_append:
@@ -58,20 +68,22 @@ class Path(Encodable):
             for item in segments
         ]
 
-    def encode(self):
-        """
-        Encode the path segments into a URL-encoded string.
+    def encode(self) -> str:
+        """Encode the path segments into a URL-encoded string.
 
-        :return: The URL-encoded path string.
+        Returns:
+            str: The URL-encoded path string.
         """
         return "/".join(quote(utf8(item), SAFE_SEGMENT_CHARS) for item in self.segments)
 
-    def add(self, path: Union[str, "Path"]):
-        """
-        Add path segments to the existing path.
+    def add(self, path: Union[str, "Path"]) -> Self:
+        """Add path segments to the existing path.
 
-        :param path: The path segments to add. Can be a string or a Path object.
-        :return: The modified Path object.
+        Args:
+            path (Union[str, Path]): The path segments to add. Can be a string or a Path object.
+
+        Returns:
+            Path: The modified Path object.
         """
         segments = []
         if isinstance(path, str):
@@ -81,12 +93,14 @@ class Path(Encodable):
         self.segments = self._process_segments(self.segments, segments)
         return self
 
-    def set(self, path: Union[str, "Path"]):
-        """
-        Set the path segments to a new value.
+    def set(self, path: Union[str, "Path"]) -> Self:
+        """Set the path segments to a new value.
 
-        :param path: The new path segments. Can be a string or a Path object.
-        :return: The modified Path object.
+        Args:
+            path (Union[str, Path]): The new path segments. Can be a string or a Path object.
+
+        Returns:
+            Path: The modified Path object.
         """
         segments = []
         if isinstance(path, str):
@@ -97,30 +111,30 @@ class Path(Encodable):
         return self
 
     @property
-    def isdir(self):
-        """
-        Check if the path represents a directory.
+    def isdir(self) -> bool:
+        """Check if the path represents a directory.
 
         Path is considered a directory if it is empty or ends with a trailing slash.
 
-        :return: True if the path is a directory, False otherwise.
+        Returns:
+            bool: True if the path is a directory, False otherwise.
         """
         return not self.segments or (self.segments[-1] == "")
 
     @property
-    def isfile(self):
-        """
-        Check if the path represents a file.
+    def isfile(self) -> bool:
+        """Check if the path represents a file.
 
-        :return: True if the path is a file, False if it is a directory.
+        Returns:
+            bool: True if the path is a file, False if it is a directory.
         """
         return not self.isdir
 
-    def normalize(self):
-        """
-        Normalize the path by removing redundant segments.
+    def normalize(self) -> Self:
+        """Normalize the path by removing redundant segments.
 
-        :return: The normalized Path object.
+        Returns:
+            Path: The normalized Path object.
         """
         if resolved := self.encode():
             normalized = normalize(resolved)
@@ -132,11 +146,13 @@ _duplicates_regex = re.compile(r"/+")
 
 
 def normalize(path: str) -> str:
-    """
-    Normalize a path string by removing redundant segments.
+    """Normalize a path string by removing redundant segments.
 
-    :param path: The path string to normalize.
-    :return: The normalized path string.
+    Args:
+        path (str): The path string to normalize.
+
+    Returns:
+        str: The normalized path string.
     """
     stack = []
     path = _duplicates_regex.sub("/", path)

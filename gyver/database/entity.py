@@ -20,7 +20,7 @@ class AbstractEntity:
     """Default Entity Representation without default primary key"""
 
     @final
-    @declared_attr
+    @declared_attr  # type:ignore
     def __tablename__(self):
         return self.classname()
 

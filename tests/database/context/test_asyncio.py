@@ -1,7 +1,9 @@
 from contextlib import suppress
 from functools import wraps
+from typing import cast
 
 import sqlalchemy as sa
+from sqlalchemy.ext.asyncio import AsyncConnection
 
 from gyver.context import AsyncContext
 from gyver.context import atomic
@@ -34,6 +36,7 @@ async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context():
         assert response
         (first,) = response
         assert first == 1
+    assert conn.closed
 
 
 async def test_sqlalchemy_async_adapter_works_correctly_with_sa_context_transaction():  # noqa
@@ -104,10 +107,11 @@ async def test_sqlalchemy_session_and_adapter_are_compliant_to_atomic():
 
     async with atomic(context):
         async with atomic(context) as client:
-            assert client.bind.in_transaction()
-            assert client.bind.in_nested_transaction()
-        assert client.bind.in_transaction()
-        assert not client.bind.in_nested_transaction()
+            bound = cast(AsyncConnection, client.bind)
+            assert bound.in_transaction()
+            assert bound.in_nested_transaction()
+        assert bound.in_transaction()
+        assert not bound.in_nested_transaction()
 
 
 class MockException(Exception):

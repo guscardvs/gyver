@@ -4,6 +4,7 @@ import threading
 import typing
 
 from gyver.utils import lazyfield
+from gyver.utils.lazy import asynclazyfield, dellazy
 
 from . import interfaces
 from .typedef import T
@@ -13,10 +14,14 @@ class Context(typing.Generic[T]):
     def __init__(self, adapter: interfaces.Adapter[T]) -> None:
         """
         Initialize a new Context.
-        :param adapter: An adapter that will be used to acquire and release resources.
+
+        Args:
+            adapter (interfaces.Adapter[T]): An adapter that will be used to acquire and release resources.
         """
         self._adapter = adapter
-        self._stack = 0  # Keeps track of how many frames are using this context
+        self._stack = (
+            0  # Keeps track of how many frames are using this context
+        )
         self._lock = threading.Lock()  # A lock to ensure thread safety
 
     @lazyfield
@@ -28,22 +33,22 @@ class Context(typing.Generic[T]):
         return self.adapter.new()
 
     @property
-    def stack(self):
+    def stack(self) -> int:
         """
-        Returns how many frames are using this context
+        Returns how many frames are using this context.
         """
         return self._stack
 
     @property
     def adapter(self) -> interfaces.Adapter[T]:
         """
-        Returns the adapter that is being used by this context
+        Returns the adapter that is being used by this context.
         """
         return self._adapter
 
     def is_active(self) -> bool:
         """
-        Returns whether the context is currently in use
+        Returns whether the context is currently in use.
         """
         return self._stack > 0
 
@@ -53,7 +58,7 @@ class Context(typing.Generic[T]):
         """
         with self._lock:
             if self.adapter.is_closed(self.client):
-                Context.client.cleanup(self)
+                dellazy(self, "client")
             self._stack += 1
             return self.client
 
@@ -65,7 +70,7 @@ class Context(typing.Generic[T]):
         with self._lock:
             if self._stack == 1:
                 self.adapter.release(self.client)
-                Context.client.cleanup(self)
+                dellazy(self, "client")
             self._stack -= 1
 
     @contextlib.contextmanager
@@ -93,7 +98,7 @@ class Context(typing.Generic[T]):
     def __exit__(self, *_):
         """
         Releases the current resource if the stack count is 1,
-         and decreases the stack count.
+        and decreases the stack count.
         """
         self.release()
 
@@ -102,42 +107,43 @@ class AsyncContext(typing.Generic[T]):
     def __init__(self, adapter: interfaces.AsyncAdapter[T]) -> None:
         """
         Initialize a new AsyncContext.
-        :param adapter: An async adapter that will be used to acquire
-        and release resources.
+
+        Args:
+            adapter (interfaces.AsyncAdapter[T]): An async adapter that will be used to acquire and release resources.
         """
         self._adapter = adapter
-        self._stack = 0  # Keeps track of how many frames are using this context
-        self._client: typing.Optional[T] = None  # The current resource being used
+        self._stack = (
+            0  # Keeps track of how many frames are using this context
+        )
         self._lock = asyncio.Lock()  # A lock to ensure thread safety
 
     @property
     def stack(self) -> int:
         """
-        Returns how many frames are using this context
+        Returns how many frames are using this context.
         """
         return self._stack
 
     @property
     def adapter(self) -> interfaces.AsyncAdapter[T]:
         """
-        Returns the adapter that is being used by this context
+        Returns the adapter that is being used by this context.
         """
         return self._adapter
 
     def is_active(self) -> bool:
         """
-        Returns whether the context is currently in use
+        Returns whether the context is currently in use.
         """
         return self._stack > 0
 
+    @asynclazyfield
     async def client(self) -> T:
         """
         Returns the current resource being used by the context.
         Acquires a new resource if the current one is closed or doesn't exist.
         """
-        if self._client is None or await self._adapter.is_closed(self._client):
-            self._client = await self._adapter.new()
-        return self._client
+        return await self._adapter.new()
 
     async def acquire(self):
         """
@@ -154,20 +160,15 @@ class AsyncContext(typing.Generic[T]):
         and decreases the stack count.
         """
         async with self._lock:
-            if self._client is None:
-                raise RuntimeError(
-                    "Release should not be called before client initialization"
-                )
             if self._stack == 1:
-                await self.adapter.release(self._client)
-                self._client = None
+                await self.adapter.release(await self.client())
+                dellazy(self, "client")
             self._stack -= 1
 
     @contextlib.asynccontextmanager
     async def open(self):
         """
-        An async context manager that acquires
-        and releases resources without returning it.
+        An async context manager that acquires and releases resources without returning it.
         """
         async with self:
             yield
@@ -188,7 +189,7 @@ class AsyncContext(typing.Generic[T]):
 
     async def __aexit__(self, *_):
         """
-        Releases the current resource if the stack count
-        is 1, and decreases the stack count.
+        Releases the current resource if the stack count is 1,
+        and decreases the stack count.
         """
         await self.release()

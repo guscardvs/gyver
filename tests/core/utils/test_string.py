@@ -32,4 +32,4 @@ def test_upper_camel_should_return_expected_string():
         ("type_", "Type"),
     )
     for val, expected in vals:
-        assert strings.upper_camel(val) == expected
+        assert strings.to_pascal(val) == expected

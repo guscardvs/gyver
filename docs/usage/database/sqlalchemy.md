@@ -1,88 +1,53 @@
 # SQLAlchemy Defaults
 
-Gyver has some defaults to help speedup development with sqlalchemy
+Gyver offers default settings designed to expedite development with SQLAlchemy. These defaults include:
 
-* `gyver.database.default_metadata: sqlalchemy.MetaData`: default metadata object to be used in gyver defaults
-* gyver has entities defaults and table factories
+- gyver.database.default_metadata: A pre-configured sqlalchemy.MetaData object intended for use with Gyver defaults.
+- Gyver's default entities and table factories
 
 ## Entities
 
-Gyver calls entities the orm models that describe the database.
-By default gyver has 2 abstract classes:
+In Gyver, entities refer to the ORM models that define your database structure. By default, Gyver provides two abstract classes:
 
-* `gyver.database.AbstractEntity`: abstract entity is the declarative base and implements the default tablename as the classname in lowercase
-* `gyver.database.Entity(AbstractEntity)`: entity inherits from abstract entity (it is abstract as well) and implements an id column as integer primary_key that can be accessed by `.id_` or `.pk`
+* [AbstractEntity][gyver.database]: This abstract entity serves as the declarative base and automatically assigns the class name in lowercase as the default table name.
+* [Entity][gyver.database]: Building on the abstract entity, the Entity class (also abstract) includes an integer primary key column named id that can be accessed through `.id_` or `.pk`.
 
 ## Table Factories
 
-Gyver has 2 table factories:
+Gyver introduces two table factories to simplify your work:
 
-* `make_table(name: str, *args, **kwargs) -> sa.Table`: wrapper around sa.Table creation that binds to the `gyver.database.default_metadata`
-* `create_relation_table(table_name: str, *entities: str) -> sa.Table`: helper to create relation tables on m2m relationships. The table_name is the name to be used in the relation table, and the entities are the names of the tables related. will produce a result table with an integer pk, and will create a column as such: 
-> `sa.Column(f"{entity}_id", sa.Integer, sa.ForeignKey(f"{entity}.id"))`
+* [make_table][gyver.database]: A wrapper around sa.Table creation, it is bound to the gyver.database.default_metadata. This offers streamlined table creation.
+* [create_relation_table][gyver.database]: This helper aids in generating relation tables for many-to-many relationships. You can define the table name and related entities. The resulting table will have an integer primary key column and foreign key columns linking to the respective entities.
 
-## Relation Helper
-
-Gyver also has a helper function to improve typing with sqlalchemy in the `sqlalchemy.orm.relationship` factory.
-
-```python
-gyver.database.utils.make_relation(
-    relation: typing.Union[
-        str, type[EntityT], typing.Callable[[], type[EntityT]]
-    ],
-    *,
-    relation_name: str = "",
-    back_populates: typing.Optional[str] = None,
-    secondary: typing.Union[sa.Table, type, None] = None,
-    foreign_keys: typing.Optional[list[typing.Any]] = None,
-    lazy: str = "selectin",
-    use_list: bool = False,
-)
-```
-
-* `relation`: can be the str name of the class, the class type or a function that returns the class.
-    * if relation is `str`, make_relation will assume the return type is `Any`
-    * if relation is the `class`, make_relation will assume the return type is a instance of that class
-    * if relation is the `function` `make_relation` will assume the return type is an instance of the class returned by the function. This can be used to resolve circular import issues as make_relation will not call this function ever.
-        * if you pass the `function`, the `relation_name` is mandatory and requires the name of the class as `string`
-* `relation_name`: a string of the name of the class. will only be used if the relation attribute receies a function.
-* `back_populates`, `foreign_keys` and `lazy` will be used directly to the `sqlalchemy.orm.relationship`
-* `use_list`: is not used, but annotates to the function that the expected return should be a list.
-  
 
 ## Alembic and migrations
 
-To integrate with alembic, add this to your `env.py`:
+For seamless integration with Alembic, follow these steps in your `env.py`:
 
 ```python
 from myproject import db_config, ROOT_DIR
 from gyver.database import make_uri, default_metadata, AbstractEntity
-from gyver.utils import Finder, instance_finder, class_finder
+from gyver.utils import FinderBuilder
 import sqlalchemy as sa
 
-# alembic code ...
-# use the default metadata from gyver
+# ... Alembic code ...
+
+# Utilize the default metadata from Gyver
 target_metadata = default_metadata
 
-# create finders to import all the tables and classes used in your project, so that
-# you don't need to be importing them one by one
-finders = [
-    Finder(instance_finder(sa.Table),ROOT_DIR), 
-    Finder(class_validator(AbstractEntity), ROOT_DIR)
-]
-for finder in finders:
-    # Run the finders
-    finder.find()
+# Create finders to import all used tables and classes
+# This eliminates the need for individual imports
+FinderBuilder().instance_of(sa.Table).child_of(AbstractEntity).from_path(ROOT_DIR).find()
 
 
-# create the uri using the config and the sync mode
-# alembic does not support asyncio drivers
+# Create the URI using the configuration and sync mode
+# Alembic does not support asyncio drivers
 target_db_uri = make_uri(db_config, sync=True)
 
-# alembic code ...
+# ... Alembic code ...
 
 def run_migrations_offline() -> None:
-    # use the created uri to run the migrations
+    # Use the created URI to run migrations
     context.configure(
         url=target_db_uri,
         target_metadata=target_metadata,
@@ -94,8 +59,7 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def run_migrations_online() -> None:
-    # use the same uri as on run_migrations offline
+    # Use the same URI as in the run_migrations_offline
     cfg = config.get_section(config.config_ini_section)
     cfg["sqlalchemy.url"] = target_db_uri  # type: ignore
     connectable = engine_from_config(
@@ -112,6 +76,6 @@ def run_migrations_online() -> None:
         with context.begin_transaction():
             context.run_migrations()
 
-# alembic code ...
+# ... Alembic code ...
 
 ```
