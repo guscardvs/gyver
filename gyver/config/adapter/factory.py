@@ -122,7 +122,6 @@ class AdapterConfigFactory:
         presets: Optional[Mapping[str, Any]] = None,
         **defaults: Any,
     ) -> T:
-        print(__prefix__)
         """
         Load a configuration instance based on a model class.
 

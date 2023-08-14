@@ -103,7 +103,6 @@ async def test_async_cache_raises_cache_miss_correctly():
 
     with pytest.raises(CacheMiss):
         result = await cache.get("name")
-        print(result)
 
 
 async def test_async_cache_works_properly_with_mapper():
