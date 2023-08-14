@@ -232,3 +232,42 @@ config_variables = AdapterConfigFactory.resolve_confignames(Path('/path/to/proje
         # now the rule does not raise errors and the value returns correctly
         config("DB_MAX_CONNECTIONS", joined_cast(int).cast(lambda val: min(1, val)).cast(with_rule(should_be_positive)))
     ```
+
+## Nested Config Classes
+
+Gyver config can also support nested configurations as such:
+
+```python
+from gyver.config import as_config, AdapterConfigFactory
+
+
+@as_config
+class PoolConfig:
+    size: int
+    recycle: int = 3600
+
+@as_config
+class MyDbConfig:
+    pool: PoolConfig
+    host: str
+    port: int
+
+
+factory = AdapterConfigFactory()
+
+# This will look for
+# DB_HOST
+# DB_PORT
+# DB_POOL__SIZE
+# DB_POOL__RECYCLE
+factory.load(MyDbConfig, __prefix__="db")
+
+# if you want to use a different separator, 
+# then you can do it like this
+
+# this will look for
+# ...
+# DB_POOL--SIZE
+# DB_POOL--RECYCLE
+factory.load(MyDbConfig, __prefix__="db", __sep__="--")
+```
