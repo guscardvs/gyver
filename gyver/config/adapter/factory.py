@@ -1,4 +1,5 @@
 from contextlib import suppress
+import contextlib
 from dataclasses import is_dataclass
 from pathlib import Path
 from typing import Any
@@ -18,6 +19,8 @@ from config.interface import ConfigLike
 from config.utils import boolean_cast
 from gyver.attrs import define
 from gyver.attrs import mark_factory
+from gyver.attrs.utils.typedef import DisassembledType
+from gyver.attrs.utils.functions import disassemble_type
 from pydantic import BaseModel
 
 from gyver.utils import finder
@@ -42,24 +45,34 @@ def _try_each(*names: str, default: Any, cast: Any, config: ConfigLike):
             return config(name, cast)
     if default is not MISSING:
         return default
-    raise panic(MissingName, f"{', '.join(names)} not found and no default was given")
+    raise panic(
+        MissingName, f"{', '.join(names)} not found and no default was given"
+    )
 
 
-def _resolve_cast(outer_type: type):
+def _resolve_cast(outer_type: type) -> tuple[Any, bool]:
     _sequences = (list, tuple, set)
     origin = get_origin(outer_type)
     if outer_type is bool:
-        return boolean_cast
+        return boolean_cast, False
+    with contextlib.suppress(ValueError):
+        AdapterConfigFactory.get_strategy_class(disassemble_type(outer_type))
+        return outer_type, True
     if origin is None:
         return (
-            make_lex_separator(outer_type) if outer_type in _sequences else outer_type
-        )
+            make_lex_separator(outer_type)
+            if outer_type in _sequences
+            else outer_type
+        ), False
     if (origin := get_origin(outer_type)) in _sequences:
         assert origin is not None
         args = get_args(outer_type)
         cast = args[0] if args else str
-        return make_lex_separator(origin, cast)
-    return _loads if dict in (origin, outer_type) else origin
+        return make_lex_separator(origin, cast), False
+    return (
+        _loads if dict in (origin, outer_type) else origin,  # type:ignore
+        False,
+    )
 
 
 def _loads(val: Any) -> Any:
@@ -71,9 +84,13 @@ class AdapterConfigFactory:
     """
     Factory for creating configuration instances based on model classes.
     """
+
     config: ConfigLike = _default_config
 
-    def get_strategy_class(self, config_class: type) -> type[FieldResolverStrategy]:
+    @staticmethod
+    def get_strategy_class(
+        config_class: DisassembledType,
+    ) -> type[FieldResolverStrategy]:
         """
         Get the appropriate strategy class for resolving fields in the configuration class.
 
@@ -83,13 +100,14 @@ class AdapterConfigFactory:
         Returns:
             type[FieldResolverStrategy]: The strategy class for resolving fields.
         """
-        if hasattr(config_class, "__gyver_attrs__"):
+        klass = config_class.origin or config_class.type_
+        if hasattr(klass, "__gyver_attrs__"):
             return GyverAttrsResolverStrategy
-        elif is_dataclass(config_class):
+        elif is_dataclass(klass):
             return DataclassResolverStrategy
-        elif issubclass(config_class, BaseModel):
+        elif issubclass(klass, BaseModel):
             return PydanticResolverStrategy
-        elif hasattr(config_class, "__attrs_attrs__"):
+        elif hasattr(klass, "__attrs_attrs__"):
             from .attrs import AttrsResolverStrategy
 
             return AttrsResolverStrategy
@@ -99,16 +117,19 @@ class AdapterConfigFactory:
         self,
         model_cls: type[T],
         __prefix__: str = "",
+        __sep__: str = "__",
         *,
         presets: Optional[Mapping[str, Any]] = None,
         **defaults: Any,
     ) -> T:
+        print(__prefix__)
         """
         Load a configuration instance based on a model class.
 
         Args:
             model_cls (type[T]): The model class representing the configuration.
             __prefix__ (str): Optional prefix for configuration fields.
+            __set__(str): Optional prefix to separate fields of nested models. Default is "__"
             presets (Optional[Mapping[str, Any]]): Optional preset values for fields.
             **defaults (Any): Default values for fields.
 
@@ -116,7 +137,7 @@ class AdapterConfigFactory:
             T: The loaded configuration instance.
         """
         presets = presets or {}
-        strategy_class = self.get_strategy_class(model_cls)
+        strategy_class = self.get_strategy_class(disassemble_type(model_cls))
         resolvers = tuple(
             resolver
             for field in strategy_class.iterfield(model_cls)
@@ -124,7 +145,11 @@ class AdapterConfigFactory:
         )
         result = {
             resolver.init_name(): self._get_value(
-                model_cls, resolver, __prefix__, defaults
+                model_cls,
+                resolver,
+                __prefix__,
+                __sep__,
+                defaults,
             )
             for resolver in resolvers
         }
@@ -134,6 +159,7 @@ class AdapterConfigFactory:
         self,
         model_cls: type[T],
         __prefix__: str = "",
+        __sep__: str = "__",
         *,
         presets: Optional[Mapping[str, Any]] = None,
         **defaults: Any,
@@ -150,9 +176,12 @@ class AdapterConfigFactory:
         Returns:
             Callable[[], T]: The factory function for loading configuration instances.
         """
+
         @mark_factory
         def load():
-            return self.load(model_cls, __prefix__, presets=presets, **defaults)
+            return self.load(
+                model_cls, __prefix__, __sep__, presets=presets, **defaults
+            )
 
         return load
 
@@ -161,6 +190,7 @@ class AdapterConfigFactory:
         model_cls: type,
         resolver: FieldResolverStrategy,
         prefix: str,
+        sep: str,
         defaults: Mapping[str, Any],
     ):
         names = self.resolve_names(model_cls, resolver, prefix)
@@ -168,15 +198,23 @@ class AdapterConfigFactory:
             (result for name in names if (result := defaults.get(name))),
             resolver.default(),
         )
-        cast = _resolve_cast(resolver.cast())
-        return _try_each(*names, default=default, cast=cast, config=self.config)
+        cast, _is_config = _resolve_cast(resolver.cast())
+        if _is_config:
+            return self.load(
+                cast,
+                f"{next(iter(names))}{sep}",
+                sep,
+                defaults=defaults,
+            )
+        return _try_each(
+            *names, default=default, cast=cast, config=self.config
+        )
 
     def resolve_names(
         self, model_cls: type, resolver: FieldResolverStrategy, prefix: str
     ) -> Sequence[str]:
         names = resolver.names()
         prefix = prefix or getattr(model_cls, "__prefix__", "")
-        prefix = prefix.removesuffix("_")
         without_prefix = cast(
             Sequence[str], getattr(model_cls, "__without_prefix__", ())
         )
@@ -185,8 +223,8 @@ class AdapterConfigFactory:
 
         processed_names = []
         for name in names:
-            name.lstrip("_")
-            processed = f"{prefix}_{name}".lower()
+            _prefix = f"{prefix}_" if not prefix.endswith("_") else prefix
+            processed = f"{_prefix}{name}".lower()
             processed_names.extend((processed, processed.upper()))
 
         return tuple(processed_names)
@@ -205,7 +243,9 @@ class AdapterConfigFactory:
         Returns:
             dict[type, tuple[Sequence[str], ...]]: A dictionary of config classes and their associated environment variable names.
         """
-        builder = finder.FinderBuilder().add_validator(is_config).from_path(root)
+        builder = (
+            finder.FinderBuilder().add_validator(is_config).from_path(root)
+        )
         output = builder.find()
         tempself = cls()
         return {

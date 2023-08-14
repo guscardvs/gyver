@@ -5,6 +5,7 @@ from attrs import asdict
 from attrs import define
 from gyver.attrs import asdict as gasdict
 from gyver.attrs import define as gdefine
+from gyver.attrs.utils.functions import disassemble_type
 
 from gyver import config
 from gyver.config.adapter.attrs import AttrsResolverStrategy
@@ -58,12 +59,30 @@ factory = AdapterConfigFactory()
 
 
 def test_adapter_factory_identifies_strategy_correctly():
-    assert factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
-    assert factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
-    assert factory.get_strategy_class(PersonConfig) is DataclassResolverStrategy
-    assert factory.get_strategy_class(AnotherConfig) is PydanticResolverStrategy
-    assert factory.get_strategy_class(OtherConfig) is AttrsResolverStrategy
-    assert factory.get_strategy_class(Another) is GyverAttrsResolverStrategy
+    assert (
+        factory.get_strategy_class(disassemble_type(PersonConfig))
+        is DataclassResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(disassemble_type(AnotherConfig))
+        is PydanticResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(disassemble_type(PersonConfig))
+        is DataclassResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(disassemble_type(AnotherConfig))
+        is PydanticResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(disassemble_type(OtherConfig))
+        is AttrsResolverStrategy
+    )
+    assert (
+        factory.get_strategy_class(disassemble_type(Another))
+        is GyverAttrsResolverStrategy
+    )
 
 
 def test_adapter_parses_correctly_on_from_config():
@@ -205,3 +224,32 @@ def test_old_config_works_with_adapter_factory():
         ),
     )
     assert make_uri(cfg) == db_url.encode()
+
+
+def test_config_factory_support_for_nested_classes():
+    @gdefine
+    class Test:
+        name: str
+
+    @gdefine
+    class Another:
+        test: Test
+        name: str
+
+    cfg = config.Config(
+        mapping=config.EnvMapping(
+            {
+                "NAME": "name",
+                "TEST__NAME": "test_name",
+                "ANOTHER_NAME": "another_name",
+                "ANOTHER_TEST__NAME": "another_test_name",
+            }
+        )
+    )
+
+    factory = config.AdapterConfigFactory(cfg)
+
+    assert factory.load(Another) == Another(Test("test_name"), "name")
+    assert factory.load(Another, "another") == Another(
+        Test("another_test_name"), "another_name"
+    )
