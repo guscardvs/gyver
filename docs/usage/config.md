@@ -1,7 +1,11 @@
 # Config
 
+!!! note inline end 
+    Gyver prioritizes variables from the environment before environments read from files.
+
 `Config` is the core feature to all `gyver` providers. It has helpers
-to handle environment variables and create config classes in a declarative way. **Gyver prioritizes variables from the environment before environments read from files.**
+to handle environment variables and create config classes in a declarative way. 
+
 
 !!! info "Package"
     
