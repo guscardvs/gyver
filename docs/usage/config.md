@@ -19,11 +19,11 @@ from gyver.config import Config
 config = Config()
 
 # will search for MY_ENV_VAR on the environment
-# or raise a `gyver.exc.MissingName` error
+# or raise a `config.exceptions.MissingName` error
 MY_ENV_VAR = config('MY_ENV_VAR')
 
 # will search for CAST_ENV_VAR and try to pass as a parameter
-# to int. on fail raises `gyver.exc.InvalidCast`
+# to int. on fail raises `config.exceptions.InvalidCast`
 CAST_ENV_VAR = config('CAST_ENV_VAR', int)
 
 # will search for DEFAULT_ENV_VAR and if not found will
@@ -118,7 +118,7 @@ factory = AdapterConfigFactory(config)
 #   connection_recycle=config('CONNECTION_RECYCLE', int, 3600)
 # )
 # AdapterConfigFactory will retry with lowercase as well before raising
-# `gyver.exc.MissingName`
+# `config.exceptions.MissingName`
 my_provider_config = config_loader.load(MyProviderConfig)
 
 # here is essentially the same as
