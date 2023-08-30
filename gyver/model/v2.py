@@ -1,35 +1,42 @@
 from typing import Any
-from pydantic import BaseModel
+
+from pydantic import __version__
+
 from gyver import utils
 from gyver.utils.lazy import lazy
 
-class Model(BaseModel):
+pydantic_vinfo = tuple(int(i) for i in __version__.split(".") if i.isdigit())
+
+if pydantic_vinfo < (2, 0, 0):
+    raise ImportError("Unable to use .v2, install pydantic>=2.0.0", __version__)
+
+from pydantic import BaseModel, ConfigDict
+
+
+class Model(BaseModel):  # type: ignore
     """
-    Model is a BaseModel overload with opinions on JSON parsing mutability and alias generation.
-    
+    Model is a BaseModel overload with opinions on mutability and alias generation.
+
     Configurations:
-        - json_loads: Uses utils.json.loads for JSON loading.
-        - json_dumps: Uses utils.json.dumps for JSON dumping.
         - frozen: Model instances are frozen by default.
-        - orm_mode: Enables ORM mode for this model.
+        - from_attributes: Enables from_attributes mode for this model.
         - alias_generator: Uses utils.to_camel for alias generation.
-        - allow_population_by_field_name: Allows population of fields by field name.
-        - keep_untouched: Keeps attributes of type lazy untouched during population.
+        - populate_by_name: Allows population of fields by field name.
+        - ignore_types: Keeps attributes of type lazy untouched during population.
     """
-    
-    class Config:
-        json_loads = utils.json.loads
-        json_dumps = utils.json.dumps
-        frozen = True
-        orm_mode = True
-        alias_generator = utils.to_camel
-        allow_population_by_field_name = True
-        keep_untouched = (lazy,)
+
+    model_config = ConfigDict(
+        frozen=True,
+        populate_by_name=True,
+        ignored_types=(lazy,),
+        from_attributes=True,
+        alias_generator=utils.to_camel,
+    )
 
     def __setattr__(self, name: str, value: Any):
         """
         Overloads the __setattr__ method to allow lazy fields to work correctly.
-        
+
         Args:
             name (str): The name of the attribute.
             value (Any): The value to set for the attribute.
@@ -39,13 +46,13 @@ class Model(BaseModel):
         else:
             return super().__setattr__(name, value)
 
+
 class MutableModel(Model):
     """
     A mutable version of the Model class that allows unfreezing of instances.
-    
+
     Configurations:
         - frozen: Model instances are not frozen, allowing mutability.
     """
-    
-    class Config:
-        frozen = False
+
+    model_config = ConfigDict(frozen=False)

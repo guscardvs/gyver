@@ -27,6 +27,7 @@ from gyver.utils import finder
 from gyver.utils import json
 from gyver.utils import panic
 from gyver.utils.strings import make_lex_separator
+from gyver.model import is_v2
 
 from .dataclass import DataclassResolverStrategy
 from .gattrs import GyverAttrsResolverStrategy
@@ -45,9 +46,7 @@ def _try_each(*names: str, default: Any, cast: Any, config: ConfigLike):
             return config(name, cast)
     if default is not MISSING:
         return default
-    raise panic(
-        MissingName, f"{', '.join(names)} not found and no default was given"
-    )
+    raise panic(MissingName, f"{', '.join(names)} not found and no default was given")
 
 
 def _resolve_cast(outer_type: type) -> tuple[Any, bool]:
@@ -60,9 +59,7 @@ def _resolve_cast(outer_type: type) -> tuple[Any, bool]:
         return outer_type, True
     if origin is None:
         return (
-            make_lex_separator(outer_type)
-            if outer_type in _sequences
-            else outer_type
+            make_lex_separator(outer_type) if outer_type in _sequences else outer_type
         ), False
     if (origin := get_origin(outer_type)) in _sequences:
         assert origin is not None
@@ -101,11 +98,16 @@ class AdapterConfigFactory:
             type[FieldResolverStrategy]: The strategy class for resolving fields.
         """
         klass = config_class.origin or config_class.type_
+        base_model_cls: list[type] = [BaseModel]
+        if is_v2:
+            from pydantic import v1
+
+            base_model_cls.append(v1.BaseModel)
         if hasattr(klass, "__gyver_attrs__"):
             return GyverAttrsResolverStrategy
         elif is_dataclass(klass):
             return DataclassResolverStrategy
-        elif issubclass(klass, BaseModel):
+        elif issubclass(klass, tuple(base_model_cls)):
             return PydanticResolverStrategy
         elif hasattr(klass, "__attrs_attrs__"):
             from .attrs import AttrsResolverStrategy
@@ -205,9 +207,7 @@ class AdapterConfigFactory:
                 sep,
                 defaults=defaults,
             )
-        return _try_each(
-            *names, default=default, cast=cast, config=self.config
-        )
+        return _try_each(*names, default=default, cast=cast, config=self.config)
 
     def resolve_names(
         self, model_cls: type, resolver: FieldResolverStrategy, prefix: str
@@ -242,9 +242,7 @@ class AdapterConfigFactory:
         Returns:
             dict[type, tuple[Sequence[str], ...]]: A dictionary of config classes and their associated environment variable names.
         """
-        builder = (
-            finder.FinderBuilder().add_validator(is_config).from_path(root)
-        )
+        builder = finder.FinderBuilder().add_validator(is_config).from_path(root)
         output = builder.find()
         tempself = cls()
         return {

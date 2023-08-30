@@ -17,7 +17,7 @@ from gyver.config.adapter.mark import mark
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
 from gyver.database import DatabaseConfig
 from gyver.database.utils import make_uri
-from gyver.model import Model
+from gyver.model import Model, v1
 from gyver.url import URL
 from gyver.url import Netloc
 from gyver.utils import json
@@ -33,6 +33,14 @@ class PersonConfig:
 
 @mark
 class AnotherConfig(Model):
+    name: str
+    emails: tuple[str, ...]
+    counts: set[int]
+    meta: dict[str, Any]
+
+
+@mark
+class AnotherV1Config(v1.Model):
     name: str
     emails: tuple[str, ...]
     counts: set[int]
@@ -68,6 +76,10 @@ def test_adapter_factory_identifies_strategy_correctly():
         is PydanticResolverStrategy
     )
     assert (
+        factory.get_strategy_class(disassemble_type(AnotherV1Config))
+        is PydanticResolverStrategy
+    )
+    assert (
         factory.get_strategy_class(disassemble_type(PersonConfig))
         is DataclassResolverStrategy
     )
@@ -99,6 +111,7 @@ def test_adapter_parses_correctly_on_from_config():
 
     person_config = factory.load(PersonConfig, presets=presets)
     another_config = factory.load(AnotherConfig, presets=presets)
+    another_v1_config = factory.load(AnotherV1Config, presets=presets)
     other_config = factory.load(OtherConfig, presets=presets)
     another = factory.load(Another, presets=presets)
 
@@ -113,7 +126,8 @@ def test_adapter_parses_correctly_on_from_config():
     assert (
         dataclasses.asdict(person_config)
         == asdict(other_config)
-        == another_config.dict()
+        == another_v1_config.dict()
+        == another_config.model_dump()
         == gasdict(another)
     )
 

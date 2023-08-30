@@ -6,7 +6,7 @@
 
 [**Source Code**](https://github.com/guscardvs/gyver)
 
-This documentation refers to version **2.6**
+This documentation refers to version **2.7**
 
 ## Authors
 
@@ -20,7 +20,7 @@ This documentation refers to version **2.6**
 ## Required
 
 * [OrJSON](https://github.com/ijl/orjson) for json parsing.
-* [Pydantic 1.x](https://docs.pydantic.dev) for data handling. (Support for v2 is under development)
+* [Pydantic](https://docs.pydantic.dev) for data handling. (Supports both v1.10.12+ and 2.0.0+)
 * [Typing Extensions](https://github.com/python/typing_extensions) for compatibility.
 * [Cryptography](https://cryptography.io) to handle encryption.
 
@@ -51,7 +51,7 @@ Done!
 
 ## Roadmap
 
-> Move database related code to a separate library and add support for Pydantic V2
+> Move database related code to a separate library.
 
 ##  License
 
