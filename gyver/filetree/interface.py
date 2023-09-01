@@ -4,7 +4,7 @@ from typing import TypeVar
 from typing import cast
 
 from gyver.exc import InvalidPath
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 from .helpers import python_filename
 from .typedef import File

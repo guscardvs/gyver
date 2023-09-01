@@ -23,6 +23,7 @@ gyver-attrs = "^0.5.2"
 faust-cchardet = "^2.1.18"
 env-star = "^2.2.0"
 pydantic = {extras = ["email"], version = ">=1.10.12, <2.4.0"}
+lazy-fields = "^1.0.0"
 
 [tool.poetry.group.lint.dependencies]
 black = "^22.10.0"
@@ -87,6 +88,7 @@ addopts = [
     "--no-cov-on-fail",
     "--cov-fail-under=80",
     "--nf",
+    "-sv",
     "--maxfail=1"
 ]
 filterwarnings = [

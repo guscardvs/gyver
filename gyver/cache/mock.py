@@ -12,7 +12,7 @@ from gyver.attrs import info
 
 from gyver.exc import CacheMiss
 from gyver.utils import json
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 from .interface import AsyncCacheInterface
 from .interface import CacheInterface

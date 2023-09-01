@@ -1440,6 +1440,20 @@ files = [
 ]
 
 [[package]]
+name = "lazy-fields"
+version = "1.0.0"
+description = "Lazy attributes to delay initialization"
+optional = false
+python-versions = ">=3.9,<4.0"
+files = [
+    {file = "lazy_fields-1.0.0-py3-none-any.whl", hash = "sha256:cbc669cc0cf5cb61b6125aecfe3e7f117ee98ab05c466190467d6edc57bbb61e"},
+    {file = "lazy_fields-1.0.0.tar.gz", hash = "sha256:c3f3ea40313d6748c80643f3527601988c3f568331d676481fcd55018e8f9415"},
+]
+
+[package.dependencies]
+typing-extensions = {version = ">=4.7.1,<5.0.0", markers = "python_full_version > \"3.0.0\" and python_version < \"3.11\""}
+
+[[package]]
 name = "markdown"
 version = "3.4.4"
 description = "Python implementation of John Gruber's Markdown."
@@ -3083,4 +3097,4 @@ db-sqlite = ["aiosqlite", "sqlalchemy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "ed412ced23076bea02f30235cc8ca1cab232735417ede4eb8a394dc1fea6df32"
+content-hash = "e89126babb6a5955617a767ba057c2106976bd59e5ca8e60a4271bfb08ea637d"

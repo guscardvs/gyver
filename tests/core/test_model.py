@@ -1,10 +1,7 @@
 import pytest
 
 from gyver.model import Model, v1
-from gyver.utils import asynclazyfield
-from gyver.utils import lazyfield
-from gyver.utils import setlazy
-from gyver.utils.lazy import force_set
+from lazyfields import asynclazyfield, lazyfield, setlazy, force_set
 
 from pydantic_core import ValidationError
 

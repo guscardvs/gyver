@@ -10,7 +10,7 @@ from gyver.attrs import define
 
 from gyver.exc import InvalidPath
 from gyver.exc import MissingParams
-from gyver.utils.lazy import lazyfield
+from lazyfields import lazyfield
 
 PathConverter = typing.Callable[[pathlib.Path], str]
 StrOrPath = typing.Union[str, pathlib.Path]

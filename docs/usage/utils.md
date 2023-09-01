@@ -113,7 +113,7 @@ string3_parsed = string3_parser(string3) # (1, 2, 3)
 
 ## Lazy
 
-[gyver.utils.lazy][] has utilities to allow for lazily defined attributes so that you can avoid some patterns like the one below or avoid calculating a property twice.
+[lazyfields][] has utilities to allow for lazily defined attributes so that you can avoid some patterns like the one below or avoid calculating a property twice.
 
 ```python
 class MyClass:
@@ -130,10 +130,10 @@ class MyClass:
 
 
 
-The [lazyfield][gyver.utils.lazyfield] descriptor streamlines the process of implementing lazy attributes. Here's how you can use it:
+The [lazyfield][lazyfields.lazyfield] descriptor streamlines the process of implementing lazy attributes. Here's how you can use it:
 
 ```python
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 
 class MyClass:
@@ -158,10 +158,10 @@ instance.expensive_value = "Other" # Overwrites the cached value with the value 
 
 ### asynclazyfield
 
-The [asynclazyfield][gyver.utils.lazy] descriptor tackles the same issue as lazyfield, but while preserving the asynchronous API
+The [asynclazyfield][lazyfields] descriptor tackles the same issue as lazyfield, but while preserving the asynchronous API
 
 ```python
-from gyver.utils import asynclazyfield
+from lazyfields import asynclazyfield
 
 class MyClass:
 
@@ -183,7 +183,7 @@ setlazy(instance, "expensive_value", "Other") # overwrite the stored value with 
 
 ### Helpers
 
-`gyver.utils.lazy` provides helpers to work with frozen classes or when using the asynclazyfield and need to set or reset the field manually
+`lazyfields` provides helpers to work with frozen classes or when using the asynclazyfield and need to set or reset the field manually
 
 * `setlazy(instance: Any, attribute: str, value: Any, bypass_setattr: bool = False)` setlazy allows you to directly change the hidden attribute behind any lazy field, and the bypass_setattr parameter will instead of using the `setattr` function, use `object.__setattr__`.
 * `dellazy(instance: Any, attribute: str, bypass_delattr: bool = False)` dellazy allows you to clear the value stored in the hidden attribute to allow for recalculation. Similar to setlazy the bypass_delattr parameter will use `object.__delattr__` instead of `delattr`

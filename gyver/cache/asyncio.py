@@ -5,7 +5,7 @@ from typing import overload
 from gyver.attrs import call_init
 from gyver.attrs import define
 
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 from .config import CacheConfig
 from .interface import AsyncCacheInterface

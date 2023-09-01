@@ -7,7 +7,7 @@ from typing import cast
 from config import MISSING
 from gyver.attrs import define
 from gyver.model import is_v2
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 from pydantic import BaseModel
 
 if is_v2:

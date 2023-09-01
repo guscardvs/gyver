@@ -8,7 +8,7 @@ from gyver.attrs import info
 
 from gyver.config import AdapterConfigFactory
 from gyver.config import as_config
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 
 @as_config

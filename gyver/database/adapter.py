@@ -10,7 +10,7 @@ from gyver.context import atomic
 from gyver.database.context.asyncio import AsyncSessionAdapter
 from gyver.database.context.sync import SessionAdapter
 from gyver.database.typedef import Driver
-from gyver.utils.lazy import lazyfield
+from lazyfields import lazyfield
 
 from .config import DatabaseConfig
 from .context import AsyncConnectionAdapter

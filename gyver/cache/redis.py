@@ -15,7 +15,7 @@ from redis import asyncio as aioredis
 from gyver.config import AdapterConfigFactory
 from gyver.exc import CacheMiss
 from gyver.utils import json
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 from .config import CacheConfig
 from .interface import AsyncCacheInterface

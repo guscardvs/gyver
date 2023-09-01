@@ -12,7 +12,7 @@ from gyver.cache.mapper import CacheMap
 from gyver.cache.redis import AsyncRedisWrapper
 from gyver.cache.redis import RedisWrapper
 from gyver.exc import CacheMiss
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 
 def _make_cache_config():

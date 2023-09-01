@@ -71,7 +71,7 @@ import sqlalchemy as sa
 import sqlalchemy.engine as sa_engine
 
 from gyver import context
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 SaContext = context.Context[sa_engine.Connection]
 
@@ -216,7 +216,7 @@ import typing
 import sqlalchemy.ext.asyncio as sa_asyncio
 
 from gyver import context
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 AsyncSaContext = context.AsyncContext[sa_asyncio.AsyncConnection]
 

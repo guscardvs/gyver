@@ -3,8 +3,7 @@ import contextlib
 import threading
 import typing
 
-from gyver.utils import lazyfield
-from gyver.utils.lazy import asynclazyfield, dellazy
+from lazyfields import asynclazyfield, dellazy, lazyfield
 
 from . import interfaces
 from .typedef import T

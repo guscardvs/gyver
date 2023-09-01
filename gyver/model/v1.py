@@ -1,6 +1,6 @@
 from typing import Any
 from gyver import utils
-from gyver.utils.lazy import lazy
+from lazyfields import lazy
 
 try:
     from pydantic.v1 import BaseModel

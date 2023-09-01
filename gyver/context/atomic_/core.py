@@ -5,8 +5,7 @@ from gyver.context.context import Context
 from gyver.context.interfaces.adapter import AtomicAdapter
 from gyver.context.interfaces.adapter import AtomicAsyncAdapter
 from gyver.context.typedef import T
-from gyver.utils import lazyfield
-from gyver.utils.lazy import dellazy
+from lazyfields import lazyfield, dellazy
 
 
 class AtomicContext(Context[T], Generic[T]):

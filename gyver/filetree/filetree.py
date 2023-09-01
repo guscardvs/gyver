@@ -4,7 +4,7 @@ from pathlib import Path
 from gyver.attrs import mutable
 
 from gyver.exc import FailedFileOperation
-from gyver.utils import lazyfield
+from lazyfields import lazyfield
 
 from .interface import AbstractFileTree
 from .typedef import File

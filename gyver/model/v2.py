@@ -3,7 +3,7 @@ from typing import Any
 from pydantic import __version__
 
 from gyver import utils
-from gyver.utils.lazy import lazy
+from lazyfields import lazy
 
 pydantic_vinfo = tuple(int(i) for i in __version__.split(".") if i.isdigit())
 

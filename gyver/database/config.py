@@ -2,7 +2,7 @@ from gyver import utils
 from gyver.config import as_config
 from gyver.exc import InvalidField
 from gyver.utils.exc import panic
-from gyver.utils.lazy import setlazy
+from lazyfields import setlazy, lazyfield
 
 from . import drivers
 from .typedef import Driver
@@ -21,11 +21,11 @@ class DatabaseConfig:
     max_overflow: int = 0
     autotransaction: bool = False
 
-    @utils.lazyfield
+    @lazyfield
     def effective_port(self) -> int:
         return self.port if self.port != -1 else self.dialect.default_port
 
-    @utils.lazyfield
+    @lazyfield
     def dialect(self) -> drivers.Dialect:
         if self.driver is Driver.CUSTOM and not self.dialect_overriden:
             raise panic(
@@ -35,7 +35,7 @@ class DatabaseConfig:
             )
         return drivers.resolve_driver(self.driver)
 
-    @utils.lazyfield
+    @lazyfield
     def dialect_overriden(self):
         return False
 
