@@ -415,6 +415,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    Compatibility
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -795,6 +802,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#compatibility" class="md-nav__link">
+    Compatibility
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -816,8 +830,8 @@ It is built entirely using <code>pydantic.BaseModel</code> and <code>orjson</cod
 By default all Model classes are:</p>
 <ul>
 <li>frozen</li>
-<li>with orm_mode enabled</li>
-<li>with allow_population_by_field_name enabled</li>
+<li>with from_attributes enabled</li>
+<li>with populate_by_name enabled</li>
 <li>with support for all gyver features</li>
 <li>with alias generation for camelCase</li>
 </ul>
@@ -832,6 +846,11 @@ By default all Model classes are:</p>
 <h2 id="mutable-model">Mutable Model</h2>
 <p>If you need all the features of Model but don't want the immutability,
 you can use <code>gyver.model.MutableModel</code></p>
+<h2 id="compatibility">Compatibility</h2>
+<p><code>Model</code> is updated to work with <code>pydantic&gt;=2.0.0</code>, 
+however it will still hold compatibility to v1 
+and if you are using v2 but haven't upgraded all of the code,
+you can find the old model at <code>gyver.model.v1</code></p>
 
 
 
