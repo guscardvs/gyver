@@ -154,7 +154,6 @@ def test_virtual_context():
         assert file.name == "file"
         assert inner_tree.root.contents["subfolder"].name == "subfolder"
         assert inner_tree.root.contents["file"].name == "file"
-
     assert asdict(file_tree.root) == {
         "name": "root",
         "contents": {

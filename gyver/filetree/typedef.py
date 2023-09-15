@@ -63,6 +63,9 @@ class File(VirtualPath[BytesIO]):
     def getvalue(self):
         return self.contents.getvalue()
 
+    def __parse_dict__(self, by_alias: bool):
+        return {"name": self.name, "contents": self.contents}
+
 
 @define
 class TextFile(File):
@@ -96,3 +99,12 @@ class Folder(VirtualPath[dict[str, VirtualPath]]):
     @classmethod
     def new(cls, name: str) -> Self:
         return cls(name, {})
+
+    def __parse_dict__(self, by_alias: bool):
+        return {
+            "name": self.name,
+            "contents": {
+                key: value.__parse_dict__(by_alias)
+                for key, value in self.contents.items()
+            },
+        }
