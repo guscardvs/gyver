@@ -3,6 +3,6 @@ name = "cz_conventional_commits"
 tag_format = "$version"
 version_scheme = "pep440"
 version_provider = "poetry"
-update_changelog_on_bump = false
+update_changelog_on_bump = true
 version_files = ["gyver/__init__.py:__version__"]
 annotated_tag = true
