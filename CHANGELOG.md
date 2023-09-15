@@ -1,3 +1,9 @@
+## 2.8.2 (2023-09-15)
+
+### Fix
+
+- updated dependencies and added functions to properly handle with differences
+
 ## 2.8.1 (2023-09-15)
 
 ### Fix
