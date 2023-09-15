@@ -19,7 +19,7 @@ tzdata = { markers = "sys_platform != \"linux\"", version = "^2022.6" }
 sqlalchemy = { version = "^2.0.4", optional = true }
 cryptography = "^41.0.0"
 redis = { version = "^4.5.5", optional = true }
-gyver-attrs = "^0.5.2"
+gyver-attrs = "^0.7.0"
 faust-cchardet = "^2.1.18"
 env-star = "^2.2.0"
 pydantic = {extras = ["email"], version = ">=1.10.12, <2.4.0"}
