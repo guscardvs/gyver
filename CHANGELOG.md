@@ -1,3 +1,9 @@
+## 2.8.3 (2023-09-23)
+
+### Fix
+
+- updated cryptography version to remove vulnerability
+
 ## 2.8.2 (2023-09-15)
 
 ### Fix
