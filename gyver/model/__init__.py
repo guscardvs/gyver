@@ -1,8 +1,4 @@
-try:
-    from .v2 import Model, MutableModel
-    is_v2 = True
-except ImportError:
-    from .v1 import Model, MutableModel
-    is_v2 = False
+from .v2 import Model, MutableModel
+from . import v1
 
-__all__ = ["Model", "MutableModel", "is_v2"]
+__all__ = ["Model", "MutableModel", "v1"]

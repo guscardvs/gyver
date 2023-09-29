@@ -27,7 +27,8 @@ from gyver.utils import finder
 from gyver.utils import json
 from gyver.utils import panic
 from gyver.utils.strings import make_lex_separator
-from gyver.model import is_v2
+
+from pydantic import v1
 
 from .dataclass import DataclassResolverStrategy
 from .gattrs import GyverAttrsResolverStrategy
@@ -98,11 +99,7 @@ class AdapterConfigFactory:
             type[FieldResolverStrategy]: The strategy class for resolving fields.
         """
         klass = config_class.origin or config_class.type_
-        base_model_cls: list[type] = [BaseModel]
-        if is_v2:
-            from pydantic import v1
-
-            base_model_cls.append(v1.BaseModel)
+        base_model_cls: list[type] = [BaseModel, v1.BaseModel]
         if hasattr(klass, "__gyver_attrs__"):
             return GyverAttrsResolverStrategy
         elif is_dataclass(klass):

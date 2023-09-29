@@ -22,7 +22,7 @@ redis = { version = "^4.5.5", optional = true }
 gyver-attrs = "^0.7.0"
 faust-cchardet = "^2.1.18"
 env-star = "^2.3.0"
-pydantic = {extras = ["email"], version = ">=1.10.12, <=2.4.1"}
+pydantic = {extras = ["email"], version = "^2.4.1"}
 lazy-fields = "^1.0.1"
 
 [tool.poetry.group.lint.dependencies]
