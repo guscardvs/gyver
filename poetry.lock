@@ -3117,4 +3117,4 @@ db-sqlite = ["aiosqlite", "sqlalchemy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "90c503593d454c473f9533962bb447172e654af06966e3c6dd5763896f867f94"
+content-hash = "3de953670a3e55bfd6a87471af9271cc27c7b10a1cd6ea811d15d5f8b92a02b5"
