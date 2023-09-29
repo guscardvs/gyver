@@ -118,7 +118,7 @@ class AdapterConfigFactory:
         __prefix__: str = "",
         __sep__: str = "__",
         *,
-        presets: Optional[Mapping[str, Any]] = None,
+        presets: Optional[dict[str, Any]] = None,
         **defaults: Any,
     ) -> T:
         """
@@ -128,7 +128,7 @@ class AdapterConfigFactory:
             model_cls (type[T]): The model class representing the configuration.
             __prefix__ (str): Optional prefix for configuration fields.
             __set__(str): Optional prefix to separate fields of nested models. Default is "__"
-            presets (Optional[Mapping[str, Any]]): Optional preset values for fields.
+            presets (Optional[dict[str, Any]]): Optional preset values for fields.
             **defaults (Any): Default values for fields.
 
         Returns:
@@ -159,7 +159,7 @@ class AdapterConfigFactory:
         __prefix__: str = "",
         __sep__: str = "__",
         *,
-        presets: Optional[Mapping[str, Any]] = None,
+        presets: Optional[dict[str, Any]] = None,
         **defaults: Any,
     ) -> Callable[[], T]:
         """
@@ -168,7 +168,7 @@ class AdapterConfigFactory:
         Args:
             model_cls (type[T]): The model class representing the configuration.
             __prefix__ (str): Optional prefix for configuration fields.
-            presets (Optional[Mapping[str, Any]]): Optional preset values for fields.
+            presets (Optional[dict[str, Any]]): Optional preset values for fields.
             **defaults (Any): Default values for fields.
 
         Returns:

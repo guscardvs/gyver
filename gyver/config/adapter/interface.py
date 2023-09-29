@@ -13,12 +13,12 @@ if TYPE_CHECKING:
 
     from attrs import Attribute
     from gyver.attrs.field import Field as GField
-    from pydantic.fields import ModelField
+    from .pydantic import FieldWrapper
 
-T = TypeVar("T", "ModelField", "Attribute", "Field", "GField")
+T_co = TypeVar("T_co", "FieldWrapper", "Attribute", "Field", "GField", covariant=True)
 
 
-class FieldResolverStrategy(Protocol[T]):
+class FieldResolverStrategy(Protocol[T_co]):
     """
     A protocol for resolving the properties of a field, regardless of
     its implementation.
@@ -32,7 +32,7 @@ class FieldResolverStrategy(Protocol[T]):
     These types indicate the different ways that a field can be defined in Python.
     """
 
-    def __init__(self, field: T) -> None:
+    def __init__(self, field: T_co) -> None:
         """
         Initialize a new `FieldResolver` instance.
 
@@ -75,5 +75,5 @@ class FieldResolverStrategy(Protocol[T]):
         ...
 
     @staticmethod
-    def iterfield(config_class: type) -> Generator[T, Any, Any]:
+    def iterfield(config_class: type) -> Generator[T_co, Any, Any]:
         ...
