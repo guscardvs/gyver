@@ -1,3 +1,9 @@
+## 3.0.1 (2023-09-29)
+
+### Fix
+
+- updated interfaces for gyver/config to match code changes
+
 ## 3.0.0 (2023-09-29)
 
 ### Feat
