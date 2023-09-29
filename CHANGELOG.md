@@ -1,3 +1,9 @@
+## 2.8.4 (2023-09-29)
+
+### Fix
+
+- updated pydantic to fix vulnerability
+
 ## 2.8.3 (2023-09-23)
 
 ### Fix
