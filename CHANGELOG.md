@@ -1,3 +1,9 @@
+## 3.0.0 (2023-09-29)
+
+### Feat
+
+- removed support for pydanticV2 to fix vulnerability
+
 ## 2.8.4 (2023-09-29)
 
 ### Fix
