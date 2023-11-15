@@ -1,3 +1,9 @@
+## 3.0.2 (2023-11-15)
+
+### Fix
+
+- updated libraries and imports
+
 ## 3.0.1 (2023-09-29)
 
 ### Fix
