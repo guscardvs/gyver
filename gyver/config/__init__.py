@@ -6,10 +6,11 @@ from config.envconfig import DotFile
 from config.envconfig import EnvConfig
 from config.interface import ConfigLike
 from config.utils import boolean_cast
-from gyver.utils.strings import comma_separated
 from config.utils import joined_cast
 from config.utils import valid_path
 from config.utils import with_rule
+
+from gyver.utils.strings import comma_separated
 
 from .adapter import AdapterConfigFactory
 from .adapter.mark import as_config

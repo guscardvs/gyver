@@ -1,11 +1,13 @@
 from typing import Generic
 
+from lazyfields import dellazy
+from lazyfields import lazyfield
+
 from gyver.context.context import AsyncContext
 from gyver.context.context import Context
 from gyver.context.interfaces.adapter import AtomicAdapter
 from gyver.context.interfaces.adapter import AtomicAsyncAdapter
 from gyver.context.typedef import T
-from lazyfields import lazyfield, dellazy
 
 
 class AtomicContext(Context[T], Generic[T]):

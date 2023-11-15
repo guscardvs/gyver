@@ -1,8 +1,9 @@
-from gyver import utils
+from lazyfields import lazyfield
+from lazyfields import setlazy
+
 from gyver.config import as_config
 from gyver.exc import InvalidField
 from gyver.utils.exc import panic
-from lazyfields import setlazy, lazyfield
 
 from . import drivers
 from .typedef import Driver

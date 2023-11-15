@@ -51,9 +51,7 @@ if sys.version_info < (3, 11):
 
         exceptions: tuple[Exception, ...]
 
-        def __init__(
-            self, message: str, exceptions: Sequence[Exception]
-        ) -> None:
+        def __init__(self, message: str, exceptions: Sequence[Exception]) -> None:
             self.message = message
             self.exceptions = tuple(exceptions)
             args = list(chain(item.args for item in exceptions))
@@ -75,8 +73,6 @@ else:
         This exception is used to encapsulate and present multiple related exceptions as a group.
         It provides a way to handle multiple errors together in a unified manner.
         """
-
-        pass
 
 
 class FailedFileOperation(GyverError):

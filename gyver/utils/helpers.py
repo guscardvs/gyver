@@ -91,12 +91,12 @@ def merge_dicts(
         left (dict): The left dictionary to merge.
         right (dict): The right dictionary to merge.
         on_conflict (Literal["strict", "left", "right"]): The conflict resolution strategy to use.
-            
+
             - 'strict': Raise a MergeConflict exception if conflicts occur.
             - 'left': Prioritize the values from the left dictionary in case of conflicts.
             - 'right': Prioritize the values from the right dictionary in case of conflicts.
         merge_sequences (bool, optional): Indicates whether to merge sequences (lists, sets, tuples) or skip them.
-            
+
             - If True, sequences will be merged based on the conflict resolution strategy.
             - If False, sequences will be skipped, and the value from the chosen (defaults to left on strict)
             dictionary will be used. Default is True.
@@ -121,11 +121,7 @@ def merge_dicts(
             elif isinstance(value, (list, set, tuple)) and merge_sequences:
                 left_val = left_curr[key]
                 if isinstance(left_val, (list, set, tuple)):
-                    type_ = (
-                        type(value)
-                        if on_conflict == "right"
-                        else type(left_val)
-                    )
+                    type_ = type(value) if on_conflict == "right" else type(left_val)
                     output_curr[key] = type_(chain(left_val, value))
             elif isinstance(value, dict):
                 if isinstance(left_curr[key], dict):

@@ -2,7 +2,6 @@ import typing
 
 import orjson
 
-
 loads: typing.Callable[
     [typing.Union[str, bytes, bytearray, memoryview]], typing.Any
 ] = orjson.loads

@@ -3,8 +3,9 @@ from typing import Protocol
 from typing import TypeVar
 from typing import cast
 
-from gyver.exc import InvalidPath
 from lazyfields import lazyfield
+
+from gyver.exc import InvalidPath
 
 from .helpers import python_filename
 from .typedef import File

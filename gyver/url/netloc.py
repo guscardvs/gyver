@@ -1,8 +1,8 @@
 from typing import Optional
-from typing_extensions import Self
 from urllib.parse import quote
 
 from gyver.attrs import mutable
+from typing_extensions import Self
 
 from gyver.url.encode import Encodable
 from gyver.url.utils import utf8

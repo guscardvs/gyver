@@ -94,7 +94,7 @@ def make_lex_separator(
         Callable[[str], OuterCastT]: A callable that separates a string into an instance of outer_cast with casted items.
 
     Examples:
-    
+
         >>> comma_separated = make_lex_separator(tuple, str)
         >>> result = comma_separated("a, b, c")
         >>> print(result)

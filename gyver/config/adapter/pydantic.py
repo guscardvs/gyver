@@ -8,17 +8,17 @@ from config import MISSING
 from gyver.attrs import define
 from lazyfields import lazyfield
 from pydantic import BaseModel
-
+from pydantic import v1
+from pydantic.fields import FieldInfo
 
 from gyver.config.adapter.interface import FieldResolverStrategy
 
-from pydantic.fields import FieldInfo
-from pydantic import v1
 
 @define
 class FieldWrapper:
     name: str
     field_info: FieldInfo
+
 
 @define
 class PydanticResolverStrategy(FieldResolverStrategy[FieldWrapper]):

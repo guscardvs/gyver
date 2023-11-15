@@ -10,12 +10,12 @@ from typing import Union
 import redis
 from gyver.attrs import define
 from gyver.attrs import info
+from lazyfields import lazyfield
 from redis import asyncio as aioredis
 
 from gyver.config import AdapterConfigFactory
 from gyver.exc import CacheMiss
 from gyver.utils import json
-from lazyfields import lazyfield
 
 from .config import CacheConfig
 from .interface import AsyncCacheInterface

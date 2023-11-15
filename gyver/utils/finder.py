@@ -5,12 +5,13 @@ import pathlib
 import sys
 import threading
 import typing
-from typing_extensions import Self
+
 from gyver.attrs import define
+from lazyfields import lazyfield
+from typing_extensions import Self
 
 from gyver.exc import InvalidPath
 from gyver.exc import MissingParams
-from lazyfields import lazyfield
 
 PathConverter = typing.Callable[[pathlib.Path], str]
 StrOrPath = typing.Union[str, pathlib.Path]
@@ -99,9 +100,7 @@ class _Finder:
 
     def __attrs_post_init__(self):
         if not self.root.exists():
-            raise InvalidPath(
-                f"root must be a valid path, received {self.root}"
-            )
+            raise InvalidPath(f"root must be a valid path, received {self.root}")
 
     def _should_look(self, path: pathlib.Path):
         """
@@ -113,9 +112,7 @@ class _Finder:
         Returns:
             bool: True if the path should be explored, False otherwise.
         """
-        str_exclude = tuple(
-            item for item in self.exclude if isinstance(item, str)
-        )
+        str_exclude = tuple(item for item in self.exclude if isinstance(item, str))
         path_exclude = tuple(
             item for item in self.exclude if isinstance(item, pathlib.Path)
         )
@@ -301,9 +298,7 @@ class FinderBuilder:
                 os.sep + caller_module_name, ""
             )
 
-            caller_root_path = caller_root_path.replace(
-                project_related_folders, ""
-            )
+            caller_root_path = caller_root_path.replace(project_related_folders, "")
 
         return self.from_path(pathlib.Path(caller_root_path))
 

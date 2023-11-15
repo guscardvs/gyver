@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 
     from attrs import Attribute
     from gyver.attrs.field import Field as GField
+
     from .pydantic import FieldWrapper
 
 T_co = TypeVar("T_co", "FieldWrapper", "Attribute", "Field", "GField", covariant=True)

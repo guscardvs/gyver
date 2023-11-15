@@ -5,7 +5,7 @@ from gyver.context.context import Context
 from gyver.context.interfaces.adapter import AtomicAdapter
 from gyver.context.interfaces.adapter import AtomicAsyncAdapter
 from gyver.context.typedef import T
-from lazyfields import is_initialized
+
 
 class BoundContext(Context[T], Generic[T]):
     """A context manager for managing atomic transactions with an adapter."""
@@ -61,6 +61,7 @@ class BoundContext(Context[T], Generic[T]):
             *exc: Exception information.
         """
         self.release(not any(exc))
+
 
 class AsyncBoundContext(AsyncContext[T], Generic[T]):
     """An asynchronous context manager for managing atomic transactions with an async adapter."""

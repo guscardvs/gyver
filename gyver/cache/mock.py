@@ -9,10 +9,10 @@ from queue import Queue
 
 from gyver.attrs import define
 from gyver.attrs import info
+from lazyfields import lazyfield
 
 from gyver.exc import CacheMiss
 from gyver.utils import json
-from lazyfields import lazyfield
 
 from .interface import AsyncCacheInterface
 from .interface import CacheInterface

@@ -1,9 +1,12 @@
 import pytest
-
-from gyver.model import Model, v1
-from lazyfields import asynclazyfield, lazyfield, setlazy, force_set
-
+from lazyfields import asynclazyfield
+from lazyfields import force_set
+from lazyfields import lazyfield
+from lazyfields import setlazy
 from pydantic_core import ValidationError
+
+from gyver.model import Model
+from gyver.model import v1
 
 
 def test_model_configs_are_expected():

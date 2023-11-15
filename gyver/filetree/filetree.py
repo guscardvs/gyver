@@ -2,9 +2,9 @@ from contextlib import contextmanager
 from pathlib import Path
 
 from gyver.attrs import mutable
+from lazyfields import lazyfield
 
 from gyver.exc import FailedFileOperation
-from lazyfields import lazyfield
 
 from .interface import AbstractFileTree
 from .typedef import File

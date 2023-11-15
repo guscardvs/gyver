@@ -17,7 +17,8 @@ from gyver.config.adapter.mark import mark
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
 from gyver.database import DatabaseConfig
 from gyver.database.utils import make_uri
-from gyver.model import Model, v1
+from gyver.model import Model
+from gyver.model import v1
 from gyver.url import URL
 from gyver.url import Netloc
 from gyver.utils import json

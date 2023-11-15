@@ -3,7 +3,9 @@ import contextlib
 import threading
 import typing
 
-from lazyfields import asynclazyfield, dellazy, lazyfield
+from lazyfields import asynclazyfield
+from lazyfields import dellazy
+from lazyfields import lazyfield
 
 from . import interfaces
 from .typedef import T
@@ -18,9 +20,7 @@ class Context(typing.Generic[T]):
             adapter (interfaces.Adapter[T]): An adapter that will be used to acquire and release resources.
         """
         self._adapter = adapter
-        self._stack = (
-            0  # Keeps track of how many frames are using this context
-        )
+        self._stack = 0  # Keeps track of how many frames are using this context
         self._lock = threading.Lock()  # A lock to ensure thread safety
 
     @lazyfield
@@ -111,9 +111,7 @@ class AsyncContext(typing.Generic[T]):
             adapter (interfaces.AsyncAdapter[T]): An async adapter that will be used to acquire and release resources.
         """
         self._adapter = adapter
-        self._stack = (
-            0  # Keeps track of how many frames are using this context
-        )
+        self._stack = 0  # Keeps track of how many frames are using this context
         self._lock = asyncio.Lock()  # A lock to ensure thread safety
 
     @property

@@ -2,9 +2,9 @@ from typing import Optional
 
 from cryptography.fernet import Fernet
 from cryptography.fernet import MultiFernet
+from lazyfields import lazyfield
 
 from gyver.config import AdapterConfigFactory
-from lazyfields import lazyfield
 
 from .config import CryptoConfig
 

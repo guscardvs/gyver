@@ -1,9 +1,9 @@
 import typing
 
 import sqlalchemy.ext.asyncio as sa_asyncio
+from lazyfields import lazyfield
 
 from gyver import context
-from lazyfields import lazyfield
 
 AsyncSaContext = context.AsyncContext[sa_asyncio.AsyncConnection]
 

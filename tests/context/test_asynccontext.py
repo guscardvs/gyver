@@ -1,8 +1,6 @@
 import asyncio
 import contextlib
 
-import pytest
-
 from gyver.context import AsyncContext
 
 from .mocks import MockAsyncAdapter

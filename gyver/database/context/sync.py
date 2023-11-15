@@ -3,9 +3,9 @@ import typing
 import sqlalchemy as sa
 import sqlalchemy.engine as sa_engine
 import sqlalchemy.orm as sa_orm
+from lazyfields import lazyfield
 
 from gyver import context
-from lazyfields import lazyfield
 
 TransactionOption = typing.Optional[typing.Literal["open", "begin"]]
 

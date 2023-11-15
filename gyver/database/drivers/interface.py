@@ -1,5 +1,7 @@
 from typing import Protocol
+
 from gyver.database.typedef import Driver
+
 
 class Dialect(Protocol):
     """Protocol representing a database dialect.
@@ -12,6 +14,7 @@ class Dialect(Protocol):
         sync_driver (str): The synchronous driver name.
         only_host (bool): Indicates if the dialect supports only host connections.
     """
+
     default_port: int
     driver: Driver
     dialect_name: str

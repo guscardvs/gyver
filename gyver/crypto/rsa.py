@@ -5,10 +5,10 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.asymmetric import rsa
 from gyver.attrs import define
 from gyver.attrs import info
+from lazyfields import lazyfield
 
 from gyver.config import AdapterConfigFactory
 from gyver.config import as_config
-from lazyfields import lazyfield
 
 
 @as_config

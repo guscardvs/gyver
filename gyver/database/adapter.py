@@ -3,6 +3,7 @@ import typing
 import sqlalchemy as sa
 from gyver.attrs import define
 from gyver.attrs import info
+from lazyfields import lazyfield
 from sqlalchemy.ext.asyncio import create_async_engine
 
 from gyver.config import AdapterConfigFactory
@@ -10,7 +11,6 @@ from gyver.context import atomic
 from gyver.database.context.asyncio import AsyncSessionAdapter
 from gyver.database.context.sync import SessionAdapter
 from gyver.database.typedef import Driver
-from lazyfields import lazyfield
 
 from .config import DatabaseConfig
 from .context import AsyncConnectionAdapter

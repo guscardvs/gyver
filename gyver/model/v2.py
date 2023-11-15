@@ -1,16 +1,17 @@
 from typing import Any
 
+from lazyfields import lazy
 from pydantic import __version__
 
 from gyver import utils
-from lazyfields import lazy
 
 pydantic_vinfo = tuple(int(i) for i in __version__.split(".") if i.isdigit())
 
 if pydantic_vinfo < (2, 0, 0):
     raise ImportError("Unable to use .v2, install pydantic>=2.0.0", __version__)
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
+from pydantic import ConfigDict
 
 
 class Model(BaseModel):  # type: ignore

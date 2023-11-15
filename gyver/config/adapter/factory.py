@@ -1,5 +1,5 @@
-from contextlib import suppress
 import contextlib
+from contextlib import suppress
 from dataclasses import is_dataclass
 from pathlib import Path
 from typing import Any
@@ -19,16 +19,15 @@ from config.interface import ConfigLike
 from config.utils import boolean_cast
 from gyver.attrs import define
 from gyver.attrs import mark_factory
-from gyver.attrs.utils.typedef import DisassembledType
 from gyver.attrs.utils.functions import disassemble_type
+from gyver.attrs.utils.typedef import DisassembledType
 from pydantic import BaseModel
+from pydantic import v1
 
 from gyver.utils import finder
 from gyver.utils import json
 from gyver.utils import panic
 from gyver.utils.strings import make_lex_separator
-
-from pydantic import v1
 
 from .dataclass import DataclassResolverStrategy
 from .gattrs import GyverAttrsResolverStrategy

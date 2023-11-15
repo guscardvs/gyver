@@ -5,6 +5,7 @@ from datetime import timezone
 import fakeredis._server as fakeredis
 import pytest
 from fakeredis import aioredis
+from lazyfields import lazyfield
 
 from gyver.cache.config import CacheConfig
 from gyver.cache.mapper import AsyncCacheMap
@@ -12,7 +13,6 @@ from gyver.cache.mapper import CacheMap
 from gyver.cache.redis import AsyncRedisWrapper
 from gyver.cache.redis import RedisWrapper
 from gyver.exc import CacheMiss
-from lazyfields import lazyfield
 
 
 def _make_cache_config():
@@ -102,7 +102,7 @@ async def test_async_cache_raises_cache_miss_correctly():
     cache = await _make_async_cache()
 
     with pytest.raises(CacheMiss):
-        result = await cache.get("name")
+        await cache.get("name")
 
 
 async def test_async_cache_works_properly_with_mapper():

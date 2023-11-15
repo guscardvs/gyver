@@ -2,9 +2,9 @@ import re
 from typing import Union
 from urllib.parse import quote
 from urllib.parse import unquote
-from typing_extensions import Self
 
 from gyver.attrs import mutable
+from typing_extensions import Self
 
 from gyver.url.encode import Encodable
 from gyver.url.utils import is_valid_encoded_path
@@ -22,6 +22,7 @@ class Path(Encodable):
     Attributes:
         segments (list[str]): List of path segments.
     """
+
     segments: list[str]
 
     def __init__(self, pathstr: str) -> None:

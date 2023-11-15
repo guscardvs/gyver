@@ -1,5 +1,7 @@
 from gyver.attrs import define
+
 from gyver.database.typedef import Driver
+
 
 @define
 class DialectInfo:
@@ -13,6 +15,7 @@ class DialectInfo:
         sync_driver (str): The synchronous driver name.
         only_host (bool): Indicates if the dialect supports only host connections.
     """
+
     default_port: int
     driver: Driver
     dialect_name: str

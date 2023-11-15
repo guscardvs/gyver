@@ -1,11 +1,11 @@
 from collections import defaultdict
 from typing import Mapping
 from typing import Optional
-from typing_extensions import Self
 from urllib.parse import urlparse
 from urllib.parse import urlunsplit
 
 from gyver.attrs import mutable
+from typing_extensions import Self
 
 from gyver.url.encode import Encodable
 from gyver.url.fragment import Fragment
@@ -70,9 +70,7 @@ class URL(Encodable):
             str: The encoded URL string.
         """
         resolved_query = (
-            self.query.encode()
-            if append_empty_equal
-            else self.query.omit_empty_equal()
+            self.query.encode() if append_empty_equal else self.query.omit_empty_equal()
         )
         return urlunsplit(
             (

@@ -1,6 +1,8 @@
 from typing import Any
-from gyver import utils
+
 from lazyfields import lazy
+
+from gyver import utils
 
 try:
     from pydantic.v1 import BaseModel
@@ -11,7 +13,7 @@ except ImportError:
 class Model(BaseModel):  # type: ignore
     """
     Model is a BaseModel overload with opinions on JSON parsing mutability and alias generation.
-    
+
     Configurations:
         - json_loads: Uses utils.json.loads for JSON loading.
         - json_dumps: Uses utils.json.dumps for JSON dumping.
@@ -21,7 +23,7 @@ class Model(BaseModel):  # type: ignore
         - allow_population_by_field_name: Allows population of fields by field name.
         - keep_untouched: Keeps attributes of type lazy untouched during population.
     """
-    
+
     class Config:
         json_loads = utils.json.loads
         json_dumps = utils.json.dumps
@@ -34,7 +36,7 @@ class Model(BaseModel):  # type: ignore
     def __setattr__(self, name: str, value: Any):
         """
         Overloads the __setattr__ method to allow lazy fields to work correctly.
-        
+
         Args:
             name (str): The name of the attribute.
             value (Any): The value to set for the attribute.
@@ -44,14 +46,14 @@ class Model(BaseModel):  # type: ignore
         else:
             return super().__setattr__(name, value)
 
+
 class MutableModel(Model):
     """
     A mutable version of the Model class that allows unfreezing of instances.
-    
+
     Configurations:
         - frozen: Model instances are not frozen, allowing mutability.
     """
-    
+
     class Config:
         frozen = False
-

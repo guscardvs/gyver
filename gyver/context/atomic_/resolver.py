@@ -10,6 +10,7 @@ from .bound import BoundContext
 from .core import AsyncAtomicContext
 from .core import AtomicContext
 
+
 @overload
 def atomic(context: Context[T], bound: bool = True) -> AtomicContext[T]:
     """
@@ -26,6 +27,7 @@ def atomic(context: Context[T], bound: bool = True) -> AtomicContext[T]:
         ValueError: If the provider received is not compliant with the atomic adapter interface.
     """
     ...
+
 
 @overload
 def atomic(context: AsyncContext[T], bound: bool = True) -> AsyncAtomicContext[T]:
@@ -44,7 +46,10 @@ def atomic(context: AsyncContext[T], bound: bool = True) -> AsyncAtomicContext[T
     """
     ...
 
-def atomic(context: Union[Context[T], AsyncContext[T]], bound: bool = True) -> Union[Context[T], AsyncContext[T]]:
+
+def atomic(
+    context: Union[Context[T], AsyncContext[T]], bound: bool = True
+) -> Union[Context[T], AsyncContext[T]]:
     """
     Create an atomic context or a bound context based on the given context.
 

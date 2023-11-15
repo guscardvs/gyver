@@ -1,11 +1,12 @@
 from urllib.parse import quote
-from typing_extensions import Self
 
 from gyver.attrs import mutable
+from typing_extensions import Self
 
 from gyver.url.encode import Encodable
 from gyver.url.utils import is_valid_encoded_path
 from gyver.url.utils import utf8
+
 
 @mutable(eq=False)
 class Fragment(Encodable):
