@@ -12,18 +12,12 @@ nav:
       - Working with Contexts: usage/context/index.md
       - Adapter Interface: usage/context/adapter.md
       - Atomicity: usage/context/atomic.md
-  - Database:
-      - Working With Database: usage/database/index.md
-      - Adapters: usage/database/adapter.md
-      - SQLAlchemy Defaults: usage/database/sqlalchemy.md
-      - SQLAlchemy Queries Helper: usage/database/query.md
   - URL: usage/url.md
   - Reference: 
       - Context: reference/context.md
       - Model: reference/model.md
       - Utils: reference/utils.md
       - Config: reference/config.md
-      - Database: reference/database.md
       - URL: reference/url.md
 theme:
   features:
