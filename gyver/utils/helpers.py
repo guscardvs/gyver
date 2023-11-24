@@ -2,12 +2,9 @@ import functools
 import warnings
 from collections import deque
 from itertools import chain
-from typing import Callable
-from typing import Literal
-from typing import TypeVar
-from typing import cast
+from collections.abc import Callable
+from typing import Literal, TypeVar, cast, TYPE_CHECKING
 
-from gyver.attrs import define
 from typing_extensions import ParamSpec
 
 from gyver.exc import MergeConflict
@@ -55,9 +52,9 @@ def deprecated(func: Callable[P, T]) -> Callable[P, T]:
 
     return inner
 
-
-frozen = deprecated(define)
-
+if TYPE_CHECKING:
+    import typing_extensions as te
+    deprecated = te.deprecated # type: ignore
 
 class DeprecatedClass:
     """

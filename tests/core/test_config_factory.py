@@ -15,8 +15,6 @@ from gyver.config.adapter.gattrs import GyverAttrsResolverStrategy
 from gyver.config.adapter.mark import as_config
 from gyver.config.adapter.mark import mark
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
-from gyver.database import DatabaseConfig
-from gyver.database.utils import make_uri
 from gyver.model import Model
 from gyver.model import v1
 from gyver.url import URL
@@ -211,34 +209,6 @@ def test_boolean_cast_works_correctly():
     )
 
 
-def test_old_config_works_with_adapter_factory():
-    factory = config.AdapterConfigFactory(
-        config.Config(
-            mapping=config.EnvMapping(
-                {
-                    "DB_USER": "internal-api",
-                    "DB_PASSWORD": "dummy-password",
-                    "DB_NAME": "internal_api",
-                    "DB_HOST": "localhost",
-                    "DB_DRIVER": "postgres",
-                }
-            )
-        )
-    )
-
-    cfg = factory.load(DatabaseConfig, "db")
-    db_url = URL("")
-    db_url.scheme = "postgresql+asyncpg"
-    db_url.add(
-        path="internal_api",
-        netloc_obj=Netloc("").set(
-            host="localhost",
-            username="internal-api",
-            password="dummy-password",
-            port=5432,
-        ),
-    )
-    assert make_uri(cfg) == db_url.encode()
 
 
 def test_config_factory_support_for_nested_classes():

@@ -2,8 +2,6 @@ import asyncio
 
 import pytest
 
-from tests.database import mocks  # noqa
-
 
 @pytest.fixture(scope="session")
 def event_loop():
