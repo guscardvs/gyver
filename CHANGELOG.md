@@ -1,3 +1,9 @@
+## 4.0.0 (2023-12-15)
+
+### Feat
+
+- removed database, cache and crypto modules and removed deprecated features
+
 ## 3.0.2 (2023-11-15)
 
 ### Fix
