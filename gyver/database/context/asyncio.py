@@ -60,7 +60,7 @@ class AsyncConnectionAdapter(context.AtomicAsyncAdapter[sa_asyncio.AsyncConnecti
 
     async def begin(self, client: sa_asyncio.AsyncConnection) -> None:
         if client.in_transaction():
-            await client.begin_nested()
+            return
         else:
             await client.begin()
 

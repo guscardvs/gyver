@@ -1,14 +1,10 @@
 import typing
-from datetime import date
-from datetime import time
+from datetime import date, time
 
 import sqlalchemy as sa
-from sqlalchemy.sql import Delete
-from sqlalchemy.sql import Select
-from sqlalchemy.sql import Update
+from sqlalchemy.sql import Delete, Select, Update
 from sqlalchemy.sql.elements import ColumnElement
 
-from gyver.database.entity import AbstractEntity
 from gyver.database.typedef import ClauseType
 
 ExecutableType = typing.Union[Select, Update, Delete]
@@ -17,7 +13,7 @@ Sortable = typing.Union[int, float, date, time]
 Comparison = ColumnElement[bool]  # type: ignore
 FieldType = typing.Union[ColumnElement, sa.Column]
 T = typing.TypeVar("T", contravariant=True)
-Mapper = typing.Union[sa.Table, type[AbstractEntity]]
+Mapper = typing.Union[sa.Table, type]
 
 
 class Comparator(typing.Protocol[T]):
