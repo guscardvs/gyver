@@ -1,3 +1,9 @@
+## 3.0.3 (2024-02-15)
+
+### Fix
+
+- update Mapper type to support custom types and removed support for savepoints
+
 ## 3.0.2 (2023-11-15)
 
 ### Fix
