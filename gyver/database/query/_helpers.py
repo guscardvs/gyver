@@ -2,14 +2,14 @@ import contextlib
 from inspect import isclass
 from typing import cast
 
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.sql import ColumnElement
 from typing_extensions import TypeGuard
 
 from gyver.database.entity import AbstractEntity
 
 from .exc import FieldNotFound
-from .interface import FieldType
-from .interface import Mapper
+from .interface import FieldType, Mapper
 
 
 def retrieve_attr(entity: Mapper, field: str) -> FieldType:
@@ -30,7 +30,7 @@ def retrieve_attr(entity: Mapper, field: str) -> FieldType:
 
 
 def _is_entity(entity: Mapper) -> TypeGuard[type[AbstractEntity]]:
-    return isclass(entity) and issubclass(entity, AbstractEntity)
+    return isclass(entity) and issubclass(entity, (AbstractEntity, DeclarativeBase))
 
 
 def _retrieve_related_field(entity: type[AbstractEntity], field: str) -> FieldType:
