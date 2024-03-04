@@ -1,3 +1,9 @@
+## 4.1.1 (2024-03-04)
+
+### Fix
+
+- added from_args function to URL
+
 ## 4.1.0 (2024-03-04)
 
 ### Feat
