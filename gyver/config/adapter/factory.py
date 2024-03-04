@@ -2,31 +2,28 @@ import contextlib
 from contextlib import suppress
 from dataclasses import is_dataclass
 from pathlib import Path
-from typing import Any
-from typing import Callable
-from typing import Mapping
-from typing import Optional
-from typing import Sequence
-from typing import TypeVar
-from typing import cast
-from typing import get_args
-from typing import get_origin
+from typing import (
+    Any,
+    Callable,
+    Mapping,
+    Optional,
+    Sequence,
+    TypeVar,
+    cast,
+    get_args,
+    get_origin,
+)
 
-from config import MISSING
-from config import Config
+from config import MISSING, Config
 from config.exceptions import MissingName
 from config.interface import ConfigLike
 from config.utils import boolean_cast
-from gyver.attrs import define
-from gyver.attrs import mark_factory
+from pydantic import BaseModel, v1
+
+from gyver.attrs import define, mark_factory
 from gyver.attrs.utils.functions import disassemble_type
 from gyver.attrs.utils.typedef import DisassembledType
-from pydantic import BaseModel
-from pydantic import v1
-
-from gyver.utils import finder
-from gyver.utils import json
-from gyver.utils import panic
+from gyver.utils import finder, json, panic
 from gyver.utils.strings import make_lex_separator
 
 from .dataclass import DataclassResolverStrategy
@@ -35,7 +32,7 @@ from .interface import FieldResolverStrategy
 from .mark import is_config
 from .pydantic import PydanticResolverStrategy
 
-_default_config = Config()
+_DEFAULT_CONFIG = Config()
 
 T = TypeVar("T")
 
@@ -82,7 +79,7 @@ class AdapterConfigFactory:
     Factory for creating configuration instances based on model classes.
     """
 
-    config: ConfigLike = _default_config
+    config: ConfigLike = _DEFAULT_CONFIG
 
     @staticmethod
     def get_strategy_class(

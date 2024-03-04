@@ -1,10 +1,9 @@
-from typing import Any
-from typing import TypeVar
+from typing import Any, TypeVar
 
 import typing_extensions
+
 from gyver.attrs import define
-from gyver.attrs.field import FieldInfo
-from gyver.attrs.field import info
+from gyver.attrs.field import FieldInfo, info
 
 # Sentinel object used to check if the __config_class__ attribute
 # has been set on the class

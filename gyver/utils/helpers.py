@@ -1,12 +1,14 @@
 import functools
 import warnings
 from collections import deque
-from itertools import chain
 from collections.abc import Callable
-from typing import Literal, TypeVar, cast, TYPE_CHECKING
+from itertools import chain
+from typing import TYPE_CHECKING, Literal, TypeVar, cast
+from weakref import WeakValueDictionary
 
 from typing_extensions import ParamSpec
 
+from gyver.attrs import define, info
 from gyver.exc import MergeConflict
 
 P = ParamSpec("P")
@@ -52,9 +54,12 @@ def deprecated(func: Callable[P, T]) -> Callable[P, T]:
 
     return inner
 
+
 if TYPE_CHECKING:
     import typing_extensions as te
-    deprecated = te.deprecated # type: ignore
+
+    deprecated = te.deprecated  # type: ignore
+
 
 class DeprecatedClass:
     """
@@ -141,3 +146,8 @@ def merge_dicts(
                 output_curr[key] = value
 
     return output
+
+
+@define
+class Cached:
+    _mapping: WeakValueDictionary = info(default_factory=WeakValueDictionary)
