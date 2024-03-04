@@ -1,12 +1,9 @@
-from collections import defaultdict
-from typing import Mapping
-from typing import Optional
-from urllib.parse import urlparse
-from urllib.parse import urlunsplit
+from typing import Mapping, Optional
+from urllib.parse import urlparse, urlunsplit
 
-from gyver.attrs import mutable
 from typing_extensions import Self
 
+from gyver.attrs import mutable
 from gyver.url.encode import Encodable
 from gyver.url.fragment import Fragment
 from gyver.url.netloc import Netloc
@@ -164,22 +161,13 @@ class URL(Encodable):
             self.scheme = scheme
         return self
 
-    def copy(self) -> Self:
+    def copy(self) -> "URL":
         """Create a copy of the URL object.
 
         Returns:
             URL: The copied URL object.
         """
-        new_url = URL("")
-        new_url.scheme = self.scheme
-        new_url.fragment.fragment_str = self.fragment.fragment_str
-        new_url.path.segments = self.path.segments.copy()
-        new_url.query.params = defaultdict(
-            list,
-            ((key, list(value)) for key, value in self.query.params.items()),
-        )
-        new_url.add(netloc_obj=self.netloc)
-        return new_url
+        return URL(self.encode())
 
     @classmethod
     def from_netloc(
@@ -208,4 +196,28 @@ class URL(Encodable):
         if netloc:
             newnetloc = netloc.merge(newnetloc)
         url.add(netloc_obj=newnetloc)
+        return url
+
+    @classmethod
+    def from_args(
+        cls,
+        queryasdict: Optional[Mapping[str, str]] = None,
+        /,
+        path: Optional[str] = None,
+        query: Optional[Mapping[str, str]] = None,
+        fragment: Optional[str] = None,
+        netloc: Optional[str] = None,
+        netloc_obj: Optional[Netloc] = None,
+        scheme: Optional[str] = None,
+    ):
+        url = URL("")
+        url.set(
+            queryasdict,
+            path,
+            query,
+            fragment,
+            netloc,
+            netloc_obj,
+            scheme,
+        )
         return url
