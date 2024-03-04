@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gyver"
-version = "4.0.0"
+version = "4.1.0"
 description = "Toolbox for web development"
 authors = ["Gustavo Correa <self.gustavocorrea@gmail.com>"]
 readme = "README.md"
@@ -53,15 +53,15 @@ force_single_line = true
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 addopts = [
-    "-n",
-    "4",
+    # "-n",
+    # "4",
     "--cov=gyver/",
     "--cov-report=html",
     "--cov-config=.coveragerc",
     "--no-cov-on-fail",
     "--cov-fail-under=80",
-    "--nf",
-    "-sv",
+    # "--nf",
+    "-s",
     "--maxfail=1",
 ]
 filterwarnings = [

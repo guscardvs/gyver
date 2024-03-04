@@ -1,3 +1,9 @@
+## 4.1.0 (2024-03-04)
+
+### Feat
+
+- **config**: added config helpers
+
 ## 4.0.0 (2023-12-15)
 
 ### Feat

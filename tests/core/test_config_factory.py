@@ -1,24 +1,20 @@
 import dataclasses
 from typing import Any
 
-from attrs import asdict
-from attrs import define
+import pytest
+from attrs import asdict, define
+
+from gyver import config
 from gyver.attrs import asdict as gasdict
 from gyver.attrs import define as gdefine
 from gyver.attrs.utils.functions import disassemble_type
-
-from gyver import config
 from gyver.config.adapter.attrs import AttrsResolverStrategy
 from gyver.config.adapter.dataclass import DataclassResolverStrategy
 from gyver.config.adapter.factory import AdapterConfigFactory
 from gyver.config.adapter.gattrs import GyverAttrsResolverStrategy
-from gyver.config.adapter.mark import as_config
-from gyver.config.adapter.mark import mark
+from gyver.config.adapter.mark import as_config, mark
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
-from gyver.model import Model
-from gyver.model import v1
-from gyver.url import URL
-from gyver.url import Netloc
+from gyver.model import Model, v1
 from gyver.utils import json
 
 
@@ -209,8 +205,6 @@ def test_boolean_cast_works_correctly():
     )
 
 
-
-
 def test_config_factory_support_for_nested_classes():
     @gdefine
     class Test:
@@ -238,3 +232,116 @@ def test_config_factory_support_for_nested_classes():
     assert factory.load(Another, "another") == Another(
         Test("another_test_name"), "another_name"
     )
+
+
+def test_parametrize_loads_parameters_as_expected():
+    def mock_function(val1: str, val2: int, val3) -> tuple[str, int, Any]:
+        return val1, val2, val3
+
+    cfg = config.Config(
+        mapping=config.EnvMapping({"VAL1": "example", "VAL2": "2", "VAL3": "False"})
+    )
+
+    result = config.parametrize(mock_function, __config__=cfg)
+    assert result == ("example", 2, "False")
+
+
+def test_parametrize_raises_warning_if_no_args_found():
+    def mock_funca():
+        pass
+
+    def mock_funcb(a: int):
+        return a
+
+    with pytest.warns(UserWarning) as winfo:
+        resulta = config.parametrize(mock_funca)
+    assert (
+        str(winfo.pop().message)
+        == f"No args could be inspected in function: {mock_funca.__name__}"
+    )
+    with pytest.warns(UserWarning) as winfo:
+        resultb = config.parametrize(mock_funcb, __kwargs_type__="presets", a=35)
+    assert (
+        str(winfo.pop().message)
+        == f"No args could be inspected in function: {mock_funcb.__name__}"
+    )
+
+    assert resulta is None
+    assert resultb == 35
+
+
+def test_parametrize_transforms_key_correctly():
+    def func(val: str) -> str:
+        return val
+
+    cfg = config.Config(mapping=config.EnvMapping({"val": "Hello", "VAL": "World"}))
+
+    assert (
+        f"{config.parametrize(func, __transform__=str, __config__=cfg)}, {config.parametrize(func, __transform__=str.upper, __config__=cfg)}"
+        == "Hello, World"
+    )
+
+
+def test_parametrize_applies_defaults_properly():
+    def test(greeting: str, name: str) -> str:
+        return f"{greeting}, {name}"
+
+    cfg = config.Config(mapping=config.EnvMapping({"NAME": "John Doe"}))
+
+    assert (
+        config.parametrize(
+            test,
+            __config__=cfg,
+            __kwargs_type__="defaults",
+            greeting="Hello",
+            name="Jane Doe",
+        )
+        == "Hello, John Doe"
+    )
+
+
+def test_parametrize_supports_config_classes():
+    @as_config
+    class Person:
+        name: str
+        email: str
+        age: int
+
+    def say_hello(person: Person):
+        return (
+            f"Hello, I'm {person.name}. My email is {person.email}. I'm {person.age}."
+        )
+
+    cfg = config.Config(
+        mapping=config.EnvMapping(
+            {"PERSON_NAME": "John Doe", "PERSON_EMAIL": "johndoe@example.com"}
+        )
+    )
+
+    assert (
+        config.parametrize(say_hello, __config__=cfg, person_age=31)
+        == "Hello, I'm John Doe. My email is johndoe@example.com. I'm 31."
+    )
+
+
+async def test_attribute_loader_loads_values_properly():
+    cfg = config.Config(
+        mapping=config.EnvMapping({"FACTOR": "3", "PREFIXED_FACTOR": "3.7"})
+    )
+
+    @gdefine
+    class Test:
+        initial_value: float
+
+        @config.AttributeLoader(__config__=cfg).lazy
+        def factora(self, factor: float) -> float:
+            return self.initial_value * factor
+
+        @config.AttributeLoader(__prefix__="prefixed", __config__=cfg).asynclazy
+        async def factorb(self, factor: float) -> float:
+            return self.initial_value * factor
+
+    test = Test(3)
+
+    assert test.factora == test.initial_value * 3
+    assert await test.factorb() == test.initial_value * 3.7
