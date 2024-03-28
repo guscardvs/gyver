@@ -1,3 +1,9 @@
+## 4.1.2 (2024-03-28)
+
+### Fix
+
+- update vulnerable packages
+
 ## 4.1.1 (2024-03-04)
 
 ### Fix
