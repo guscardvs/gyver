@@ -1,3 +1,9 @@
+## 4.1.4 (2024-04-18)
+
+### Fix
+
+- **url**: updated url code to do a smarter faster copy without compromising API
+
 ## 4.1.3 (2024-03-28)
 
 ### Fix
