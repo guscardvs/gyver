@@ -1,11 +1,10 @@
 from urllib.parse import quote
 
-from gyver.attrs import mutable
 from typing_extensions import Self
 
+from gyver.attrs import mutable
 from gyver.url.encode import Encodable
-from gyver.url.utils import is_valid_encoded_path
-from gyver.url.utils import utf8
+from gyver.url.utils import is_valid_encoded_path, utf8
 
 
 @mutable(eq=False)
@@ -59,3 +58,8 @@ class Fragment(Encodable):
             str: The fragment string.
         """
         return self.fragment_str
+
+    def copy(self) -> "Fragment":
+        fragment = object.__new__(Fragment)
+        fragment.fragment_str = self.fragment_str
+        return fragment

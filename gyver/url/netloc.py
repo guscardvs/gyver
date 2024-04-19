@@ -1,9 +1,9 @@
 from typing import Optional
 from urllib.parse import quote
 
-from gyver.attrs import mutable
 from typing_extensions import Self
 
+from gyver.attrs import mutable
 from gyver.url.encode import Encodable
 from gyver.url.utils import utf8
 
@@ -155,3 +155,11 @@ class Netloc(Encodable):
         """
         netloc = cls("")
         return netloc.set(host, username, password, port)
+
+    def copy(self) -> "Netloc":
+        netloc = object.__new__(type(self))
+        netloc.host = self.host
+        netloc.username = self.username
+        netloc.password = self.password
+        netloc.port = self.port
+        return netloc

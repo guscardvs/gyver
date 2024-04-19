@@ -1,14 +1,12 @@
 import re
 from typing import Union
-from urllib.parse import quote
-from urllib.parse import unquote
+from urllib.parse import quote, unquote
 
-from gyver.attrs import mutable
 from typing_extensions import Self
 
+from gyver.attrs import mutable
 from gyver.url.encode import Encodable
-from gyver.url.utils import is_valid_encoded_path
-from gyver.url.utils import utf8
+from gyver.url.utils import is_valid_encoded_path, utf8
 
 PERCENT_REGEX = r"\%[a-fA-F\d][a-fA-F\d]"
 
@@ -141,6 +139,11 @@ class Path(Encodable):
             normalized = normalize(resolved)
             self.segments = self._load(normalized)
         return self
+
+    def copy(self) -> "Path":
+        path = object.__new__(Path)
+        path.segments = self.segments.copy()
+        return path
 
 
 _duplicates_regex = re.compile(r"/+")

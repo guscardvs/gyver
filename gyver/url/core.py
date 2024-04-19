@@ -167,7 +167,13 @@ class URL(Encodable):
         Returns:
             URL: The copied URL object.
         """
-        return URL(self.encode())
+        url = object.__new__(type(self))
+        url.scheme = self.scheme
+        url.netloc = self.netloc.copy()
+        url.path = self.path.copy()
+        url.query = self.query.copy()
+        url.fragment = self.fragment.copy()
+        return url
 
     @classmethod
     def from_netloc(

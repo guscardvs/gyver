@@ -1,12 +1,10 @@
 from collections import defaultdict
-from typing import Mapping
-from typing import Optional
-from urllib.parse import parse_qs
-from urllib.parse import quote
+from typing import Mapping, Optional
+from urllib.parse import parse_qs, quote
 
-from gyver.attrs import mutable
 from typing_extensions import Self
 
+from gyver.attrs import mutable
 from gyver.url.encode import Encodable
 
 
@@ -124,3 +122,8 @@ class Query(Encodable):
         """
         self.params = defaultdict(list, sorted(self.params.items()))
         return self
+
+    def copy(self) -> "Query":
+        query = object.__new__(type(self))
+        query.params = self.params.copy()
+        return query
