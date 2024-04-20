@@ -28,7 +28,7 @@ def dumps(val: typing.Any, *, default: typing.Any = None) -> str:
     Returns:
         str: The JSON-formatted string representing the serialized object.
     """
-    return orjson.dumps(val, default=default).decode()
+    return orjson.dumps(val, default=default).decode("utf-8")
 
 
 def load(fdes: typing.TextIO) -> str:

@@ -4,11 +4,9 @@ from collections import deque
 from collections.abc import Callable
 from itertools import chain
 from typing import TYPE_CHECKING, Literal, TypeVar, cast
-from weakref import WeakValueDictionary
 
 from typing_extensions import ParamSpec
 
-from gyver.attrs import define, info
 from gyver.exc import MergeConflict
 
 P = ParamSpec("P")
@@ -146,8 +144,3 @@ def merge_dicts(
                 output_curr[key] = value
 
     return output
-
-
-@define
-class Cached:
-    _mapping: WeakValueDictionary = info(default_factory=WeakValueDictionary)
