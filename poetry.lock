@@ -482,13 +482,13 @@ colorama = ">=0.4"
 
 [[package]]
 name = "gyver-attrs"
-version = "0.9.0"
+version = "0.9.2"
 description = ""
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "gyver_attrs-0.9.0-py3-none-any.whl", hash = "sha256:cc2948962ec7621f068580e937ac2145839bf2bad138129e992522a75bf7696c"},
-    {file = "gyver_attrs-0.9.0.tar.gz", hash = "sha256:f0c268b880dbd42bba1fbe058ba351450b7db3a353db3ddb7317e1b56e100da0"},
+    {file = "gyver_attrs-0.9.2-py3-none-any.whl", hash = "sha256:52afd14d62322152be467eb1390c99264da82b71b7a52d0a295ac85a8b4a23ec"},
+    {file = "gyver_attrs-0.9.2.tar.gz", hash = "sha256:b75e1879b4e8be71c8c526c340add4241120d501e7e38d2648a89ad1c1b2bc21"},
 ]
 
 [package.dependencies]
@@ -1555,4 +1555,4 @@ watchmedo = ["PyYAML (>=3.10)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "12cb2fbd310d6ffdba3be4431a6fe2fa114ae7eda700be87caff79d0ba7dc0b6"
+content-hash = "ae103cc758f7da9b1e40eeecae6c37b22139b7be1841f25bf80c1d8c0ed28d4d"
