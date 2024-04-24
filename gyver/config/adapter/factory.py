@@ -1,4 +1,5 @@
 import contextlib
+import typing
 from contextlib import suppress
 from dataclasses import is_dataclass
 from pathlib import Path
@@ -17,7 +18,7 @@ from typing import (
 from config import MISSING, Config
 from config.exceptions import MissingName
 from config.interface import ConfigLike
-from config.utils import boolean_cast
+from config.utils import LiteralType, boolean_cast, literal_cast
 from pydantic import BaseModel, v1
 
 from gyver.attrs import define, mark_factory
@@ -51,6 +52,8 @@ def _resolve_cast(outer_type: type) -> tuple[Any, bool]:
     origin = get_origin(outer_type)
     if outer_type is bool:
         return boolean_cast, False
+    if isinstance(outer_type, typing.cast(Any, LiteralType)):
+        return literal_cast(outer_type), False
     with contextlib.suppress(ValueError):
         AdapterConfigFactory.get_strategy_class(disassemble_type(outer_type))
         return outer_type, True

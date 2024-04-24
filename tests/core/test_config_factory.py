@@ -1,8 +1,10 @@
 import dataclasses
-from typing import Any
+from enum import Enum
+from typing import Any, Literal
 
 import pytest
 from attrs import asdict, define
+from config import InvalidCast
 
 from gyver import config
 from gyver.attrs import asdict as gasdict
@@ -24,6 +26,7 @@ class PersonConfig:
     emails: tuple[str, ...]
     counts: set[int]
     meta: dict[str, Any]
+    account: Literal["admin", "user"]
 
 
 @mark
@@ -32,6 +35,7 @@ class AnotherConfig(Model):
     emails: tuple[str, ...]
     counts: set[int]
     meta: dict[str, Any]
+    account: Literal["admin", "user"]
 
 
 @mark
@@ -40,6 +44,7 @@ class AnotherV1Config(v1.Model):
     emails: tuple[str, ...]
     counts: set[int]
     meta: dict[str, Any]
+    account: Literal["admin", "user"]
 
 
 @define
@@ -48,6 +53,7 @@ class OtherConfig:
     emails: tuple[str, ...]
     counts: set[int]
     meta: dict[str, Any]
+    account: Literal["admin", "user"]
 
 
 @gdefine
@@ -56,6 +62,7 @@ class Another:
     emails: tuple[str, ...]
     counts: set[int]
     meta: dict[str, Any]
+    account: Literal["admin", "user"]
 
 
 factory = AdapterConfigFactory()
@@ -98,6 +105,7 @@ def test_adapter_parses_correctly_on_from_config():
             "NAME": "John Doe",
             "emails": "person@example.com,  john.doe@hi.com,doejohn@test.com",
             "COUNTS": "6,2, 7, 1",
+            "ACCOUNT": "admin",
         }
     )
     cfg = config.Config(mapping=mapping)
@@ -134,6 +142,7 @@ def test_adapter_uses_json_loads_if_receives_dict_as_param():
             "emails": "person@example.com,  john.doe@hi.com,doejohn@test.com",
             "COUNTS": "6,2, 7, 1",
             "meta": json.dumps({"hello": "world"}),
+            "account": "user",
         }
     )
     cfg = config.Config(mapping=mapping)
@@ -203,6 +212,60 @@ def test_boolean_cast_works_correctly():
         .load(CustomConfig)
         .is_valid
     )
+
+
+def test_literal_cast_works_correctly():
+    class Option(Enum):
+        VALUE = "value"
+
+    @as_config
+    class Test:
+        options: Literal[1, "Other", b"Another", Option.VALUE, False]
+
+    assert (
+        config.AdapterConfigFactory(
+            config.Config(mapping=config.EnvMapping({"OPTIONS": "1"}))
+        )
+        .load(Test)
+        .options
+        == 1
+    )
+    assert (
+        config.AdapterConfigFactory(
+            config.Config(mapping=config.EnvMapping({"OPTIONS": "Other"}))
+        )
+        .load(Test)
+        .options
+        == "Other"
+    )
+    assert (
+        config.AdapterConfigFactory(
+            config.Config(mapping=config.EnvMapping({"OPTIONS": "Another"}))
+        )
+        .load(Test)
+        .options
+        == b"Another"
+    )
+    assert (
+        config.AdapterConfigFactory(
+            config.Config(mapping=config.EnvMapping({"OPTIONS": "value"}))
+        )
+        .load(Test)
+        .options
+        is Option.VALUE
+    )
+    assert (
+        config.AdapterConfigFactory(
+            config.Config(mapping=config.EnvMapping({"OPTIONS": "false"}))
+        )
+        .load(Test)
+        .options
+        is False
+    )
+    with pytest.raises(InvalidCast):
+        assert config.AdapterConfigFactory(
+            config.Config(mapping=config.EnvMapping({"OPTIONS": "invalid"}))
+        ).load(Test)
 
 
 def test_config_factory_support_for_nested_classes():

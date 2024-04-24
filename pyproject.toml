@@ -7,13 +7,13 @@ readme = "README.md"
 repository = "https://github.com/guscardvs/gyver"
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 orjson = "^3.8.1"
 typing-extensions = "^4.4.0"
 tzdata = { markers = "sys_platform != \"linux\"", version = "^2022.6" }
 gyver-attrs = "^0.9.0"
 faust-cchardet = "^2.1.18"
-env-star = "^2.4.0"
+env-star = "^2.4.4"
 lazy-fields = "^1.0.1"
 pydantic = {extras = ["email"], version = "^2.6.4"}
 

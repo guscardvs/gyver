@@ -37,3 +37,4 @@ class DataclassResolverStrategy(FieldResolverStrategy[Field]):
     @staticmethod
     def iterfield(config_class: type) -> Generator[Field, Any, Any]:
         yield from fields(config_class)
+
