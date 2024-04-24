@@ -1,3 +1,9 @@
+## 4.1.6 (2024-04-24)
+
+### Fix
+
+- now config factory supports literal casting
+
 ## 4.1.5 (2024-04-20)
 
 ### Fix
