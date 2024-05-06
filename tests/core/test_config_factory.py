@@ -1,6 +1,6 @@
 import dataclasses
 from enum import Enum
-from typing import Any, Literal
+from typing import Any, Literal, TypeAlias
 
 import pytest
 from attrs import asdict, define
@@ -214,6 +214,9 @@ def test_boolean_cast_works_correctly():
     )
 
 
+LiteralValue: TypeAlias = Literal["a", "b"]
+
+
 def test_literal_cast_works_correctly():
     class Option(Enum):
         VALUE = "value"
@@ -221,6 +224,10 @@ def test_literal_cast_works_correctly():
     @as_config
     class Test:
         options: Literal[1, "Other", b"Another", Option.VALUE, False]
+
+    @as_config
+    class Defaults:
+        value: LiteralValue = "b"
 
     assert (
         config.AdapterConfigFactory(
@@ -262,6 +269,13 @@ def test_literal_cast_works_correctly():
         .options
         is False
     )
+    assert (
+        config.AdapterConfigFactory(config.Config(mapping=config.EnvMapping({})))
+        .load(Defaults)
+        .value
+        == "b"
+    )
+
     with pytest.raises(InvalidCast):
         assert config.AdapterConfigFactory(
             config.Config(mapping=config.EnvMapping({"OPTIONS": "invalid"}))

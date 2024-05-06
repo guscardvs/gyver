@@ -127,3 +127,46 @@ class Query(Encodable):
         query = object.__new__(type(self))
         query.params = self.params.copy()
         return query
+
+    def first(self) -> dict[str, str]:
+        """Return a dictionary containing the first value for each query parameter.
+
+        Returns:
+            dict[str, str]: A dictionary where keys are query parameter names
+                and values are the first values associated with those parameters.
+        """
+        return {key: value[0] for key, value in self.params.items()}
+
+    def index_or_first(self, idx: int) -> dict[str, str]:
+        """Return a dictionary containing the value at index 'idx' for each query parameter,
+        or the first value if 'idx' exceeds the length of the parameter's value list.
+
+        Args:
+            idx (int): The index to retrieve for each query parameter.
+
+        Returns:
+            dict[str, str]: A dictionary where keys are query parameter names
+                and values are the values at index 'idx' or the first values
+                if 'idx' exceeds the length of the parameter's value list.
+        """
+        return {
+            key: value[0 if len(value) <= idx else idx]
+            for key, value in self.params.items()
+        }
+
+    def index_or_last(self, idx: int) -> dict[str, str]:
+        """Return a dictionary containing the value at index 'idx' for each query parameter,
+        or the last value if 'idx' exceeds the length of the parameter's value list.
+
+        Args:
+            idx (int): The index to retrieve for each query parameter.
+
+        Returns:
+            dict[str, str]: A dictionary where keys are query parameter names
+                and values are the values at index 'idx' or the last values
+                if 'idx' exceeds the length of the parameter's value list.
+        """
+        return {
+            key: value[-1 if len(value) <= idx else idx]
+            for key, value in self.params.items()
+        }
