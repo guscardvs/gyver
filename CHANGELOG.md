@@ -1,3 +1,9 @@
+## 4.1.8 (2024-05-06)
+
+### Fix
+
+- added helpers to retrieve a dict[str, str] on gyver.url.query
+
 ## 4.1.7 (2024-04-24)
 
 ### Fix
