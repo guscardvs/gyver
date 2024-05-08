@@ -4,8 +4,8 @@
 name: Lint and Run Tests
 
 on:
-  pull_request:
-    branches: [ "release" ]
+  push:
+    branches: [ "main" "release" ]
     paths:
       - 'gyver/**'
       - 'tests/**'
