@@ -1,6 +1,6 @@
 import warnings
 
-from gyver.utils.helpers import deprecated
+from gyver.utils import deprecated
 
 
 def test_deprecated_decorator():

@@ -1,10 +1,8 @@
-from config import MISSING, Config, EnvMapping
+from config import MISSING, Config, EnvMapping, comma_separated
 from config.enums import Env
 from config.envconfig import DotFile, EnvConfig
 from config.interface import ConfigLike
 from config.utils import boolean_cast, joined_cast, valid_path, with_rule
-
-from gyver.utils.strings import comma_separated
 
 from .adapter import AdapterConfigFactory
 from .adapter.helpers import AttributeLoader, attribute, load, parametrize

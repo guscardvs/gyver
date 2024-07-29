@@ -2,7 +2,6 @@ from collections import OrderedDict
 
 import pytest
 
-from gyver.exc import MergeConflict
 from gyver.utils import merge_dicts
 
 
@@ -45,7 +44,9 @@ def test_merge_dicts_skip_sequences():
     left = {"a": [1, 2, 3]}
     right = {"a": [4, 5, 6]}
     expected = {"a": [4, 5, 6]}
-    assert merge_dicts(left, right, on_conflict="right", merge_sequences=False)
+    assert (
+        merge_dicts(left, right, on_conflict="right", merge_sequences=False) == expected
+    )
 
 
 def test_merge_dicts_ordered_dict():
@@ -58,14 +59,14 @@ def test_merge_dicts_ordered_dict():
 def test_merge_dicts_strict_conflict_strategy():
     left = {"a": 1}
     right = {"a": 2}
-    with pytest.raises(MergeConflict):
+    with pytest.raises(ValueError):
         merge_dicts(left, right, on_conflict="strict")
 
 
 def test_merge_dicts_strict_nested_conflict_strategy():
     left = {"a": {"x": 1}}
     right = {"a": {"x": 2}}
-    with pytest.raises(MergeConflict):
+    with pytest.raises(ValueError):
         merge_dicts(left, right, on_conflict="strict")
 
 

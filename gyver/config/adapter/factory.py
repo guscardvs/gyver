@@ -24,8 +24,9 @@ from pydantic import BaseModel, v1
 from gyver.attrs import define, mark_factory
 from gyver.attrs.utils.functions import disassemble_type
 from gyver.attrs.utils.typedef import DisassembledType
-from gyver.utils import finder, json, panic
-from gyver.utils.strings import make_lex_separator
+from gyver.misc import autodiscovery
+from gyver.misc.strings import make_lex_separator
+from gyver.utils import json, panic
 
 from .dataclass import DataclassResolverStrategy
 from .gattrs import GyverAttrsResolverStrategy
@@ -238,8 +239,8 @@ class AdapterConfigFactory:
         Returns:
             dict[type, tuple[Sequence[str], ...]]: A dictionary of config classes and their associated environment variable names.
         """
-        builder = finder.FinderBuilder().add_validator(is_config).from_path(root)
-        output = builder.find()
+        builder = autodiscovery.RuntimeAutoDiscovery(is_config, root)
+        output = builder.load_asdict()
         tempself = cls()
         return {
             cfg: tuple(

@@ -1,16 +1,11 @@
-from typing import Any
-from typing import Generator
-from typing import Sequence
-from typing import Union
+from typing import Any, Generator, Sequence, Union
 
 from attr._make import Factory
-from attrs import NOTHING
-from attrs import Attribute
-from attrs import fields
+from attrs import NOTHING, Attribute, fields
 from config import MISSING
 from config.exceptions import InvalidCast
-from gyver.attrs import define
 
+from gyver.attrs import define
 from gyver.config.adapter.interface import FieldResolverStrategy
 from gyver.utils import panic
 
