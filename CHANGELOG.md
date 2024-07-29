@@ -1,3 +1,9 @@
+## 5.0.0 (2024-07-29)
+
+### Feat
+
+- major changes, pydantic and tzdata are no longer required dependencies and using gyver-misc for miscellaneous instead of the .utils package
+
 ## 4.1.8 (2024-05-06)
 
 ### Fix
