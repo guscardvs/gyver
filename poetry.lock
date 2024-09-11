@@ -1578,4 +1578,4 @@ tzdata = ["tzdata"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "c514da50fb05c29b87caa6f8fff9f497a8d5e8aad45d3f35bfd2fa8c2aae7885"
+content-hash = "f2d47cff0e7b72efde803c97e57fd123dec521a5b4fdd3a093ba38c0ccc5fe64"

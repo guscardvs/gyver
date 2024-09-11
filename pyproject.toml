@@ -18,7 +18,7 @@ gyver-attrs = "^0.9.4"
 faust-cchardet = "^2.1.18"
 env-star = "^2.4.4"
 lazy-fields = "^1.0.1"
-gyver-misc = "^0.4.0"
+gyver-misc = ">=0.4.0,<1.0.0"
 pydantic = { version = "^2.8.2", optional = true }
 
 [tool.poetry.group.lint.dependencies]
