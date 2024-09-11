@@ -1,3 +1,9 @@
+## 5.0.2 (2024-09-11)
+
+### Fix
+
+- bump gyver-misc to allow any minor/patch
+
 ## 5.0.1 (2024-09-05)
 
 ### Fix
