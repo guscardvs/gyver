@@ -1,3 +1,9 @@
+## 5.0.4 (2024-10-01)
+
+### Fix
+
+- changed linter/formatter to use ruff
+
 ## 5.0.3 (2024-10-01)
 
 ### Fix
