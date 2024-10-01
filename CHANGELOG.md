@@ -1,3 +1,9 @@
+## 5.0.3 (2024-10-01)
+
+### Fix
+
+- updated package versions and removed mandatory dependency from pydantic from the code
+
 ## 5.0.2 (2024-09-11)
 
 ### Fix
