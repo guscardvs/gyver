@@ -19,7 +19,6 @@ from config import MISSING, Config
 from config.exceptions import MissingName
 from config.interface import ConfigLike
 from config.utils import LiteralType, boolean_cast, literal_cast
-from pydantic import BaseModel, v1
 
 from gyver.attrs import define, mark_factory
 from gyver.attrs.utils.functions import disassemble_type
@@ -32,7 +31,6 @@ from .dataclass import DataclassResolverStrategy
 from .gattrs import GyverAttrsResolverStrategy
 from .interface import FieldResolverStrategy
 from .mark import is_config
-from .pydantic import PydanticResolverStrategy
 
 _DEFAULT_CONFIG = Config()
 
@@ -99,12 +97,19 @@ class AdapterConfigFactory:
             type[FieldResolverStrategy]: The strategy class for resolving fields.
         """
         klass = config_class.origin or config_class.type_
-        base_model_cls: list[type] = [BaseModel, v1.BaseModel]
+        try:
+            from pydantic import BaseModel, v1
+
+            base_model_cls = [BaseModel, v1.BaseModel]
+        except ImportError:
+            base_model_cls = []
         if hasattr(klass, "__gyver_attrs__"):
             return GyverAttrsResolverStrategy
         elif is_dataclass(klass):
             return DataclassResolverStrategy
-        elif issubclass(klass, tuple(base_model_cls)):
+        elif base_model_cls and issubclass(klass, tuple(base_model_cls)):
+            from .pydantic import PydanticResolverStrategy
+
             return PydanticResolverStrategy
         elif hasattr(klass, "__attrs_attrs__"):
             from .attrs import AttrsResolverStrategy
