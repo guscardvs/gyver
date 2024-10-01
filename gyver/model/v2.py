@@ -10,8 +10,10 @@ pydantic_vinfo = tuple(int(i) for i in __version__.split(".") if i.isdigit())
 if pydantic_vinfo < (2, 0, 0):
     raise ImportError("Unable to use .v2, install pydantic>=2.0.0", __version__)
 
-from pydantic import BaseModel
-from pydantic import ConfigDict
+from pydantic import (  # noqa: E402
+    BaseModel,
+    ConfigDict,
+)
 
 
 class Model(BaseModel):  # type: ignore

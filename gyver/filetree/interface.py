@@ -1,4 +1,3 @@
-from typing import Optional
 from typing import Protocol
 from typing import TypeVar
 from typing import cast
@@ -71,7 +70,7 @@ class AbstractFileTree(Protocol[T]):
             raise InvalidPath("filename conflicts with folder")
         return target
 
-    def get_dir(self, dirname: str, *path: str) -> Optional[Folder]:
+    def get_dir(self, dirname: str, *path: str) -> Folder | None:
         target = self.root
         for item in path:
             if item not in target.contents:
@@ -79,7 +78,7 @@ class AbstractFileTree(Protocol[T]):
             target = target.contents[item]
             if isinstance(target, File):
                 raise InvalidPath("Foldername conflicts with file")
-        return cast(Optional[Folder], target.contents.get(dirname))
+        return cast(Folder | None, target.contents.get(dirname))
 
     def create_py_file(
         self,

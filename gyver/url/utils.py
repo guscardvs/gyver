@@ -1,9 +1,7 @@
 import re
-from typing import Callable
-from typing import TypeVar
-from typing import Union
+from collections.abc import Callable
+from typing import Concatenate, TypeVar
 
-from typing_extensions import Concatenate
 from typing_extensions import ParamSpec
 
 T = TypeVar("T")
@@ -13,7 +11,7 @@ P = ParamSpec("P")
 
 def try_cast(
     val: T, cast: Callable[Concatenate[T, P], R], *args: P.args, **kwargs: P.kwargs
-) -> Union[T, R]:
+) -> T | R:
     """
     Try to cast a value to a different type using a provided casting function.
 
@@ -43,5 +41,5 @@ PERCENT_REGEX = r"\%[a-fA-F\d][a-fA-F\d]"
 
 
 is_valid_encoded_path = re.compile(
-    r"^([\w%s]|(%s))*$" % (re.escape("-.~:@!$&'()*+,;="), PERCENT_REGEX)
+    r"^([\w{}]|({}))*$".format(re.escape("-.~:@!$&'()*+,;="), PERCENT_REGEX)
 )

@@ -1,4 +1,4 @@
-from typing import Mapping, Optional
+from collections.abc import Mapping
 from urllib.parse import urlparse, urlunsplit
 
 from typing_extensions import Self
@@ -81,14 +81,14 @@ class URL(Encodable):
 
     def add(
         self,
-        queryasdict: Optional[Mapping[str, str]] = None,
+        queryasdict: Mapping[str, str] | None = None,
         /,
-        path: Optional[str] = None,
-        query: Optional[Mapping[str, str]] = None,
-        fragment: Optional[str] = None,
-        netloc: Optional[str] = None,
-        netloc_obj: Optional[Netloc] = None,
-        scheme: Optional[str] = None,
+        path: str | None = None,
+        query: Mapping[str, str] | None = None,
+        fragment: str | None = None,
+        netloc: str | None = None,
+        netloc_obj: Netloc | None = None,
+        scheme: str | None = None,
     ) -> Self:
         """Add components to the URL.
 
@@ -122,14 +122,14 @@ class URL(Encodable):
 
     def set(
         self,
-        queryasdict: Optional[Mapping[str, str]] = None,
+        queryasdict: Mapping[str, str] | None = None,
         /,
-        path: Optional[str] = None,
-        query: Optional[Mapping[str, str]] = None,
-        fragment: Optional[str] = None,
-        netloc: Optional[str] = None,
-        netloc_obj: Optional[Netloc] = None,
-        scheme: Optional[str] = None,
+        path: str | None = None,
+        query: Mapping[str, str] | None = None,
+        fragment: str | None = None,
+        netloc: str | None = None,
+        netloc_obj: Netloc | None = None,
+        scheme: str | None = None,
     ) -> Self:
         """Set components of the URL.
 
@@ -178,12 +178,12 @@ class URL(Encodable):
     @classmethod
     def from_netloc(
         cls,
-        netloc: Optional[Netloc] = None,
+        netloc: Netloc | None = None,
         *,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        host: Optional[str] = None,
-        port: Optional[int] = None,
+        username: str | None = None,
+        password: str | None = None,
+        host: str | None = None,
+        port: int | None = None,
     ) -> Self:
         """Create a URL object from a netloc.
 
@@ -207,14 +207,14 @@ class URL(Encodable):
     @classmethod
     def from_args(
         cls,
-        queryasdict: Optional[Mapping[str, str]] = None,
+        queryasdict: Mapping[str, str] | None = None,
         /,
-        path: Optional[str] = None,
-        query: Optional[Mapping[str, str]] = None,
-        fragment: Optional[str] = None,
-        netloc: Optional[str] = None,
-        netloc_obj: Optional[Netloc] = None,
-        scheme: Optional[str] = None,
+        path: str | None = None,
+        query: Mapping[str, str] | None = None,
+        fragment: str | None = None,
+        netloc: str | None = None,
+        netloc_obj: Netloc | None = None,
+        scheme: str | None = None,
     ):
         url = URL("")
         url.set(

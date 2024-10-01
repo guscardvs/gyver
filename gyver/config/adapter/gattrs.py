@@ -1,7 +1,6 @@
 from typing import Any
-from typing import Generator
-from typing import Sequence
-from typing import Union
+from collections.abc import Generator
+from collections.abc import Sequence
 
 from config import MISSING
 from gyver.attrs import define
@@ -25,7 +24,7 @@ class GyverAttrsResolverStrategy(FieldResolverStrategy[Field]):
     def init_name(self) -> str:
         return self.field.alias or self.field.name
 
-    def default(self) -> Union[Any, type[MISSING]]:
+    def default(self) -> Any | type[MISSING]:
         default = self.field.default
         if default is NOTHING:
             return MISSING

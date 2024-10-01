@@ -1,10 +1,9 @@
 import asyncio
 from time import time
 from typing import Any
-from typing import Callable
-from typing import Coroutine
+from collections.abc import Callable
+from collections.abc import Coroutine
 from typing import Generic
-from typing import Optional
 from typing import TypeVar
 
 from gyver.attrs import call_init
@@ -67,7 +66,7 @@ class AsyncPool(Generic[T]):
         return Resource.from_now(resource)
 
     async def _maybe_recycle(
-        self, resource: Resource[T], current_ts: Optional[float] = None
+        self, resource: Resource[T], current_ts: float | None = None
     ) -> T:
         """Returns resource from resource object or
         releases the current resource and returns a new one if
@@ -113,7 +112,7 @@ class AsyncPool(Generic[T]):
         self.resources.put_nowait(Resource.from_resource(resource))
         await self._increase_available()
 
-    async def prefill(self, count: Optional[int] = None) -> None:
+    async def prefill(self, count: int | None = None) -> None:
         """
         Prefills the queue by the amount passed.
 

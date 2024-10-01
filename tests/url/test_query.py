@@ -2,7 +2,6 @@ from gyver.url.query import Query
 
 
 def test_query():  # sourcery skip: extract-duplicate-method
-
     # Test query load
     query = Query("param1=value1&param2=value2")
     assert query.params == {"param1": ["value1"], "param2": ["value2"]}

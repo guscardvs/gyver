@@ -3,9 +3,8 @@ from queue import Empty
 from queue import LifoQueue
 from queue import Queue
 from time import time
-from typing import Callable
+from collections.abc import Callable
 from typing import Generic
-from typing import Optional
 from typing import TypeVar
 
 from gyver.attrs import call_init
@@ -55,9 +54,7 @@ class ThreadPool(Generic[T]):
         resource = self.factory()
         return Resource.from_now(resource)
 
-    def _maybe_recycle(
-        self, resource: Resource[T], current: Optional[float] = None
-    ) -> T:
+    def _maybe_recycle(self, resource: Resource[T], current: float | None = None) -> T:
         current = current or time()
         if (
             self._pool_recycle >= 0
@@ -81,7 +78,7 @@ class ThreadPool(Generic[T]):
         self.resources.put_nowait(Resource.from_resource(resource))
         self._increase_available()
 
-    def prefill(self, count: Optional[int] = None) -> None:
+    def prefill(self, count: int | None = None) -> None:
         count = count or self._pool_size
         count = min(count, self._pool_size)
 

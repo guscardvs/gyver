@@ -1,10 +1,9 @@
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Generator
+from collections.abc import Generator
 from typing import Protocol
-from typing import Sequence
+from collections.abc import Sequence
 from typing import TypeVar
-from typing import Union
 
 from config import MISSING
 
@@ -65,7 +64,7 @@ class FieldResolverStrategy(Protocol[T_co]):
         """
         ...
 
-    def default(self) -> Union[Any, type[MISSING]]:
+    def default(self) -> Any | type[MISSING]:
         """
         Get the default value of the field.
 
@@ -76,5 +75,4 @@ class FieldResolverStrategy(Protocol[T_co]):
         ...
 
     @staticmethod
-    def iterfield(config_class: type) -> Generator[T_co, Any, Any]:
-        ...
+    def iterfield(config_class: type) -> Generator[T_co, Any, Any]: ...

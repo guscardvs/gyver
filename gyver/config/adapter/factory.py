@@ -5,15 +5,12 @@ from dataclasses import is_dataclass
 from pathlib import Path
 from typing import (
     Any,
-    Callable,
-    Mapping,
-    Optional,
-    Sequence,
     TypeVar,
     cast,
     get_args,
     get_origin,
 )
+from collections.abc import Callable, Mapping, Sequence
 
 from config import MISSING, Config
 from config.exceptions import MissingName
@@ -123,7 +120,7 @@ class AdapterConfigFactory:
         __prefix__: str = "",
         __sep__: str = "__",
         *,
-        presets: Optional[dict[str, Any]] = None,
+        presets: dict[str, Any] | None = None,
         **defaults: Any,
     ) -> T:
         """
@@ -164,7 +161,7 @@ class AdapterConfigFactory:
         __prefix__: str = "",
         __sep__: str = "__",
         *,
-        presets: Optional[dict[str, Any]] = None,
+        presets: dict[str, Any] | None = None,
         **defaults: Any,
     ) -> Callable[[], T]:
         """

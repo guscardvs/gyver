@@ -3,12 +3,14 @@ import warnings
 from collections.abc import Callable
 from functools import WRAPPER_UPDATES, update_wrapper
 from inspect import signature
-from typing import Any, Coroutine, Literal, TypeVar
+from typing import Any, Literal, TypeVar
+from collections.abc import Coroutine
 
 from config import MISSING
 from config.interface import ConfigLike
 from lazyfields import asynclazyfield, lazyfield
-from typing_extensions import Concatenate, ParamSpec
+from typing_extensions import ParamSpec
+from typing import Concatenate
 
 from gyver.attrs import call_init, define
 
@@ -107,9 +109,7 @@ def parametrize(
     )
     presets = kwargs if __kwargs_type__ == "presets" else {}
     if not args:
-        warnings.warn(
-            "No args could be inspected in function: {}".format(call.__name__)
-        )
+        warnings.warn(f"No args could be inspected in function: {call.__name__}")
     vals = {
         key: __config__(prefix, _cast, defaults.get(key, MISSING))
         if not is_config(_cast)

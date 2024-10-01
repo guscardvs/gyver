@@ -1,6 +1,6 @@
 import sys
 from itertools import chain
-from typing import Sequence
+from collections.abc import Sequence
 
 
 class GyverError(Exception):

@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import Mapping, Optional
+from collections.abc import Mapping
 from urllib.parse import parse_qs, quote
 
 from typing_extensions import Self
@@ -51,7 +51,7 @@ class Query(Encodable):
             for item in value
         )
 
-    def add(self, args: Optional[Mapping[str, str]] = None, /, **params: str) -> Self:
+    def add(self, args: Mapping[str, str] | None = None, /, **params: str) -> Self:
         """Adds query parameters to the Query object.
 
         Args:
@@ -66,7 +66,7 @@ class Query(Encodable):
             self.params[key].append(value)
         return self
 
-    def set(self, args: Optional[Mapping[str, str]] = None, /, **params: str) -> Self:
+    def set(self, args: Mapping[str, str] | None = None, /, **params: str) -> Self:
         """Sets the query parameters, replacing any existing parameters.
 
         Args:

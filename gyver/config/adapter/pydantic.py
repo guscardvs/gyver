@@ -1,7 +1,6 @@
 from typing import Any
-from typing import Generator
-from typing import Sequence
-from typing import Union
+from collections.abc import Generator
+from collections.abc import Sequence
 from typing import cast
 
 from config import MISSING
@@ -37,7 +36,7 @@ class PydanticResolverStrategy(FieldResolverStrategy[FieldWrapper]):
     def init_name(self) -> str:
         return self.field.name
 
-    def default(self) -> Union[Any, type[MISSING]]:
+    def default(self) -> Any | type[MISSING]:
         if self.field_info.default not in (None, Ellipsis):
             return self.field_info.default
         return (
@@ -49,7 +48,7 @@ class PydanticResolverStrategy(FieldResolverStrategy[FieldWrapper]):
     @classmethod
     def iterfield(
         cls,
-        config_class: type[Union[BaseModel, v1.BaseModel]],
+        config_class: type[BaseModel | v1.BaseModel],
     ) -> Generator[FieldWrapper, Any, Any]:
         if issubclass(config_class, v1.BaseModel):
             yield from cls._as_v1_iterfield(config_class)

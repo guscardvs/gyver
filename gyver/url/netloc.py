@@ -1,4 +1,3 @@
-from typing import Optional
 from urllib.parse import quote
 
 from typing_extensions import Self
@@ -19,10 +18,10 @@ class Netloc(Encodable):
         port (Optional[int]): The port number.
     """
 
-    username: Optional[str]
-    password: Optional[str]
+    username: str | None
+    password: str | None
     host: str
-    port: Optional[int]
+    port: int | None
 
     def __init__(self, netloc: str) -> None:
         """
@@ -31,8 +30,8 @@ class Netloc(Encodable):
         Args:
             netloc (str): The network location string.
         """
-        self.username: Optional[str] = None
-        self.password: Optional[str] = None
+        self.username: str | None = None
+        self.password: str | None = None
         self.load(netloc)
 
     def load(self, netloc: str):
@@ -97,10 +96,10 @@ class Netloc(Encodable):
 
     def set(
         self,
-        host: Optional[str] = None,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        port: Optional[int] = None,
+        host: str | None = None,
+        username: str | None = None,
+        password: str | None = None,
+        port: int | None = None,
     ) -> Self:
         """
         Set the network location properties.
@@ -137,9 +136,9 @@ class Netloc(Encodable):
     def from_args(
         cls,
         host: str,
-        username: Optional[str] = None,
-        password: Optional[str] = None,
-        port: Optional[int] = None,
+        username: str | None = None,
+        password: str | None = None,
+        port: int | None = None,
     ) -> Self:
         """
         Create a new `Netloc` object from individual arguments.

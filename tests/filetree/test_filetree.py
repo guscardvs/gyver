@@ -14,7 +14,7 @@ def test_write_file(tmp_path):
     file_tree.write()
 
     assert (tmp_path / "file.txt").is_file()
-    with open(tmp_path / "file.txt", "r") as f:
+    with open(tmp_path / "file.txt") as f:
         assert f.read() == "Hello, World!"
 
 
@@ -34,9 +34,9 @@ def test_write_folder(tmp_path):
     file_tree.write()
 
     assert (tmp_path / "file.txt").is_file()
-    with open(tmp_path / "file.txt", "r") as f:
+    with open(tmp_path / "file.txt") as f:
         assert f.read() == "Hello, World!"
 
     assert (tmp_path / "subfolder" / "subfile.txt").is_file()
-    with open(tmp_path / "subfolder" / "subfile.txt", "r") as f:
+    with open(tmp_path / "subfolder" / "subfile.txt") as f:
         assert f.read() == "This is a subfile."

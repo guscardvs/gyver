@@ -1,4 +1,5 @@
-from typing import Any, Generator, Sequence, Union
+from typing import Any
+from collections.abc import Generator, Sequence
 
 from attr._make import Factory
 from attrs import NOTHING, Attribute, fields
@@ -27,7 +28,7 @@ class AttrsResolverStrategy(FieldResolverStrategy[Attribute]):
     def init_name(self) -> str:
         return self.field.alias or self.field.name
 
-    def default(self) -> Union[Any, type[MISSING]]:
+    def default(self) -> Any | type[MISSING]:
         default = self.field.default
         if default is None or default in (Ellipsis, NOTHING):
             return MISSING

@@ -57,7 +57,6 @@ def test_bound_context_client_yields_the_same_client_instantiated_in_context():
 
 
 async def test_atomic_async_context_acquire_release():
-
     # Create an instance of AtomicAsyncContext
     context = AsyncAtomicContext(MockAsyncAdapter())
 

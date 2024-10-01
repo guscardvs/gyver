@@ -2,9 +2,8 @@ from dataclasses import MISSING as dc_MISSING
 from dataclasses import Field
 from dataclasses import fields
 from typing import Any
-from typing import Generator
-from typing import Sequence
-from typing import Union
+from collections.abc import Generator
+from collections.abc import Sequence
 
 from config import MISSING
 from gyver.attrs import define
@@ -25,7 +24,7 @@ class DataclassResolverStrategy(FieldResolverStrategy[Field]):
     def init_name(self) -> str:
         return self.field.name
 
-    def default(self) -> Union[Any, type[MISSING]]:
+    def default(self) -> Any | type[MISSING]:
         if self.field.default not in (None, Ellipsis, dc_MISSING):
             return self.field.default
         return (
@@ -37,4 +36,3 @@ class DataclassResolverStrategy(FieldResolverStrategy[Field]):
     @staticmethod
     def iterfield(config_class: type) -> Generator[Field, Any, Any]:
         yield from fields(config_class)
-

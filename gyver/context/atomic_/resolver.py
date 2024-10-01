@@ -1,4 +1,3 @@
-from typing import Union
 from typing import overload
 
 from gyver.context.context import AsyncContext
@@ -48,8 +47,8 @@ def atomic(context: AsyncContext[T], bound: bool = True) -> AsyncAtomicContext[T
 
 
 def atomic(
-    context: Union[Context[T], AsyncContext[T]], bound: bool = True
-) -> Union[Context[T], AsyncContext[T]]:
+    context: Context[T] | AsyncContext[T], bound: bool = True
+) -> Context[T] | AsyncContext[T]:
     """
     Create an atomic context or a bound context based on the given context.
 
