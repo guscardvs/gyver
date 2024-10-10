@@ -216,13 +216,13 @@ toml = ["tomli"]
 
 [[package]]
 name = "env-star"
-version = "2.5.0"
+version = "2.5.1"
 description = "a minimalist config manager"
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "env_star-2.5.0-py3-none-any.whl", hash = "sha256:fd9bcda24703caac7a1e7501621d76db82e67bf68ee0a70f386fe16ecbea0b4b"},
-    {file = "env_star-2.5.0.tar.gz", hash = "sha256:a6a6d85d1d57528ec041453b9fb2818eddd0c915ddbfaa15ee5b003568795e9d"},
+    {file = "env_star-2.5.1-py3-none-any.whl", hash = "sha256:4ba8a2f8e94eb54ba5be913860bedb7e61679e401218592c9b362e5beb2d0899"},
+    {file = "env_star-2.5.1.tar.gz", hash = "sha256:c2a714ac19279b4b5a6bf975ef06bc607caab9ad90e2a3ab170ddef697c5cc6c"},
 ]
 
 [package.dependencies]
@@ -1479,4 +1479,4 @@ tzdata = ["tzdata"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "d7085dfb4b20deb1ad0c88e2641b89b2ba0a878603ff9eeb95719dd44f605207"
+content-hash = "d7c6c79259c59040463f410745f35eb132d137edce487bef017b45b119fa3d6b"
