@@ -1,3 +1,9 @@
+## 5.0.5 (2024-10-10)
+
+### Fix
+
+- update env-star to remove print
+
 ## 5.0.4 (2024-10-01)
 
 ### Fix
