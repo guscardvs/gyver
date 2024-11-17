@@ -1,3 +1,9 @@
+## 5.1.0 (2024-11-17)
+
+### Feat
+
+- updated dependencies to latest and removed unsupported setup of eventloop at conftest
+
 ## 5.0.5 (2024-10-10)
 
 ### Fix
