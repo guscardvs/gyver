@@ -2,14 +2,11 @@ from collections import deque
 from contextlib import contextmanager
 
 from gyver.attrs import mutable
-
-from gyver.exc import FailedFileOperation
-from gyver.exc import InvalidPath
+from gyver.exc import FailedFileOperation, InvalidPath
 from gyver.utils import merge_dicts
 
 from .interface import AbstractFileTree
-from .typedef import File
-from .typedef import Folder
+from .typedef import File, Folder
 
 
 @mutable
@@ -30,7 +27,7 @@ class VirtualFileTree(AbstractFileTree[Folder]):
         target = self.root
         for item in path:
             if item not in target.contents:
-                target.contents[item] = Folder.new(item)
+                target.contents[item] = Folder(item)
             target = target.contents[item]
             if isinstance(target, File):
                 raise InvalidPath("Foldername conflicts with file")
@@ -68,7 +65,7 @@ class VirtualFileTree(AbstractFileTree[Folder]):
     @contextmanager
     def virtual_context(self, dirname: str, *path: str):
         try:
-            folder = self.get_dir(dirname, *path) or Folder.new(dirname)
+            folder = self.get_dir(dirname, *path) or Folder(dirname)
             vt = VirtualFileTree(folder)
             yield vt
         except Exception as e:

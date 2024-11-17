@@ -1,14 +1,13 @@
 from contextlib import contextmanager
 from pathlib import Path
 
-from gyver.attrs import mutable
 from lazyfields import lazyfield
 
+from gyver.attrs import mutable
 from gyver.exc import FailedFileOperation
 
 from .interface import AbstractFileTree
-from .typedef import File
-from .typedef import Folder
+from .typedef import BaseFile, Folder
 from .virtual import VirtualFileTree
 
 
@@ -18,7 +17,7 @@ class FileTree(AbstractFileTree[Path]):
 
     @lazyfield
     def root(self):
-        return Folder.new(self.base_dir.name)
+        return Folder(self.base_dir.name)
 
     @lazyfield
     def virtual(self):
@@ -40,7 +39,8 @@ class FileTree(AbstractFileTree[Path]):
         else:
             self.write()
 
-    def write_file(self, path: Path, file: File):
+    def write_file(self, path: Path, file: BaseFile):
+        file.seek(0)
         with open(path, "wb") as stream:
             stream.write(file.contents.getvalue())
 
@@ -49,7 +49,7 @@ class FileTree(AbstractFileTree[Path]):
             path.mkdir()
         for value in folder.contents.values():
             inner_path = path / value.name
-            if isinstance(value, File):
+            if isinstance(value, BaseFile):
                 self.write_file(inner_path, value)
             elif isinstance(value, Folder):
                 self.write_folder(inner_path, value)

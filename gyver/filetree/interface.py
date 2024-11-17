@@ -1,18 +1,15 @@
-from typing import Protocol
-from typing import TypeVar
-from typing import cast
+from typing import Protocol, TypeVar, cast
 
 from lazyfields import lazyfield
 
 from gyver.exc import InvalidPath
 
 from .helpers import python_filename
-from .typedef import File
-from .typedef import Folder
-from .typedef import T
-from .typedef import TextFile
+from .typedef import BaseFile, File, Folder, TextFile
 
-FileT = TypeVar("FileT", bound=File)
+FileT = TypeVar("FileT", bound=BaseFile)
+
+T = TypeVar("T")
 
 
 class AbstractFileTree(Protocol[T]):
@@ -26,12 +23,12 @@ class AbstractFileTree(Protocol[T]):
         target = self.root
         for item in path:
             if item not in target.contents:
-                target.contents[item] = Folder.new(item)
+                target.contents[item] = Folder(item)
             target = target.contents[item]
             if isinstance(target, File):
                 raise InvalidPath("Foldername conflicts with file")
         if dirname not in target.contents:
-            target.contents[dirname] = Folder.new(dirname)
+            target.contents[dirname] = Folder(dirname)
         if not isinstance(target.contents[dirname], Folder):
             raise InvalidPath("foldername conflicts with filename")
         return cast(Folder, target.contents[dirname])
@@ -44,7 +41,7 @@ class AbstractFileTree(Protocol[T]):
             directory = self.create_dir(dirname, *restpath)
         else:
             directory = self.root
-        target = directory.contents.get(filename) or fileclass.new(filename)
+        target = directory.contents.get(filename) or fileclass(filename)
         if not isinstance(target, fileclass):
             raise InvalidPath(
                 "filename conflicts with other folder, or different fileclass"

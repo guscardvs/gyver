@@ -1,12 +1,10 @@
-from gyver.filetree import FileTree
-from gyver.filetree import Folder
-from gyver.filetree import TextFile
+from gyver.filetree import FileTree, Folder, TextFile
 
 
 def test_write_file(tmp_path):
     file_tree = FileTree(base_dir=tmp_path)
-    folder = Folder.new("root")
-    file = TextFile.new("file.txt")
+    folder = Folder("root")
+    file = TextFile("file.txt")
     file.write("Hello, World!")
     folder.contents[file.name] = file
     file_tree.root = folder
@@ -20,11 +18,11 @@ def test_write_file(tmp_path):
 
 def test_write_folder(tmp_path):
     file_tree = FileTree(base_dir=tmp_path)
-    folder = Folder.new("root")
-    file = TextFile.new("file.txt")
+    folder = Folder("root")
+    file = TextFile("file.txt")
     file.write("Hello, World!")
-    subfolder = Folder.new("subfolder")
-    subfile = TextFile.new("subfile.txt")
+    subfolder = Folder("subfolder")
+    subfile = TextFile("subfile.txt")
     subfile.write("This is a subfile.")
     subfolder.contents[subfile.name] = subfile
     folder.contents[file.name] = file

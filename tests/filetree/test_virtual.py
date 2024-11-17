@@ -1,16 +1,12 @@
 import pytest
-from gyver.attrs import asdict
 
-from gyver.exc import FailedFileOperation
-from gyver.exc import InvalidPath
-from gyver.filetree import File
-from gyver.filetree import Folder
-from gyver.filetree import TextFile
-from gyver.filetree import VirtualFileTree
+from gyver.attrs import asdict
+from gyver.exc import FailedFileOperation, InvalidPath
+from gyver.filetree import File, Folder, TextFile, VirtualFileTree
 
 
 def test_create_dir():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         folder = inner_tree.create_dir("subfolder")
         assert folder.name == "subfolder"
@@ -18,7 +14,7 @@ def test_create_dir():
 
 
 def test_create_dir_existing_folder():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         folder1 = inner_tree.create_dir("subfolder")
         folder2 = inner_tree.create_dir("subfolder")
@@ -26,7 +22,7 @@ def test_create_dir_existing_folder():
 
 
 def test_create_dir_existing_file():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_file("file")
         with pytest.raises(InvalidPath):
@@ -34,7 +30,7 @@ def test_create_dir_existing_file():
 
 
 def test_create_file():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         file = inner_tree.create_file("file")
         assert file.name == "file"
@@ -42,7 +38,7 @@ def test_create_file():
 
 
 def test_create_file_existing_folder():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_dir("subfolder")
         with pytest.raises(InvalidPath):
@@ -50,7 +46,7 @@ def test_create_file_existing_folder():
 
 
 def test_create_file_existing_file():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         file1 = inner_tree.create_file("file")
         file2 = inner_tree.create_file("file")
@@ -58,7 +54,7 @@ def test_create_file_existing_file():
 
 
 def test_get_file():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_file("file")
         file = inner_tree.get_file("file")
@@ -66,20 +62,20 @@ def test_get_file():
 
 
 def test_get_file_nonexistent_folder():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with pytest.raises(InvalidPath):
         file_tree.get_file("file", "invalid")
 
 
 def test_get_file_nonexistent_file():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         with pytest.raises(InvalidPath):
             inner_tree.get_file("file")
 
 
 def test_get_dir():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_dir("folder")
         folder = inner_tree.get_dir("folder")
@@ -88,32 +84,32 @@ def test_get_dir():
 
 
 def test_get_dir_nonexistent_folder():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     folder = file_tree.get_dir("folder")
     assert folder is None
 
 
 def test_create_py_file():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder"):
         file = file_tree.create_py_file("script")
         assert file.name == "script.py"
 
 
 def test_dunder_init():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder"):
         file = file_tree.dunder_init()
         assert file.name == "__init__.py"
 
 
 def test_from_virtual():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_dir("subfolder")
         inner_tree.create_file("file")
 
-        new_tree = VirtualFileTree(Folder.new("new_root"))
+        new_tree = VirtualFileTree(Folder("new_root"))
         new_root = new_tree.from_virtual(inner_tree, "folder")
         assert new_root.name == "folder"
         assert isinstance(new_root, Folder)
@@ -124,27 +120,27 @@ def test_from_virtual():
 
 
 def test_from_virtual_existing_file():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_file("file")
 
-    new_tree = VirtualFileTree(Folder.new("file"))
+    new_tree = VirtualFileTree(Folder("file"))
     with pytest.raises(InvalidPath):
         file_tree.from_virtual(new_tree, "folder")
 
 
 def test_from_virtual_foldername_conflict():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_file("subfolder")
 
-    new_tree = VirtualFileTree(Folder.new("subfolder"))
+    new_tree = VirtualFileTree(Folder("subfolder"))
     with pytest.raises(InvalidPath):
         file_tree.from_virtual(new_tree, "folder")
 
 
 def test_virtual_context():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with file_tree.virtual_context("folder") as inner_tree:
         folder = inner_tree.create_dir("subfolder")
         file = inner_tree.create_file("file")
@@ -177,7 +173,7 @@ def test_virtual_context():
 
 
 def test_virtual_context_exception():  # sourcery skip: raise-specific-error
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
     with pytest.raises(FailedFileOperation):
         with file_tree.virtual_context("folder"):
             raise Exception("Something went wrong")
@@ -186,13 +182,13 @@ def test_virtual_context_exception():  # sourcery skip: raise-specific-error
 
 
 def test_from_virtual_merge_strict():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
 
     # Create a file with the same name as the folder we want to merge
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_file("file.txt")
 
-    another = VirtualFileTree(Folder.new("folder"))
+    another = VirtualFileTree(Folder("folder"))
     another.create_file("another_file.txt")
     another.create_dir("subfolder")
 
@@ -201,13 +197,13 @@ def test_from_virtual_merge_strict():
 
 
 def test_from_virtual_merge_non_strict():
-    file_tree = VirtualFileTree(Folder.new("root"))
+    file_tree = VirtualFileTree(Folder("root"))
 
     # Create a file with the same name as the folder we want to merge
     with file_tree.virtual_context("folder") as inner_tree:
         inner_tree.create_file("file.txt")
 
-    another = VirtualFileTree(Folder.new("folder"))
+    another = VirtualFileTree(Folder("folder"))
     another.create_file("another_file.txt")
     another.create_dir("subfolder")
 

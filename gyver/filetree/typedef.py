@@ -1,13 +1,15 @@
 import sys
+from abc import ABC, abstractmethod
 from io import SEEK_SET, BytesIO
 from typing import Generic
 
 import cchardet
-from typing_extensions import Self, TypeVar
+from typing_extensions import Self, TypeVar, override
 
-from gyver.attrs import define
+from gyver.attrs import asdict, call_init, define
 
 T = TypeVar("T")
+BoundType = TypeVar("BoundType", str, bytes)
 
 
 @define
@@ -16,30 +18,29 @@ class VirtualPath(Generic[T]):
     contents: T
 
 
-class File(VirtualPath[BytesIO]):
-    def get_encoding(self):
-        val = cchardet.detect(self.getvalue())
+class BaseFile(VirtualPath[BytesIO], Generic[BoundType], ABC):
+    def __init__(self, name: str):
+        super().__init__(name, BytesIO())
+
+    def get_encoding(self) -> str:
+        val = cchardet.detect(self.file_contents())
         self.seek(SEEK_SET)
         return val["encoding"] or sys.getdefaultencoding()
 
-    @classmethod
-    def new(cls, name: str) -> Self:
-        return cls(name, BytesIO())
+    @abstractmethod
+    def read(self, size: int = -1) -> BoundType: ...
 
-    def read(self, size: int = -1) -> bytes:
-        return self.contents.read(size)
+    @abstractmethod
+    def readline(self, size: int = -1) -> BoundType: ...
 
-    def readline(self, size: int = -1) -> bytes:
-        return self.contents.readline(size)
+    @abstractmethod
+    def readlines(self, hint: int = -1) -> list[BoundType]: ...
 
-    def readlines(self, hint: int = -1) -> list[bytes]:
-        return self.contents.readlines(hint)
+    @abstractmethod
+    def write(self, content: BoundType) -> int: ...
 
-    def write(self, content: bytes) -> int:
-        return self.contents.write(content)
-
-    def writelines(self, lines: list[bytes]):
-        self.contents.writelines(lines)
+    @abstractmethod
+    def writelines(self, lines: list[BoundType]): ...
 
     def seek(self, offset: int, whence: int = SEEK_SET) -> int:
         return self.contents.seek(offset, whence)
@@ -53,57 +54,78 @@ class File(VirtualPath[BytesIO]):
     def close(self):
         self.contents.close()
 
-    def __enter__(self) -> "File":
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(self, *_):
         self.close()
 
-    def getvalue(self):
+    def file_contents(self):
         return self.contents.getvalue()
 
     def __parse_dict__(self, by_alias: bool):
         return {"name": self.name, "contents": self.contents}
 
 
+class File(BaseFile[bytes]):
+    @override
+    def read(self, size: int = -1) -> bytes:
+        return self.contents.read(size)
+
+    @override
+    def readline(self, size: int = -1) -> bytes:
+        return self.contents.readline(size)
+
+    @override
+    def readlines(self, hint: int = -1) -> list[bytes]:
+        return self.contents.readlines(hint)
+
+    @override
+    def write(self, content: bytes) -> int:
+        return self.contents.write(content)
+
+    @override
+    def writelines(self, lines: list[bytes]):
+        self.contents.writelines(lines)
+
+
 @define
-class TextFile(File):
+class TextFile(BaseFile[str]):
     encoding: str
 
-    @classmethod
-    def new(cls, name: str):
-        return cls(name, BytesIO(), sys.getdefaultencoding())
+    def __init__(self, name: str, encoding: str = "utf-8"):
+        call_init(self, name, BytesIO(), encoding)
 
+    @override
     def read(self, size: int = -1) -> str:
         return self.contents.read(size).decode(self.encoding)
 
+    @override
     def readline(self, size: int = -1) -> str:
         return self.contents.readline(size).decode(self.encoding)
 
+    @override
     def readlines(self, hint: int = -1) -> list[str]:
         return [line.decode(self.encoding) for line in self.contents.readlines(hint)]
 
-    def write(self, text: str) -> int:
-        return self.contents.write(text.encode(self.encoding))
+    @override
+    def write(self, content: str) -> int:
+        return self.contents.write(content.encode(self.encoding))
 
+    @override
     def writelines(self, lines: list[str]):
         encoded_lines = [line.encode(self.encoding) for line in lines]
         self.contents.writelines(encoded_lines)
 
-    def getvalue(self) -> str:
-        return self.contents.getvalue().decode(self.encoding)
-
 
 class Folder(VirtualPath[dict[str, VirtualPath]]):
-    @classmethod
-    def new(cls, name: str) -> Self:
-        return cls(name, {})
+    def __init__(self, name: str):
+        super().__init__(name, {})
 
     def __parse_dict__(self, by_alias: bool):
         return {
             "name": self.name,
             "contents": {
-                key: value.__parse_dict__(by_alias)
-                for key, value in self.contents.items()
+                key: asdict(value, by_alias) for key, value in self.contents.items()
             },
         }
