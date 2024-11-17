@@ -1,12 +1,11 @@
 import sys
-from io import SEEK_SET
-from io import BytesIO
+from io import SEEK_SET, BytesIO
 from typing import Generic
-from typing import TypeVar
 
 import cchardet
+from typing_extensions import Self, TypeVar
+
 from gyver.attrs import define
-from typing_extensions import Self
 
 T = TypeVar("T")
 
