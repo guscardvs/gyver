@@ -1,3 +1,9 @@
+## 5.1.1 (2024-11-17)
+
+### Fix
+
+- small refactor of filetree
+
 ## 5.1.0 (2024-11-17)
 
 ### Feat
