@@ -543,13 +543,13 @@ i18n = ["Babel (>=2.7)"]
 
 [[package]]
 name = "lazy-fields"
-version = "1.0.1"
+version = "1.1.0"
 description = "Lazy attributes to delay initialization"
 optional = false
-python-versions = ">=3.9,<4.0"
+python-versions = "<4.0,>=3.9"
 files = [
-    {file = "lazy_fields-1.0.1-py3-none-any.whl", hash = "sha256:5531c68da517811c19768d0f5fa620cceefb7117d2a098811a5dd9f7c913293b"},
-    {file = "lazy_fields-1.0.1.tar.gz", hash = "sha256:7144655218d1e4d4986d6782f2bb00fb5331d94ace4802724af8d6858d955600"},
+    {file = "lazy_fields-1.1.0-py3-none-any.whl", hash = "sha256:4489b1047b66dddd4c29f215a3cf66d5746b3cd336f063346b601595808fe0d0"},
+    {file = "lazy_fields-1.1.0.tar.gz", hash = "sha256:f9332ba982a2ad73b985aa030e2d6938dd33aa682aa60441b6987d157074c4ef"},
 ]
 
 [package.dependencies]
@@ -1460,4 +1460,4 @@ tzdata = ["tzdata"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "faab37a76eb8ae0311f456715c74740ceacf61b96ca30a3273daf4bae429da04"
+content-hash = "cf5c13e6584768fc9e599d96947e7acf0ba845e723646384d6ae3ad558c42038"
