@@ -1,3 +1,9 @@
+## 5.1.3 (2024-12-24)
+
+### Fix
+
+- no longer nests bound contexts if the adapter is the same and context is already a bound one
+
 ## 5.1.2 (2024-11-18)
 
 ### Fix
