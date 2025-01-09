@@ -16,9 +16,9 @@ typing-extensions = "^4.12.2"
 tzdata = { markers = "sys_platform != \"linux\"", version = "^2024.2", optional = true }
 gyver-attrs = "^0.9.4"
 faust-cchardet = "^2.1.19"
-env-star = "^2.5.1"
+env-star = "^2.6.0"
 lazy-fields = "^1.1.0"
-gyver-misc = "^0.5.7"
+gyver-misc = "^0.5.9"
 pydantic = { version = "^2.9.2", optional = true }
 
 [tool.poetry.group.lint.dependencies]
