@@ -1,3 +1,9 @@
+## 5.1.5 (2025-01-09)
+
+### Fix
+
+- always string cast on add for Query
+
 ## 5.1.4 (2025-01-09)
 
 ### Fix
