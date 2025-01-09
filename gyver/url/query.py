@@ -63,7 +63,7 @@ class Query(Encodable):
         """
         query = {**(args or {}), **params}
         for key, value in query.items():
-            self.params[key].append(value)
+            self.params[key].append(str(value))
         return self
 
     def set(self, args: Mapping[str, str] | None = None, /, **params: str) -> Self:
