@@ -1,3 +1,9 @@
+## 5.1.6 (2025-02-18)
+
+### Fix
+
+- created memoization strategy for config
+
 ## 5.1.5 (2025-01-09)
 
 ### Fix
