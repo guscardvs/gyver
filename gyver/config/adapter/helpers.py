@@ -1,20 +1,18 @@
 import inspect
 import warnings
-from collections.abc import Callable
+from collections.abc import Callable, Coroutine
 from functools import WRAPPER_UPDATES, update_wrapper
 from inspect import signature
-from typing import Any, Literal, TypeVar
-from collections.abc import Coroutine
+from typing import Any, Concatenate, Literal, TypeVar
 
 from config import MISSING
 from config.interface import ConfigLike
 from lazyfields import asynclazyfield, lazyfield
 from typing_extensions import ParamSpec
-from typing import Concatenate
 
 from gyver.attrs import call_init, define
 
-from .factory import _DEFAULT_CONFIG, AdapterConfigFactory
+from .factory import DEFAULT_CONFIG, AdapterConfigFactory
 from .mark import is_config
 
 T = TypeVar("T")
@@ -27,7 +25,7 @@ def load(
     __prefix__: str = "",
     __sep__: str = "__",
     __kwargs_type__: Literal["presets", "defaults"] = "defaults",
-    __config__: ConfigLike = _DEFAULT_CONFIG,
+    __config__: ConfigLike = DEFAULT_CONFIG,
     **kwargs: Any,
 ) -> T:
     """
@@ -65,7 +63,7 @@ def parametrize(
     __prefix__: str = "",
     __sep__: str = "__",
     __kwargs_type__: Literal["presets", "defaults"] = "defaults",
-    __config__: ConfigLike = _DEFAULT_CONFIG,
+    __config__: ConfigLike = DEFAULT_CONFIG,
     __transform__: Callable[[str], str] = str.upper,
     **kwargs: Any,
 ) -> T:
@@ -130,7 +128,7 @@ def parametrize(
 class AttributeLoader:
     __prefix__: str = ""
     __sep__: str = "__"
-    __config__: ConfigLike = _DEFAULT_CONFIG
+    __config__: ConfigLike = DEFAULT_CONFIG
     __self_name__: str = "self"
     __transform__: Callable[[str], str] = str.upper
 
@@ -138,7 +136,7 @@ class AttributeLoader:
         self,
         __prefix__: str = "",
         __sep__: str = "__",
-        __config__: ConfigLike = _DEFAULT_CONFIG,
+        __config__: ConfigLike = DEFAULT_CONFIG,
         __self_name__: str = "self",
         __transform__: Callable[[str], str] = str.upper,
     ) -> None:

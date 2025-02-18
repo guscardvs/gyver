@@ -1,5 +1,6 @@
 import contextlib
 import typing
+from collections.abc import Callable, Mapping, Sequence
 from contextlib import suppress
 from dataclasses import is_dataclass
 from pathlib import Path
@@ -10,7 +11,6 @@ from typing import (
     get_args,
     get_origin,
 )
-from collections.abc import Callable, Mapping, Sequence
 
 from config import MISSING, Config
 from config.exceptions import MissingName
@@ -29,7 +29,7 @@ from .gattrs import GyverAttrsResolverStrategy
 from .interface import FieldResolverStrategy
 from .mark import is_config
 
-_DEFAULT_CONFIG = Config()
+DEFAULT_CONFIG = Config()
 
 T = TypeVar("T")
 
@@ -78,7 +78,7 @@ class AdapterConfigFactory:
     Factory for creating configuration instances based on model classes.
     """
 
-    config: ConfigLike = _DEFAULT_CONFIG
+    config: ConfigLike = DEFAULT_CONFIG
 
     @staticmethod
     def get_strategy_class(

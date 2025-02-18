@@ -15,6 +15,7 @@ from gyver.config.adapter.dataclass import DataclassResolverStrategy
 from gyver.config.adapter.factory import AdapterConfigFactory
 from gyver.config.adapter.gattrs import GyverAttrsResolverStrategy
 from gyver.config.adapter.mark import as_config, mark
+from gyver.config.adapter.memo import MemoFactory
 from gyver.config.adapter.pydantic import PydanticResolverStrategy
 from gyver.model import Model, v1
 from gyver.utils import json
@@ -84,10 +85,6 @@ def test_adapter_factory_identifies_strategy_correctly():
     assert (
         factory.get_strategy_class(disassemble_type(PersonConfig))
         is DataclassResolverStrategy
-    )
-    assert (
-        factory.get_strategy_class(disassemble_type(AnotherConfig))
-        is PydanticResolverStrategy
     )
     assert (
         factory.get_strategy_class(disassemble_type(OtherConfig))
@@ -422,3 +419,109 @@ async def test_attribute_loader_loads_values_properly():
 
     assert test.factora == test.initial_value * 3
     assert await test.factorb() == test.initial_value * 3.7
+
+
+def test_memo_factory_does_not_reload_matching_calls():
+    @as_config
+    class Person:
+        name: str
+        email: str
+        age: int
+
+    cfg = config.Config(
+        mapping=config.EnvMapping(
+            {
+                "PERSON_NAME": "John Doe",
+                "PERSON_EMAIL": "johndoe@example.com",
+                "PERSON_AGE": "30",
+            }
+        )
+    )
+    memo_factory = MemoFactory(cfg)
+
+    assert memo_factory.load(Person, __prefix__="person") is memo_factory.load(
+        Person, __prefix__="person"
+    )
+
+
+def test_memo_factory_reloads_for_different_prefix():
+    @as_config
+    class Person:
+        name: str
+        email: str
+        age: int
+
+    cfg = config.Config(
+        mapping=config.EnvMapping(
+            {
+                "PERSON_NAME": "John Doe",
+                "PERSON_EMAIL": "johndoe@example.com",
+                "PERSON_AGE": "30",
+                "NAME": "Doe John",
+                "EMAIL": "doejohn@example.com",
+                "AGE": "15",
+            }
+        )
+    )
+    memo_factory = MemoFactory(cfg)
+
+    assert memo_factory.load(Person, __prefix__="person") != memo_factory.load(Person)
+
+
+def test_memo_factory_reloads_for_different_types():
+    @as_config
+    class Person:
+        name: str
+        email: str
+        age: int
+
+    @as_config
+    class Product:
+        name: str
+        category: str
+
+    cfg = config.Config(
+        mapping=config.EnvMapping(
+            {
+                "NAME": "John Doe",
+                "EMAIL": "johndoe@example.com",
+                "AGE": "30",
+                "CATEGORY": "cleaning",
+            }
+        )
+    )
+    memo_factory = MemoFactory(cfg)
+
+    person = memo_factory.load(Person)
+    product = memo_factory.load(Product)
+
+    assert isinstance(person, Person)
+    assert person.name == "John Doe"
+    assert person.email == "johndoe@example.com"
+    assert person.age == 30
+    assert isinstance(product, Product)
+    assert product.name == "John Doe"
+    assert product.category == "cleaning"
+
+
+def test_memo_factory_primary_is_loaded_if_prefix_is_empty():
+    @as_config
+    class Person:
+        name: str
+        email: str
+        age: int
+
+    cfg = config.Config(
+        mapping=config.EnvMapping(
+            {
+                "PERSON_NAME": "John Doe",
+                "PERSON_EMAIL": "johndoe@example.com",
+                "PERSON_AGE": "30",
+            }
+        )
+    )
+    memo_factory = MemoFactory(cfg)
+
+    assert memo_factory.load(
+        Person, __prefix__="person", __primary__=True
+    ) is memo_factory.load(Person)

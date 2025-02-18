@@ -7,6 +7,7 @@ from config.utils import boolean_cast, joined_cast, valid_path, with_rule
 from .adapter import AdapterConfigFactory
 from .adapter.helpers import AttributeLoader, attribute, load, parametrize
 from .adapter.mark import as_config, mark
+from .adapter.memo import MemoFactory
 
 __all__ = [
     "Config",
@@ -22,6 +23,7 @@ __all__ = [
     "joined_cast",
     "with_rule",
     "AdapterConfigFactory",
+    "MemoFactory",
     "mark",
     "as_config",
     "load",
