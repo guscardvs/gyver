@@ -1,3 +1,9 @@
+## 5.2.0 (2025-02-21)
+
+### Feat
+
+- **ds**: added datastructures folder and circuit_breaker implementation
+
 ## 5.1.6 (2025-02-18)
 
 ### Fix
